@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Artist Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            text-align: center;
+            margin: 1rem 0;
+        }
+        nav a {
+            text-decoration: none;
+            margin: 0 1rem;
+            color: #333;
+        }
+        section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .artwork {
+            width: calc(33.33% - 1rem);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .artwork img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Your Name</h1>
+        <p>Visual Artist</p>
+    </header>
+    <nav>
+        <a href="#">Portfolio</a>
+        <a href="#">Google Drive</a>
+        <a href="#">Photos</a>
+        <a href="#">YouTube</a>
+    </nav>
+    <section>
+        <h2>Portfolio</h2>
+        <div class="gallery">
+            <div class="artwork">
+                <img src="image1.jpg" alt="Artwork 1">
+            </div>
+            <div class="artwork">
+                <img src="image2.jpg" alt="Artwork 2">
+            </div>
+            <div class="artwork">
+                <img src="image3.jpg" alt="Artwork 3">
+            </div>
+            <!-- Add more artwork divs as needed -->
+        </div>
+    </section>
+</body>
+</html>
