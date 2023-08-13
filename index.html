@@ -97,11 +97,13 @@
 
         .slide {
             display: none;
+            text-align: center;
         }
 
         .slide img {
             width: 100%;
             height: auto;
+             vertical-align: middle;
         }    
 
         .prev,
@@ -166,27 +168,32 @@
     </section>
     
     <script>
-        let slideIndex = 1;
+        let slideIndex = 0;
 
         function showSlide(n) {
             const slides = document.querySelectorAll('.slide');
-            if (n > slides.length) {
-                slideIndex = 1;
+            if (n >= slides.length) {
+                slideIndex = 0;
             }
-            if (n < 1) {
-            slideIndex = slides.length;
+            if (n < 0) {
+                slideIndex = slides.length - 1;
             }
             for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = 'none';
             }
-            slides[slideIndex - 1].style.display = 'block';
+            slides[slideIndex].style.display = 'block';
         }
 
         function changeSlide(n) {
             showSlide(slideIndex += n);
         }
 
+        function autoSlide() {
+            changeSlide(1);
+        }
+
         showSlide(slideIndex);
+        setInterval(autoSlide, 5000); // Change image every 5 seconds
     </script>
     
     <section id="youtube">
