@@ -202,5 +202,19 @@
     window.addEventListener('resize', resizeIframes);
 </script>
 
+ <script>
+        function setGoogleDocHeight() {
+            const container = document.getElementById('google-doc-container');
+            const containerWidth = container.clientWidth;
+            const aspectRatio = 1.5; // Adjust the aspect ratio as needed
+            const calculatedHeight = containerWidth / aspectRatio;
+            container.style.height = `${calculatedHeight}px`;
+        }
+
+        // Call the function initially and on window resize
+        setGoogleDocHeight();
+        window.addEventListener('resize', setGoogleDocHeight);
+ </script>
+
 </body>
 </html>
