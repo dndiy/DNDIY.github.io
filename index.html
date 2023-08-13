@@ -30,6 +30,20 @@
             margin: 0 1rem;
             color: #d32f2f;
         }
+        .nav-link {
+            text-decoration: none;
+            margin: 0 1rem;
+            color: #d32f2f;
+            border: 2px solid #d32f2f;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
         section {
             max-width: 900px;
             margin: 0 auto;
@@ -72,12 +86,12 @@
         <h1>Gregory M Aster</h1>
         <p>Visual Artist</p>
     </header>
-    <nav>
-        <a href="#">Art</a>
-        <a href="#">Video</a>
-        <a href="#">Machine</a>
-        <a href="#">YouTube</a>
-    </nav>
+<nav>
+    <a href="#art" class="nav-link">Art</a>
+    <a href="#video" class="nav-link">Video</a>
+    <a href="#machine" class="nav-link">Machine</a>
+    <a href="#youtube" class="nav-link">YouTube</a>
+</nav>
     <section>
         <h2>Portfolio</h2>
         <div class="gallery">
