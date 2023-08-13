@@ -181,40 +181,36 @@
 
 
 <script>
-    function resizeIframes() {
-        // Resize Google Photos iframe
-        const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-        if (googlePhotosIframe) {
-            googlePhotosIframe.style.width = '100%';
-            googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
-        }
+        function resizeIframes() {
+            // Resize Google Photos iframe
+            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
+            if (googlePhotosIframe) {
+                googlePhotosIframe.style.width = '100%';
+                googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
+            }
 
-        // Resize YouTube iframe
-        const youtubeIframe = document.querySelector('.video-container iframe');
-        if (youtubeIframe) {
-            youtubeIframe.style.width = '100%';
-            youtubeIframe.style.height = (youtubeIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
-        }
-    }
+            // Resize YouTube iframe
+            const youtubeIframe = document.querySelector('.video-container iframe');
+            if (youtubeIframe) {
+                youtubeIframe.style.width = '100%';
+                youtubeIframe.style.height = (youtubeIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
+            }
 
-    // Call the function initially and on window resize
-    resizeIframes();
-    window.addEventListener('resize', resizeIframes);
-</script>
-
- <script>
-        function setGoogleDocHeight() {
-            const container = document.getElementById('google-doc-container');
-            const containerWidth = container.clientWidth;
-            const aspectRatio = 1.5; // Adjust the aspect ratio as needed
-            const calculatedHeight = containerWidth / aspectRatio;
-            container.style.height = `${calculatedHeight}px`;
+            // Resize Google Doc iframe
+            const googleDocIframe = document.querySelector('#google-doc-container iframe');
+            if (googleDocIframe) {
+                const containerWidth = googleDocIframe.parentElement.clientWidth;
+                const aspectRatio = 1.5; // Adjust the aspect ratio as needed
+                const calculatedHeight = containerWidth / aspectRatio;
+                googleDocIframe.style.width = '100%';
+                googleDocIframe.style.height = `${calculatedHeight}px`;
+            }
         }
 
         // Call the function initially and on window resize
-        setGoogleDocHeight();
-        window.addEventListener('resize', setGoogleDocHeight);
- </script>
+        resizeIframes();
+        window.addEventListener('resize', resizeIframes);
+    </script>
 
 </body>
 </html>
