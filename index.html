@@ -139,6 +139,17 @@
         .tab-content.active {
             display: block;
         }
+
+        /* Add this CSS to highlight the active tab */
+        .tab-button.active {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        /* Add this CSS to highlight the active section */
+        .section-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -148,14 +159,14 @@
     </header>
     
     <nav class="tabs">
-        <a href="#art" class="tab-button" data-tab-id="art">Art</a>
+        <a href="#art" class="tab-button active" data-tab-id="art">Art</a>
         <a href="#video" class="tab-button" data-tab-id="video">Video</a>
         <a href="#machine" class="tab-button" data-tab-id="builds">Builds</a>
         <a href="#youtube" class="tab-button" data-tab-id="youtube">YouTube</a>
         <a href="#about" class="tab-button" data-tab-id="about">About</a>
     </nav>
 
-   <section id="art" class="section-content">
+   <section id="art" class="section-content active">
         <h2>Art Portfolio</h2>
         <div id="google-photos-slideshow">
             <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/embed?start=true&loop=true&delayms=3000" 
@@ -242,8 +253,11 @@
                     sectionContents.forEach(content => {
                         if (content.id === tabId) {
                             content.style.display = 'block';
+                            button.classList.add('active'); // Add 'active' class to the clicked tab
+
                         } else {
                             content.style.display = 'none';
+                            button.classList.remove('active'); // Remove 'active' class from other tabs
                         }
                     });
                 });
