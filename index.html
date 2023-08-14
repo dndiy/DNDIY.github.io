@@ -256,6 +256,14 @@
                         } else {
                             content.style.display = 'none';
                             button.classList.remove('active'); // Remove 'active' class from other tabs
+                            
+            // Add 'active' class to the clicked tab button and remove from others
+            tabButtons.forEach(btn => {
+                if (btn === button) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                            
                         }
                     });
                 });
