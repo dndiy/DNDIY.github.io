@@ -165,7 +165,7 @@
         <a href="#about" class="tab-button" data-tab-id="about">About</a>
     </nav>
 
-   <section id="art">
+   <section id="art" class="section-content">
         <h2 style="text-align: center;">Art Portfolio</h2>
         <div id="google-photos-slideshow">
             <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/embed?start=true&loop=true&delayms=3000" 
@@ -176,7 +176,7 @@
         </div>
     </section>
 
-        <section id="video">
+        <section id="video" class="section-content">
         <h2 style="text-align: center;">Video</h2>
         <div class="video-container">
             <iframe width="100%" height="0" src="https://www.youtube.com/embed/videoseries?list=PLLmfUsn8D20V_I1wSABfHqTJSXhTT7bcl" 
@@ -191,7 +191,7 @@
         </div>
     </section>
     
-    <section id="google-photos-album">
+    <section id="google-photos-album" class="section-content">
         <h2 style="text-align: center;">Builds</h2>
         <!-- Paste your Google Photos album embed code here -->
             </div id="google-photos-album">
@@ -199,7 +199,7 @@
             </div>
     </section>
     
-        <section id="about">
+        <section id="about" class="section-content">
             <h2 style="text-align: center;">About Me</h2>
                 <div id="google-doc-container">
                     <p style="text-align: center;">This is some information about me and my work.</p>
@@ -218,13 +218,19 @@
                 button.addEventListener('click', function() {
                     const tabId = button.getAttribute('data-tab-id');
 
-                    sectionContents.forEach(content => {
-                        if (content.id === tabId) {
-                            content.style.display = 'block';
-                            button.classList.add('active');
-                        } else {
-                            content.style.display = 'none';
-                            button.classList.remove('active');
+            sectionContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+
+            tabButtons.forEach(btn => {
+                if (btn === button) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
                         }
                     });
                 });
