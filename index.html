@@ -248,21 +248,20 @@
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const tabId = button.getAttribute('data-tab-id');
-                    sectionContents.forEach(content => {
-                        if (content.id === tabId) {
-                            content.style.display = 'block';
-                            button.classList.add('active'); // Add 'active' class to the clicked tab
-
-                        } else {
-                            content.style.display = 'none';
-                            button.classList.remove('active'); // Remove 'active' class from other tabs
-                            
-            // Add 'active' class to the clicked tab button and remove from others
+                    
+            // Hide all section contents and remove 'active' class from tab buttons
+            sectionContents.forEach(content => {
+                content.style.display = 'none';
+            });
             tabButtons.forEach(btn => {
-                if (btn === button) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
+                btn.classList.remove('active');
+            });
+
+            // Show the clicked section content and add 'active' class to the clicked tab button
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                button.classList.add('active');
                             
                         }
                     });
