@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G M Aster ART</title>
+    <title>GMAster ART</title>
     <style>
         /* Your existing CSS code */
         body {
@@ -129,6 +129,16 @@
             right: 0;
         }
             
+
+        /* Hide content by default */
+        .tab-content {
+            display: none;
+        }
+
+        /* Show active tab content */
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -145,8 +155,17 @@
 
 </nav>
     
-
-    <section id="art">
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-button" onclick="openTab('art')">Art</button>
+        <button class="tab-button" onclick="openTab('video')">Video</button>
+        <button class="tab-button" onclick="openTab('machine')">Machine</button>
+        <button class="tab-button" onclick="openTab('Youtube')">Youtube</button>
+        <button class="tab-button" onclick="openTab('about')">About</button>
+        <!-- Add more buttons for other sections -->
+    </div>
+    
+   <div class="tab-content" id="art">
         <h2>Art Portfolio</h2>
         <div id="google-photos-slideshow">
             <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/embed?start=true&loop=true&delayms=3000" 
@@ -155,6 +174,7 @@
               mozallowfullscreen="true" 
               webkitallowfullscreen="true"></iframe>
         </div>
+   </div>
     </section>
 
 <section id="google-photos-album">
