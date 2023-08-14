@@ -175,7 +175,6 @@
               webkitallowfullscreen="true"></iframe>
         </div>
    </div>
-    </section>
 
 <section id="google-photos-album">
     <h2>Google Photos Album</h2>
@@ -238,6 +237,21 @@
         // Call the function initially and on window resize
         resizeIframes();
         window.addEventListener('resize', resizeIframes);
+        
+    function openTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                if (tab.id === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        // Call the function initially and on tab button clicks
+        openTab('art');
+
     </script>
 
 </body>
