@@ -209,6 +209,28 @@
 
 
 <script>
+            // JavaScript for showing and hiding section content
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const sectionContents = document.querySelectorAll('.section-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = button.getAttribute('data-tab-id');
+
+                    sectionContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.style.display = 'block';
+                            button.classList.add('active');
+                        } else {
+                            content.style.display = 'none';
+                            button.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+    
         function resizeIframes() {
             // Resize Google Photos iframe
             const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
@@ -239,35 +261,6 @@
         resizeIframes();
         window.addEventListener('resize', resizeIframes);
 
-         // JavaScript for showing and hiding section content
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const sectionContents = document.querySelectorAll('.section-content');
-
-            // Add event listeners to tab buttons
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const tabId = button.getAttribute('data-tab-id');
-                    
-            // Hide all section contents and remove 'active' class from tab buttons
-            sectionContents.forEach(content => {
-                content.style.display = 'none';
-            });
-            tabButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show the clicked section content and add 'active' class to the clicked tab button
-            const targetSection = document.getElementById(tabId);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-                button.classList.add('active');
-                            
-                        }
-                    });
-                });
-            });
-        });
     </script>
 
 </body>
