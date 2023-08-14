@@ -129,28 +129,7 @@
             right: 0;
         }
             
-
-        /* Hide content by default */
-        .tab-content {
-            display: none;
-        }
-
-        /* Show active tab content */
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Add this CSS to highlight the active tab */
-        .tab-button.active {
-            background-color: #d32f2f;
-            color: #fff;
-        }
-
-        /* Add this CSS to highlight the active section */
-        .section-content.active {
-            display: block;
-        }
-         #about {
+        #about {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -209,33 +188,7 @@
 
 
 <script>
-            // JavaScript for showing and hiding section content
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const sectionContents = document.querySelectorAll('.section-content');
 
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const tabId = button.getAttribute('data-tab-id');
-
-            sectionContents.forEach(content => {
-                if (content.id === tabId) {
-                    content.style.display = 'block';
-                } else {
-                    content.style.display = 'none';
-                }
-            });
-
-            tabButtons.forEach(btn => {
-                if (btn === button) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                        }
-                    });
-                });
-            });
-        });
     
         function resizeIframes() {
             // Resize Google Photos iframe
