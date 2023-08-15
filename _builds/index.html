@@ -62,36 +62,30 @@
 </head>
 <body>
     <nav>   
-    <a href="https://dndiy.github.io/art/art.html" class="nav-link">Art</a>
+    <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
     <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
-    <a href="#builds" class="nav-link">Builds</a>
+    <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
     <a href="https://dndiy.org" class="nav-link">About</a>
     </nav>
 
-    <section id="art" class="section-content">
-        <h2 style="text-align: center;">Art Portfolio</h2>
-        <div id="google-photos-slideshow">
-            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/embed?start=true&loop=true&delayms=5000&amp;rm=minimal" 
-              frameborder="0" width="100%" height="0" 
-              allowfullscreen="true" 
-              mozallowfullscreen="true" 
-              webkitallowfullscreen="true"></iframe>
+   <section id="builds" class="section-content">
+        <h2 style="text-align: center;">Builds</h2>
+         <div id="google-photos-slideshow-builds">
+            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRhwEAP3otnO8pDwGuTbC6tMdOSsW3SU-ZNcL3pb2z-hYLorj8PzCz-UYCnjc20701_rGvUIJQowV-7/embed?start=true&loop=true&delayms=5000&amp;rm=minimal" 
+             frameborder="0" width="100%" height="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
         </div>
     </section>
     
-     <script>
+ <script>
     
         function resizeIframes() {
-            // Resize Google Photos iframe
-            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-            if (googlePhotosIframe) {
-                googlePhotosIframe.style.width = '100%';
-                googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
+
+             // Resize builds iframe
+            const buildsIframe = document.querySelector('#google-photos-slideshow-builds iframe');
+            if (buildsIframe) {
+                buildsIframe.style.width = '100%';
+                buildsIframe.style.height = (buildsIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
             }
-
-
-
-           
         }
 
         // Call the function initially and on window resize
