@@ -162,17 +162,16 @@
     
 <section id="about" class="section-content">
     <div id="pdf-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <iframe src="https://drive.google.com/file/d/1BF0HcoaFHoign65PmLnwKjbbme6C51bt/preview" frameborder="0" width="100%" style="height: 100%;"></iframe>
+        <iframe id="pdf-iframe" src="https://drive.google.com/file/d/1BF0HcoaFHoign65PmLnwKjbbme6C51bt/preview" frameborder="0" width="100%" style="height: 100%;"></iframe>
     </div>
 </section>
 
  <script>
     
-        function resizeIframe() {
+         function resizeIframe() {
             const pdfIframe = document.getElementById("pdf-iframe");
             if (pdfIframe) {
                 const containerWidth = window.innerWidth;
-                const containerHeight = window.innerHeight;
                 const aspectRatio = 8.5 / 11; // PDF aspect ratio (8.5x11)
                 
                 // Calculate the height based on the aspect ratio and the container width
