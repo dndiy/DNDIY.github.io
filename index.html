@@ -59,51 +59,84 @@
             background-color: #333;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-            /* Add borders to the section content */
-            .section-content {
-                border: 2px solid #d32f2f; /* You can adjust the color and thickness */
-                border-radius: 5px;
-                padding: 1rem; /* Add some padding for spacing */
-                margin: 5rem 0; /* Add margin for spacing */
-            }
+
         /* Add additional margin below the header */
         header {
             /* Other styles... */
             margin-bottom: 2rem; /* Add margin below the header */
 }
             
-        #contact-info {
+        .gallery {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .artwork {
+            width: calc(33.33% - 1rem);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .artwork img {
+            max-width: 100%;
+            height: auto;
+        }
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Video container width */
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            text-align: center; /* Center the video horizontally */
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
-        #info-container {
+        /* Slideshow styles */
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
             margin: 0 auto;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
+            overflow: hidden;       
+            text-align: center; /* Center the slides horizontally */
+        }
+
+        .slide {
+            display: none;
+            text-align: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+             vertical-align: middle;
+        }    
+
+        .prev,
+        .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
             color: #fff;
-            font-family: Arial, sans-serif;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+            text-decoration: none;
+            border: none;
         }
 
-        #info-container h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .prev {
+            left: 0;
         }
 
-        #info-container p {
-            font-size: 1rem;
-            margin-bottom: 1rem;
+        .next {
+            right: 0;
         }
-                        
+            
         #about {
             display: flex;
             align-items: center;
@@ -119,7 +152,7 @@
         <p>Visual Artist</p>
     </header>
     
-<nav style="margin-bottom: 2rem;">
+<nav>
     <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
     <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
     <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
@@ -127,30 +160,33 @@
 </nav>
        
     
-    <section id="about" class="section-content">
-        <div id="contact-info">
-            <div id="info-container">
-                <h2>Contact Information:</h2>
-                <p>Full Name: Gregory Mechanic Aster</p>
-                <p>Phone Number: Private (Available upon request)</p>
-                <p>Email Address: greg@dndiy.org</p>
-                <p>Location: Portland, Oregon</p>
+<section id="about" class="section-content">
+    <div id="pdf-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <iframe id="pdf-iframe" src="https://drive.google.com/file/d/1BF0HcoaFHoign65PmLnwKjbbme6C51bt/preview" frameborder="0" width="100%" style="height: 100%;"></iframe>
+    </div>
+</section>
 
-                <h2>Summary:</h2>
-                <p>A dedicated and skilled independent artist with a diverse background in mechanics and a deep passion for creative expression. Over 23 years of experience, including 13 years as a business owner. Proficient in welding, electrical, and computerized systems. Committed, resilient, and an unwavering work ethic. Believes in personal autonomy and equal respect for all. Portfolio includes an impressive range of video work, digital art, and innovative gadgets. Featured on Adult Swim and showcased at events like Burning Man and others.</p>
+ <script>
+    
+         function resizeIframe() {
+            const pdfIframe = document.getElementById("pdf-iframe");
+            if (pdfIframe) {
+                const containerWidth = window.innerWidth;
+                const aspectRatio = 8.5 / 11; // PDF aspect ratio (8.5x11)
+                
+                // Calculate the height based on the aspect ratio and the container width
+                const calculatedHeight = containerWidth * aspectRatio;
 
-                <h2>Skills:</h2>
-                <p>Video Production: Proficient in creating captivating video content, editing, and post-production.</p>
-                <p>Digital Art: Skilled in various digital art techniques and software, showcasing creativity and artistic expression.</p>
-                <p>Gadget Creation: Demonstrated ability to design and construct unique gadgets, highlighting a strong aptitude for innovation.</p>
-                <p>Welding: Experienced in welding techniques for diverse applications.</p>
-                <p>Electrical Systems: Deep understanding of electrical systems and their integration.</p>
-                <p>Resilience: Proven track record of working tirelessly to complete projects.</p>
-                <p>Known for an unwavering commitment to completing projects and pushing creative boundaries.</p>
-            </div>
-        </div>
-    </section>
+                // Set the dimensions of the iframe
+                pdfIframe.style.width = `${containerWidth}px`;
+                pdfIframe.style.height = `${calculatedHeight}px`;
+            }
+        }
 
+        // Call the function initially and on window resize
+        resizeIframe();
+        window.addEventListener('resize', resizeIframe);
+    </script>
 
 </body>
 </html>
