@@ -229,7 +229,7 @@
             const googleDocIframe = document.querySelector('#google-doc-container iframe');
             if (googleDocIframe) {
                 const containerWidth = googleDocIframe.parentElement.clientWidth;
-                const aspectRatio = 1.5; // Adjust the aspect ratio as needed
+                const aspectRatio = 1.0; // Adjust the aspect ratio as needed
                 const calculatedHeight = containerWidth / aspectRatio;
                 googleDocIframe.style.width = '100%';
                 googleDocIframe.style.height = `${calculatedHeight}px`;
