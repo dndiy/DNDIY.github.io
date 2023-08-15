@@ -162,7 +162,7 @@
 <nav>
     <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
     <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
-    <a href="#builds" class="nav-link">Builds</a>
+    <a href="https://dndiy.github.io/_builds/" class="nav-link">Builds</a>
     <a href="https://dndiy.org" class="nav-link">About</a>
 </nav>
        
@@ -177,26 +177,6 @@
  <script>
     
         function resizeIframes() {
-            // Resize Google Photos iframe
-            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-            if (googlePhotosIframe) {
-                googlePhotosIframe.style.width = '100%';
-                googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
-            }
-
-            // Resize Video iframe
-            const videoIframe = document.querySelector('#google-photos-slideshow-video iframe');
-            if (videoIframe) {
-                videoIframe.style.width = '100%';
-                videoIframe.style.height = (videoIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
-            }
-             // Resize builds iframe
-            const buildsIframe = document.querySelector('#google-photos-slideshow-builds iframe');
-            if (buildsIframe) {
-                buildsIframe.style.width = '100%';
-                buildsIframe.style.height = (buildsIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
-            }
-
             // Resize Google Doc iframe
             const googleDocIframe = document.querySelector('#google-doc-container iframe');
             if (googleDocIframe) {
