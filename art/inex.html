@@ -61,8 +61,10 @@
     </style>
 </head>
 <body>
-    <nav>
-        <a href="https://dndiy.github.io/art" class="nav-link">Art</a>
+    <nav>    <a href="https://dndiy.github.io/art/art.html" class="nav-link">Art</a>
+    <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
+    <a href="#builds" class="nav-link">Builds</a>
+    <a href="#about" class="nav-link">About</a>
     </nav>
 
     <section id="art" class="section-content">
@@ -75,5 +77,27 @@
               webkitallowfullscreen="true"></iframe>
         </div>
     </section>
+    
+     <script>
+    
+        function resizeIframes() {
+            // Resize Google Photos iframe
+            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
+            if (googlePhotosIframe) {
+                googlePhotosIframe.style.width = '100%';
+                googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
+            }
+
+
+
+           
+        }
+
+        // Call the function initially and on window resize
+        resizeIframes();
+        window.addEventListener('resize', resizeIframes);
+
+    </script>
+
 </body>
 </html>
