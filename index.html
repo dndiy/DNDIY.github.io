@@ -162,28 +162,31 @@
     
 <section id="about" class="section-content">
     <div id="pdf-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <iframe src="https://drive.google.com/file/d/1BF0HcoaFHoign65PmLnwKjbbme6C51bt/preview" frameborder="0" width="100%" style="height: 0;"></iframe>
+        <iframe src="https://drive.google.com/file/d/1BF0HcoaFHoign65PmLnwKjbbme6C51bt/preview" frameborder="0" width="100%" style="height: 100%;"></iframe>
     </div>
 </section>
 
  <script>
     
-        function resizeIframes() {
-            // Resize Google Doc iframe
-            const googleDocIframe = document.querySelector('#google-doc-container iframe');
-            if (googleDocIframe) {
-                const containerWidth = googleDocIframe.parentElement.clientWidth;
-                const aspectRatio = 1.0; // Adjust the aspect ratio as needed
-                const calculatedHeight = containerWidth / aspectRatio;
-                googleDocIframe.style.width = '100%';
-                googleDocIframe.style.height = `${calculatedHeight}px`;
+        function resizeIframe() {
+            const pdfIframe = document.getElementById("pdf-iframe");
+            if (pdfIframe) {
+                const containerWidth = window.innerWidth;
+                const containerHeight = window.innerHeight;
+                const aspectRatio = 8.5 / 11; // PDF aspect ratio (8.5x11)
+                
+                // Calculate the height based on the aspect ratio and the container width
+                const calculatedHeight = containerWidth * aspectRatio;
+
+                // Set the dimensions of the iframe
+                pdfIframe.style.width = `${containerWidth}px`;
+                pdfIframe.style.height = `${calculatedHeight}px`;
             }
         }
 
         // Call the function initially and on window resize
-        resizeIframes();
-        window.addEventListener('resize', resizeIframes);
-
+        resizeIframe();
+        window.addEventListener('resize', resizeIframe);
     </script>
 
 </body>
