@@ -117,7 +117,7 @@
 
     images.forEach(url => {
         const img = document.createElement("img");
-        img.src = "art/" + url; // Prepend the path to your images folder here
+        img.src = "images/" + url; // Prepend the path to your images folder here
         img.addEventListener('click', function() {
             bodyElement.style.backgroundImage = `url(images/${url})`;
             bodyElement.style.backgroundSize = 'cover';
