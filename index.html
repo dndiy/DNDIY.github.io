@@ -34,6 +34,7 @@
             margin: 0 1rem;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
+            border: 1px solid #fff;
             transition: all 0.3s;
         }
         section {
@@ -57,12 +58,22 @@
         }
     </style>
 
-    <!-- JavaScript for theme switching -->
+    <!-- JavaScript for theme switching and background changes -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const bodyElement = document.querySelector('body');
             const navLinks = document.querySelectorAll(".nav-link");
             const header = document.querySelector('header');
+
+            // Random background for the header
+            const backgrounds = [
+                "url('00085-a window looking out to rocky desert.jpg')",
+                "url('0282b.png')",
+                "url('00123-detailed eyes.jpg')"
+            ];
+            const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            header.style.backgroundImage = randomBackground;
+            header.style.backgroundSize = "cover";
 
             // Random theme chooser
             const themes = ['dark', 'neon-dark', 'goth', 'cyberpunk', 'glitch'];
@@ -74,7 +85,6 @@
                     bodyElement.style.color = "#ddd";
                     navLinks.forEach(link => {
                         link.style.color = "#ddd";
-                        link.style.borderColor = "#aaa";
                     });
                     break;
 
@@ -83,7 +93,6 @@
                     bodyElement.style.color = "#0ff";
                     navLinks.forEach(link => {
                         link.style.color = "#0ff";
-                        link.style.borderColor = "#0ff";
                     });
                     break;
 
@@ -92,7 +101,6 @@
                     bodyElement.style.color = "#87377a";
                     navLinks.forEach(link => {
                         link.style.color = "#87377a";
-                        link.style.borderColor = "#c59ac8";
                     });
                     break;
 
@@ -101,18 +109,16 @@
                     bodyElement.style.color = "#ff007f";
                     navLinks.forEach(link => {
                         link.style.color = "#ff007f";
-                        link.style.borderColor = "#ff3d9e";
                     });
                     break;
 
                 case 'glitch':
                     bodyElement.style.backgroundColor = "#111";
                     bodyElement.style.color = "#ddd";
-                    header.style.webkitClipPath = "polygon(0 0, 100% 0, 100% 95%, 90% 90%, 85% 95%, 80% 90%, 75% 95%, 70% 90%, 65% 95%, 60% 90%, 55% 95%, 50% 90%, 45% 95%, 40% 90%, 35% 95%, 30% 90%, 25% 95%, 20% 90%, 15% 95%, 10% 90%, 0 95%)";
+                    header.style.backgroundImage += `, repeating-linear-gradient(45deg, transparent, transparent 2px, #fff 2px, #fff 4px)`;
                     navLinks.forEach(link => {
                         link.style.color = "#ddd";
-                        link.style.borderColor = "#aaa";
-                        link.style.backgroundImage = "repeating-linear-gradient(45deg, #aaa, #aaa 10px, #111 10px, #111 20px)";
+                        link.style.backgroundImage = "repeating-linear-gradient(45deg, transparent, transparent 1px, #fff 1px, #fff 2px)";
                     });
                     break;
             }
