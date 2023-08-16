@@ -4,66 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART</title>
-
-    <!-- Importing Orbitron font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet"> 
-
     <style>
-        /* Essential styles */
+        /* Reset some default styles */
         body, h1, h2, p {
             margin: 0;
             padding: 0;
-            font-family: 'Orbitron', sans-serif;
         }
+
         body {
-            background-color: #111;
-            color: #fff;
-            overflow-x: hidden;
-            cursor: none; /* Disable default cursor, we'll use a custom one */
+            font-family: 'Arial', sans-serif;
+            background-color: #222;
+            color: #ff5555;
+            transition: background-color 30s linear, color 30s linear; /* Smooth transition */
         }
-        /* Custom Cursor */
-        body::before {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: currentColor;
-            box-shadow: 0 0 5px currentColor;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-        }
+
         header {
-            background: url('profile.jpg') no-repeat center center;
+            background: url('cyberpunk_image.jpg') no-repeat center center;
             background-size: cover;
             padding: 6rem 0;
             text-align: center;
+            filter: grayscale(80%);
         }
-        header h1, header p {
-            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px #ff5555, 0 0 20px #ff5555;
         }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            text-shadow: 0 0 10px #ff5555, 0 0 20px #ff5555;
+        }
+
         nav {
             text-align: center;
-            margin: 2rem 0;
+            margin: 1rem 0;
         }
+
         .nav-link {
             text-decoration: none;
             margin: 0 1rem;
-            color: currentColor;
-            border: 2px solid currentColor;
+            color: #ff5555;
+            border: 2px solid #ff5555;
             padding: 0.5rem 1rem;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, text-shadow 0.3s, transform 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         .nav-link:hover {
-            background-color: currentColor;
-            color: #000;
-            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
-            transform: perspective(400px) rotateX(20deg);
+            background-color: #ff5555;
+            color: #fff;
         }
+
         @media (max-width: 768px) {
             .nav-link {
                 margin: 0.5rem 0;
@@ -71,63 +65,42 @@
                 text-align: center;
             }
         }
+
         section {
-            max-width: 880px;
+            max-width: 800px; /* reduced width */
             margin: 0 auto;
             padding: 2rem;
-            background-color: rgba(50, 50, 50, 0.9);
-            box-shadow: 0 0 15px currentColor;
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         #google-doc-container {
             text-align: center;
+            padding: 1rem; /* reduced padding */
         }
+
         #google-doc-container iframe {
-            width: 100%;
+            width: 90%;
             max-width: 1000px;
-            height: 80vh;
+            height: 75vh;  /* slightly reduced height */
             border: none;
-            box-shadow: 0 0 15px currentColor;
+            box-shadow: 0 0 10px #ff5555;
         }
     </style>
-
-    <!-- JavaScript for dynamic effects -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Dynamic background images
-            const backgrounds = ["url('detailedeyes.jpg')", "url('https://github.com/dndiy/DNDIY.github.io/blob/main/0282b.png')", "url('profile.jpg')"];
-            const headerElement = document.querySelector('header');
-            const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-            headerElement.style.backgroundImage = randomBackground;
-
-            // Dynamic neon colors and background gradients
-            const neonColors = ['#0f0', '#00f', '#f0f', '#f00'];
-            let currentColorIndex = 0;
-            
-            setInterval(() => {
-                document.body.style.color = neonColors[currentColorIndex];
-                document.body.style.background = `linear-gradient(${neonColors[currentColorIndex]}, ${neonColors[(currentColorIndex + 1) % neonColors.length]})`;
-                currentColorIndex = (currentColorIndex + 1) % neonColors.length;
-            }, 5000);
-
-            // Glowing cursor effect
-            document.addEventListener('mousemove', (e) => {
-                document.body.style.setProperty('--x', e.clientX + "px");
-                document.body.style.setProperty('--y', e.clientY + "px");
-            });
-        });
-    </script>
 </head>
 <body>
     <header>
         <h1>Gregory M Aster</h1>
         <p>Visual Artist</p>
     </header>
-    <nav>   
+    
+    <nav>
         <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
         <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
         <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
         <a href="https://dndiy.github.io/" class="nav-link">About</a>
     </nav>
+       
     <section id="about">
         <div id="google-doc-container">
             <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
