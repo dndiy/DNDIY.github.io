@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+
+    <!-- Importing Roboto font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         body, h1, h2, p {
             margin: 0;
             padding: 0;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Roboto', sans-serif; 
         }
         body {
-            background-color: #111;
-            color: #ff5555;
             overflow-x: hidden;
             position: relative;
         }
@@ -24,7 +24,6 @@
             padding: 2rem 0;
             position: relative;
             z-index: 1;
-            text-shadow: 0 0 5px #ff5555, 0 0 10px #ff5555;
         }
         nav {
             text-align: center;
@@ -33,12 +32,9 @@
         .nav-link {
             text-decoration: none;
             margin: 0 1rem;
-            color: #ff5555;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
             transition: all 0.3s;
-        }
-        .nav-link:hover {
-            color: #fff;
-            transform: scale(1.1);
         }
         section {
             max-width: 900px;
@@ -51,7 +47,6 @@
             width: 100%;
             height: 80vh;
             border: none;
-            box-shadow: 0 0 15px rgba(255, 85, 85, 0.7);
         }
         @media (max-width: 768px) {
             .nav-link {
@@ -62,19 +57,65 @@
         }
     </style>
 
-    <!-- JavaScript for random backgrounds -->
+    <!-- JavaScript for theme switching -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const backgrounds = [
-                "url('0282b.png')", 
-                "url('00123-detailed eyes.jpg')", 
-                "url('00085-a window looking out to rocky desert.jpg')"
-            ];
             const bodyElement = document.querySelector('body');
-            const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-            bodyElement.style.backgroundImage = randomBackground;
-            bodyElement.style.backgroundSize = 'cover';
-            bodyElement.style.backgroundPosition = 'center';
+            const navLinks = document.querySelectorAll(".nav-link");
+            const header = document.querySelector('header');
+
+            // Random theme chooser
+            const themes = ['dark', 'neon-dark', 'goth', 'cyberpunk', 'glitch'];
+            const chosenTheme = themes[Math.floor(Math.random() * themes.length)];
+
+            switch (chosenTheme) {
+                case 'dark':
+                    bodyElement.style.backgroundColor = "#111";
+                    bodyElement.style.color = "#ddd";
+                    navLinks.forEach(link => {
+                        link.style.color = "#ddd";
+                        link.style.borderColor = "#aaa";
+                    });
+                    break;
+
+                case 'neon-dark':
+                    bodyElement.style.backgroundColor = "#111";
+                    bodyElement.style.color = "#0ff";
+                    navLinks.forEach(link => {
+                        link.style.color = "#0ff";
+                        link.style.borderColor = "#0ff";
+                    });
+                    break;
+
+                case 'goth':
+                    bodyElement.style.backgroundColor = "#210a2e";
+                    bodyElement.style.color = "#87377a";
+                    navLinks.forEach(link => {
+                        link.style.color = "#87377a";
+                        link.style.borderColor = "#c59ac8";
+                    });
+                    break;
+
+                case 'cyberpunk':
+                    bodyElement.style.backgroundColor = "#0d0018";
+                    bodyElement.style.color = "#ff007f";
+                    navLinks.forEach(link => {
+                        link.style.color = "#ff007f";
+                        link.style.borderColor = "#ff3d9e";
+                    });
+                    break;
+
+                case 'glitch':
+                    bodyElement.style.backgroundColor = "#111";
+                    bodyElement.style.color = "#ddd";
+                    header.style.webkitClipPath = "polygon(0 0, 100% 0, 100% 95%, 90% 90%, 85% 95%, 80% 90%, 75% 95%, 70% 90%, 65% 95%, 60% 90%, 55% 95%, 50% 90%, 45% 95%, 40% 90%, 35% 95%, 30% 90%, 25% 95%, 20% 90%, 15% 95%, 10% 90%, 0 95%)";
+                    navLinks.forEach(link => {
+                        link.style.color = "#ddd";
+                        link.style.borderColor = "#aaa";
+                        link.style.backgroundImage = "repeating-linear-gradient(45deg, #aaa, #aaa 10px, #111 10px, #111 20px)";
+                    });
+                    break;
+            }
         });
     </script>
 </head>
