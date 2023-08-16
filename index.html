@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART Fusion</title>
 
-    <!-- Importing Montserrat font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
+    <!-- Importing Roboto font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         /* General styles */
         body, h1, h2, p, a {
@@ -90,21 +90,21 @@
         window.onload = function() {
             const gallery = document.querySelector(".gallery");
             const bodyElement = document.querySelector('body');
-            const images = [
-                "00085-a window looking out to rocky desert.jpg",
-                "0282b.png",
-                "00123-detailed eyes.jpg", //... add more URLs
-            ];
-            images.forEach(url => {
-                const img = document.createElement("img");
-                img.src = url;
-                img.addEventListener('click', function() {
-                    bodyElement.style.backgroundImage = `url(${url})`;
-                    bodyElement.style.backgroundSize = 'cover';
-                    bodyElement.style.backgroundPosition = 'center center';
+
+            fetch('loadImages.php')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(url => {
+                        const img = document.createElement("img");
+                        img.src = url;
+                        img.addEventListener('click', function() {
+                            bodyElement.style.backgroundImage = `url(${url})`;
+                            bodyElement.style.backgroundSize = 'cover';
+                            bodyElement.style.backgroundPosition = 'center center';
+                        });
+                        gallery.appendChild(img);
+                    });
                 });
-                gallery.appendChild(img);
-            });
         };
     </script>
 
