@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMAster ART</title>
+    <title>GMAster ART Gallery</title>
     <style>
-        /* Your existing CSS code */
+        /* Reset some default styles */
+        body, h1, h2, p {
+            margin: 0;
+            padding: 0;
+        }
 
-        /* Additional styling for header */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Header styling */
         header {
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url(profile.jpg) no-repeat center center;
             background-size: cover;
@@ -30,15 +40,15 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        /* Additional styling for navigation */
+        /* Navigation styling */
         nav {
             text-align: center;
             margin: 0;
             padding: 1rem 0;
-            background-color: #222;
+            background-color: #111;
         }
 
-        /* Additional styling for navigation links */
+        /* Navigation links */
         nav a {
             text-decoration: none;
             margin: 0 1rem;
@@ -56,7 +66,7 @@
             color: #000;
         }
 
-        /* Additional styling for section */
+        /* Section styling */
         section {
             background-color: #111;
             border-radius: 15px;
@@ -67,7 +77,20 @@
             overflow: hidden;
         }
 
-        /* Additional styling for Google Docs iframe container */
+        /* Glitch animation */
+        @keyframes glitch {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            20%, 80% {
+                transform: translateX(-5%) scaleY(1.1);
+            }
+            40%, 60% {
+                transform: translateX(5%) scaleY(0.9);
+            }
+        }
+
+        /* Glitch styling for Google Docs iframe */
         #google-doc-container {
             text-align: center;
             padding: 2rem;
@@ -84,41 +107,19 @@
             height: 80vh;
             border: none;
         }
-
-        /* Additional styling for glitch animation */
-        @keyframes glitch {
-            0% {
-                transform: translateX(0) skewX(0);
-            }
-            20% {
-                transform: translateX(-5%) skewX(2deg);
-            }
-            40% {
-                transform: translateX(5%) skewX(-2deg);
-            }
-            60% {
-                transform: translateX(-3%) skewX(1deg);
-            }
-            80% {
-                transform: translateX(3%) skewX(-1deg);
-            }
-            100% {
-                transform: translateX(0) skewX(0);
-            }
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Gregory M Aster</h1>
-        <p>Visual Artist</p>
+        <h1>Discover Artistry</h1>
+        <p>Unveil the Creative Universe</p>
     </header>
     
     <nav>
-        <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
-        <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
-        <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
-        <a href="https://dndiy.github.io/" class="nav-link">About</a>
+        <a href="https://example.com/art" class="nav-link">Gallery</a>
+        <a href="https://example.com/exhibitions" class="nav-link">Exhibitions</a>
+        <a href="https://example.com/artists" class="nav-link">Artists</a>
+        <a href="https://example.com/about" class="nav-link">About</a>
     </nav>
        
     <section id="about">
@@ -126,5 +127,13 @@
             <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
         </div>
     </section>
+
+    <script>
+        // Random glitch effect on load
+        const glitchElements = document.querySelectorAll('.glitch');
+        glitchElements.forEach(element => {
+            element.style.animationDelay = `${Math.random() * 2}s`;
+        });
+    </script>
 </body>
 </html>
