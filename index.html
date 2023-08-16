@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMAster ART Gallery</title>
+    <title>CyberArt GMAster</title>
     <style>
         /* Reset some default styles */
         body, h1, h2, p {
@@ -12,25 +12,25 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #000;
             color: #fff;
+            overflow: hidden;
         }
 
         /* Header styling */
         header {
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url(profile.jpg) no-repeat center center;
+            background: url(profile.jpg) no-repeat center center;
             background-size: cover;
-            padding: 6rem 0;
+            padding: 4rem 0;
             text-align: center;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
+            border-bottom: 5px solid #d32f2f;
         }
 
         header h1 {
             font-size: 4rem;
             margin-bottom: 1rem;
+            color: #d32f2f;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
@@ -43,9 +43,9 @@
         /* Navigation styling */
         nav {
             text-align: center;
-            margin: 0;
             padding: 1rem 0;
             background-color: #111;
+            border-top: 5px solid #d32f2f;
         }
 
         /* Navigation links */
@@ -68,12 +68,12 @@
 
         /* Section styling */
         section {
-            background-color: #111;
-            border-radius: 15px;
+            background-color: #000;
             padding: 3rem;
             margin: 3rem auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             position: relative;
+            border: 5px solid #d32f2f;
+            border-radius: 15px;
             overflow: hidden;
         }
 
@@ -91,28 +91,29 @@
         }
 
         /* Glitch styling for Google Docs iframe */
-        #google-doc-container {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 15px;
-            background-color: rgba(0, 0, 0, 0.5);
-            transform: rotate(-10deg) translateX(-5%);
-            filter: contrast(150%) hue-rotate(10deg) saturate(150%);
+        .glitch {
+            transform: rotate(-5deg) translateX(-5%);
+            filter: contrast(120%) hue-rotate(10deg) saturate(150%);
             animation: glitch 2s infinite;
         }
 
-        #google-doc-container iframe {
-            width: 100%;
-            max-width: 1000px;
-            height: 80vh;
-            border: none;
+        /* Dynamic content */
+        #dynamic-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #d32f2f;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Discover Artistry</h1>
-        <p>Unveil the Creative Universe</p>
+        <h1>CyberArt GMAster</h1>
+        <p>Immerse Yourself in the Future of Art</p>
     </header>
     
     <nav>
@@ -123,17 +124,24 @@
     </nav>
        
     <section id="about">
-        <div id="google-doc-container">
+        <div class="glitch">
             <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
         </div>
+        <div id="dynamic-content">Explore the Unseen</div>
     </section>
 
     <script>
-        // Random glitch effect on load
-        const glitchElements = document.querySelectorAll('.glitch');
-        glitchElements.forEach(element => {
-            element.style.animationDelay = `${Math.random() * 2}s`;
-        });
+        // Change dynamic content on load
+        const dynamicContent = document.getElementById('dynamic-content');
+        const phrases = [
+            "Dive into the Code",
+            "Embrace Neon Creativity",
+            "Witness Digital Dreams",
+            "Break the Virtual Boundaries"
+        ];
+
+        const randomIndex = Math.floor(Math.random() * phrases.length);
+        dynamicContent.textContent = phrases[randomIndex];
     </script>
 </body>
 </html>
