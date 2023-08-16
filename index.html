@@ -3,145 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberArt GMAster</title>
+    <title>GMAster ART</title>
+
+    <!-- Importing Orbitron font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet"> 
+
     <style>
-        /* Reset some default styles */
+        /* Reset and base styles */
         body, h1, h2, p {
             margin: 0;
             padding: 0;
+            font-family: 'Orbitron', sans-serif; /* Applying the Orbitron font */
         }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000;
+            background-color: #111;
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
         }
-
-        /* Header styling */
         header {
-            background: url(profile.jpg) no-repeat center center;
+            background: url('profile.jpg') no-repeat center center;
             background-size: cover;
-            padding: 4rem 0;
+            padding: 6rem 0;
             text-align: center;
-            border-bottom: 5px solid #d32f2f;
         }
-
         header h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: #d32f2f;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; /* Neon green text shadow */
         }
-
         header p {
-            font-size: 1.8rem;
-            opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-size: 1.2rem;
+            opacity: 0.8;
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; /* Neon pink text shadow */
         }
-
-        /* Navigation styling */
         nav {
             text-align: center;
-            padding: 1rem 0;
-            background-color: #111;
-            border-top: 5px solid #d32f2f;
+            margin: 2rem 0;
         }
-
-        /* Navigation links */
-        nav a {
+        .nav-link {
             text-decoration: none;
             margin: 0 1rem;
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.2rem;
-            padding: 0.3rem 1.5rem;
-            border-radius: 20px;
-            transition: background-color 0.3s, color 0.3s;
-            border: 2px solid #d32f2f;
+            color: #0f0; /* Neon green text color */
+            border: 2px solid #0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, text-shadow 0.3s;
         }
-
         .nav-link:hover {
-            background-color: #d32f2f;
+            background-color: #0f0;
             color: #000;
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; /* Neon pink text shadow */
         }
-
-        /* Section styling */
+        @media (max-width: 768px) {
+            .nav-link {
+                margin: 0.5rem 0;
+                display: block;
+                text-align: center;
+            }
+        }
         section {
-            background-color: #000;
-            padding: 3rem;
-            margin: 3rem auto;
-            position: relative;
-            border: 5px solid #d32f2f;
-            border-radius: 15px;
-            overflow: hidden;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: rgba(50, 50, 50, 0.9);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Neon green box shadow */
         }
-
-        /* Glitch animation */
-        @keyframes glitch {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            20%, 80% {
-                transform: translateX(-5%) scaleY(1.1);
-            }
-            40%, 60% {
-                transform: translateX(5%) scaleY(0.9);
-            }
+        #google-doc-container {
+            text-align: center;
         }
-
-        /* Glitch styling for Google Docs iframe */
-        .glitch {
-            transform: rotate(-5deg) translateX(-5%);
-            filter: contrast(120%) hue-rotate(10deg) saturate(150%);
-            animation: glitch 2s infinite;
-        }
-
-        /* Dynamic content */
-        #dynamic-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #d32f2f;
-            font-size: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            pointer-events: none;
+        #google-doc-container iframe {
+            width: 90%;
+            max-width: 1000px;
+            height: 80vh;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Neon green box shadow */
         }
     </style>
+
+    <!-- JavaScript for random backgrounds -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const backgrounds = [
+                "url('cyberpunk_image1.jpg')", 
+                "url('cyberpunk_image2.jpg')", 
+                "url('cyberpunk_image3.jpg')"
+                // Add more backgrounds as desired
+            ];
+            const headerElement = document.querySelector('header');
+            const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            headerElement.style.backgroundImage = randomBackground;
+        });
+    </script>
 </head>
 <body>
     <header>
-        <h1>CyberArt GMAster</h1>
-        <p>Immerse Yourself in the Future of Art</p>
+        <h1>Gregory M Aster</h1>
+        <p>Visual Artist</p>
     </header>
-    
-    <nav>
-        <a href="https://example.com/art" class="nav-link">Gallery</a>
-        <a href="https://example.com/exhibitions" class="nav-link">Exhibitions</a>
-        <a href="https://example.com/artists" class="nav-link">Artists</a>
-        <a href="https://example.com/about" class="nav-link">About</a>
+    <nav>   
+        <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
+        <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
+        <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
+        <a href="https://dndiy.github.io/" class="nav-link">About</a>
     </nav>
-       
     <section id="about">
-        <div class="glitch">
+        <div id="google-doc-container">
             <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
         </div>
-        <div id="dynamic-content">Explore the Unseen</div>
     </section>
-
-    <script>
-        // Change dynamic content on load
-        const dynamicContent = document.getElementById('dynamic-content');
-        const phrases = [
-            "Dive into the Code",
-            "Embrace Neon Creativity",
-            "Witness Digital Dreams",
-            "Break the Virtual Boundaries"
-        ];
-
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        dynamicContent.textContent = phrases[randomIndex];
-    </script>
 </body>
 </html>
