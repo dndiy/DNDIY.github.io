@@ -83,6 +83,16 @@
                 grid-template-columns: 1fr;
             }
         }
+        #google-doc-container iframe {
+            ...
+            opacity: 0.2;  /* Makes the iframe transparent */
+            transition: opacity 0.3s ease-in-out; /* Smooth transition */
+        }
+        #google-doc-container iframe:hover {
+            opacity: 1; /* Fully visible on hover */
+        }
+
+
     </style>
 
     <!-- JavaScript for dynamic photo loading and other features -->
@@ -145,6 +155,13 @@
     <div id="google-doc-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
     </div>
+    
+ <script>   
+    document.querySelector('#google-doc-container iframe').addEventListener('click', function() {
+    this.style.opacity = "1";
+    });
+ </script>
+    
 </body>
 
 </html>
