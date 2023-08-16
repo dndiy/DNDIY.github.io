@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body, h1, h2, p {
             margin: 0;
             padding: 0;
@@ -17,92 +15,86 @@
         }
         body {
             background-color: #111;
+            color: #ff5555;
             overflow-x: hidden;
-            color: #ff5555; /* primary red color */
-            display: flex;
-            height: 100vh;
-        }
-        /* Art showcase on the left */
-        .art-showcase {
-            flex: 1;
-            background: url('profile.jpg') no-repeat center center;
-            background-size: cover;
-            animation: fadeShowcase 10s infinite alternate;
-        }
-        /* Main content on the right */
-        .main-content {
-            flex: 2;
-            padding: 2rem;
             position: relative;
         }
-        .main-content nav {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 1rem;
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 5px #ff5555, 0 0 10px #ff5555;
+        }
+        nav {
+            text-align: center;
+            margin: 1rem 0;
         }
         .nav-link {
-            display: block;
             text-decoration: none;
+            margin: 0 1rem;
             color: #ff5555;
-            padding: 0.5rem 1rem;
-            margin-bottom: 1rem;
             transition: all 0.3s;
         }
         .nav-link:hover {
             color: #fff;
             transform: scale(1.1);
         }
-        header {
-            margin-bottom: 2rem;
-            text-shadow: 0 0 5px #ff5555, 0 0 10px #ff5555;
-        }
         section {
             max-width: 900px;
             margin: 2rem auto;
-            background-color: rgba(50, 50, 50, 0.9);
             padding: 2rem;
-            box-shadow: 0 0 15px rgba(255, 85, 85, 0.7); /* Red box shadow */
+            background-color: rgba(50, 50, 50, 0.9);
             border-radius: 10px;
-            overflow: hidden;
         }
         #google-doc-container iframe {
             width: 100%;
-            max-width: 1000px;
             height: 80vh;
             border: none;
             box-shadow: 0 0 15px rgba(255, 85, 85, 0.7);
         }
-        @keyframes fadeShowcase {
-            0% {
-                opacity: 0.6;
-            }
-            100% {
-                opacity: 1;
+        @media (max-width: 768px) {
+            .nav-link {
+                display: block;
+                text-align: center;
+                margin: 0.5rem 0;
             }
         }
     </style>
+
+    <!-- JavaScript for random backgrounds -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const backgrounds = [
+                "url('cyberpunk_image1.jpg')", 
+                "url('cyberpunk_image2.jpg')", 
+                "url('cyberpunk_image3.jpg')"
+            ];
+            const bodyElement = document.querySelector('body');
+            const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            bodyElement.style.backgroundImage = randomBackground;
+            bodyElement.style.backgroundSize = 'cover';
+            bodyElement.style.backgroundPosition = 'center';
+        });
+    </script>
 </head>
 
 <body>
-    <div class="art-showcase"></div>
-    <div class="main-content">
-        <nav>
-            <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
-            <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
-            <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
-            <a href="https://dndiy.github.io/" class="nav-link">About</a>
-        </nav>
-        <header>
-            <h1>Gregory M Aster</h1>
-            <p>Visual Artist</p>
-        </header>
-        <section id="about">
-            <div id="google-doc-container">
-                <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
-            </div>
-        </section>
-    </div>
+    <header>
+        <h1>Gregory M Aster</h1>
+        <p>Visual Artist</p>
+    </header>
+    <nav>
+        <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
+        <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
+        <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
+        <a href="https://dndiy.github.io/" class="nav-link">About</a>
+    </nav>
+    <section id="about">
+        <div id="google-doc-container">
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
+        </div>
+    </section>
 </body>
 
 </html>
