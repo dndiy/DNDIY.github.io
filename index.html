@@ -6,18 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART</title>
 
-    <!-- Importing Roboto font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Importing Dancing Script font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         body, h1, h2, p {
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', sans-serif; 
+            font-family: 'Dancing Script', cursive; 
         }
         body {
             overflow-x: hidden;
             position: relative;
+            background-color: #111;
+            color: #ddd;
         }
         header {
             text-align: center;
@@ -34,8 +36,12 @@
             margin: 0 1rem;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            border: 1px solid #fff;
+            border: 1px solid #ddd;
+            color: #ddd;
             transition: all 0.3s;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
         }
         section {
             max-width: 900px;
@@ -58,11 +64,9 @@
         }
     </style>
 
-    <!-- JavaScript for theme switching and background changes -->
+    <!-- JavaScript for background changes -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const bodyElement = document.querySelector('body');
-            const navLinks = document.querySelectorAll(".nav-link");
             const header = document.querySelector('header');
 
             // Random background for the header
@@ -74,54 +78,6 @@
             const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
             header.style.backgroundImage = randomBackground;
             header.style.backgroundSize = "cover";
-
-            // Random theme chooser
-            const themes = ['dark', 'neon-dark', 'goth', 'cyberpunk', 'glitch'];
-            const chosenTheme = themes[Math.floor(Math.random() * themes.length)];
-
-            switch (chosenTheme) {
-                case 'dark':
-                    bodyElement.style.backgroundColor = "#111";
-                    bodyElement.style.color = "#ddd";
-                    navLinks.forEach(link => {
-                        link.style.color = "#ddd";
-                    });
-                    break;
-
-                case 'neon-dark':
-                    bodyElement.style.backgroundColor = "#111";
-                    bodyElement.style.color = "#0ff";
-                    navLinks.forEach(link => {
-                        link.style.color = "#0ff";
-                    });
-                    break;
-
-                case 'goth':
-                    bodyElement.style.backgroundColor = "#210a2e";
-                    bodyElement.style.color = "#87377a";
-                    navLinks.forEach(link => {
-                        link.style.color = "#87377a";
-                    });
-                    break;
-
-                case 'cyberpunk':
-                    bodyElement.style.backgroundColor = "#0d0018";
-                    bodyElement.style.color = "#ff007f";
-                    navLinks.forEach(link => {
-                        link.style.color = "#ff007f";
-                    });
-                    break;
-
-                case 'glitch':
-                    bodyElement.style.backgroundColor = "#111";
-                    bodyElement.style.color = "#ddd";
-                    header.style.backgroundImage += `, repeating-linear-gradient(45deg, transparent, transparent 2px, #fff 2px, #fff 4px)`;
-                    navLinks.forEach(link => {
-                        link.style.color = "#ddd";
-                        link.style.backgroundImage = "repeating-linear-gradient(45deg, transparent, transparent 1px, #fff 1px, #fff 2px)";
-                    });
-                    break;
-            }
         });
     </script>
 </head>
