@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMAster ART</title>
 
-    <!-- Importing Dancing Script font and Montserrat font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Importing Montserrat font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* General Settings */
@@ -20,13 +20,9 @@
             overflow-x: hidden;
             position: relative;
             color: #ddd;
-            background-image: url('00085-a window looking out to rocky desert.jpg');
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
-        }
-        h1, p {
-            font-family: 'Dancing Script', cursive;
         }
 
         /* Header */
@@ -84,6 +80,31 @@
         }
     </style>
 
+    <!-- JavaScript for background changes -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bodyElement = document.querySelector('body');
+            
+            // Background images array
+            const backgrounds = [
+                "url('00085-a window looking out to rocky desert.jpg')",
+                "url('0282b.png')",
+                "url('00123-detailed eyes.jpg')"
+            ];
+            
+            // Function to set a random background
+            function setRandomBackground() {
+                const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+                bodyElement.style.backgroundImage = randomBackground;
+            }
+            
+            // Set the initial background
+            setRandomBackground();
+
+            // Change background every 10 seconds (10000ms)
+            setInterval(setRandomBackground, 10000);
+        });
+    </script>
 </head>
 
 <body>
