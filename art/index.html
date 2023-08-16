@@ -97,18 +97,18 @@
     </section>
     
     <script>
-        // Resize Google Photos slideshow iframe
-        function resizeIframe() {
-            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-            if (googlePhotosIframe) {
-                const containerHeight = window.innerHeight;
-                googlePhotosIframe.style.height = `${containerHeight}px`;
-            }
+    // Resize Google Photos slideshow iframe
+    function resizeIframe() {
+        const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
+        if (googlePhotosIframe) {
+            const containerHeight = window.innerHeight;
+            googlePhotosIframe.style.height = `${containerHeight}px`;
         }
+    }
 
-        // Call the function initially and on window resize
-        resizeIframe();
-        window.addEventListener('resize', resizeIframe);
+    // Call the function initially and on window resize
+    resizeIframe();
+    window.addEventListener('resize', resizeIframe);
     </script>
 
 </body>
