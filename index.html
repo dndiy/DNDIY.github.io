@@ -183,6 +183,7 @@
     
 
             // Resize Google Doc iframe
+       function resizeIframe() {
             const googleDocIframe = document.querySelector('#google-doc-container iframe');
             if (googleDocIframe) {
                 const containerWidth = googleDocIframe.parentElement.clientWidth;
@@ -190,6 +191,12 @@
                 const calculatedHeight = containerWidth / aspectRatio;
                 googleDocIframe.style.width = '100%';
                 googleDocIframe.style.height = `${calculatedHeight}px`;
+            }
+        }
+
+        // Call the function initially and on window resize
+        resizeIframe();
+        window.addEventListener('resize', resizeIframe);
             }
         }
 
