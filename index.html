@@ -46,6 +46,28 @@
             margin: 0 1rem;
             color: #d32f2f;
         }
+        .nav-link {
+            text-decoration: none;
+            margin: 0 1rem;
+            color: #d32f2f;
+            border: 2px solid #d32f2f;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+        
+        /* Media query for screens with a maximum width of 768px (typical mobile devices) */
+        @media (max-width: 768px) {
+            .nav-link {
+                margin: 0.5rem 0;
+                display: block;
+                text-align: center;
+            }
 
         /* Section styling */
         section {
@@ -75,11 +97,11 @@
         <p>Visual Artist</p>
     </header>
     
-    <nav>
-        <a href="https://dndiy.github.io/art/">Art</a>
-        <a href="https://youtube.com/dndiy">Video</a>
-        <a href="https://dndiy.github.io/builds/">Builds</a>
-        <a href="https://dndiy.github.io/">About</a>
+    <nav>   
+    <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
+    <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
+    <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
+    <a href="https://dndiy.github.io/" class="nav-link">About</a>
     </nav>
        
     <section id="about">
