@@ -18,7 +18,6 @@
             overflow: hidden;
         }
 
-        /* Additional styling for header content */
         header h1 {
             font-size: 4rem;
             margin-bottom: 1rem;
@@ -76,6 +75,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             transform: rotate(-10deg) translateX(-5%);
             filter: contrast(150%) hue-rotate(10deg) saturate(150%);
+            animation: glitch 2s infinite;
         }
 
         #google-doc-container iframe {
@@ -83,6 +83,28 @@
             max-width: 1000px;
             height: 80vh;
             border: none;
+        }
+
+        /* Additional styling for glitch animation */
+        @keyframes glitch {
+            0% {
+                transform: translateX(0) skewX(0);
+            }
+            20% {
+                transform: translateX(-5%) skewX(2deg);
+            }
+            40% {
+                transform: translateX(5%) skewX(-2deg);
+            }
+            60% {
+                transform: translateX(-3%) skewX(1deg);
+            }
+            80% {
+                transform: translateX(3%) skewX(-1deg);
+            }
+            100% {
+                transform: translateX(0) skewX(0);
+            }
         }
     </style>
 </head>
