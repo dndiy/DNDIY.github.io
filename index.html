@@ -87,24 +87,45 @@
 
     <!-- JavaScript for dynamic photo loading and other features -->
     <script>
-        window.onload = function() {
-            const gallery = document.querySelector(".gallery");
-            const bodyElement = document.querySelector('body');
+      window.onload = function() {
+    const gallery = document.querySelector(".gallery");
+    const bodyElement = document.querySelector('body');
 
-            fetch('loadImages.php')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(url => {
-                        const img = document.createElement("img");
-                        img.src = url;
-                        img.addEventListener('click', function() {
-                            bodyElement.style.backgroundImage = `url(${url})`;
-                            bodyElement.style.backgroundSize = 'cover';
-                            bodyElement.style.backgroundPosition = 'center center';
-                        });
-                        gallery.appendChild(img);
-                    });
-                });
+    // Predefined list of images
+    const images = [
+        "image1.jpg",
+        "image2.jpg",
+        "image3.jpg", 
+        "image4.jpg",
+        "image5.jpg",
+        "image5.jpg", 
+        "image7.jpg",
+        "image8.jpg",
+        "image9.jpg", 
+        "image10.jpg",
+        "image11.jpg",
+        "image12.jpg", 
+        "image13.jpg",
+        "image14.jpg",
+        "image15.jpg", 
+        "image16.jpg",
+        "image17.jpg",
+        "image18.jpg", 
+        
+        //... add more filenames as you add them to your folder
+    ];
+
+    images.forEach(url => {
+        const img = document.createElement("img");
+        img.src = "art/" + url; // Prepend the path to your images folder here
+        img.addEventListener('click', function() {
+            bodyElement.style.backgroundImage = `url(images/${url})`;
+            bodyElement.style.backgroundSize = 'cover';
+            bodyElement.style.backgroundPosition = 'center center';
+        });
+        gallery.appendChild(img);
+    });
+};
         };
     </script>
 
