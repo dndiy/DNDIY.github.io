@@ -201,15 +201,14 @@
         </div>
     </section>
  <script>
-    // Resize Google Doc iframe
-    function resizeIframe() {
-        const googleDocIframe = document.querySelector('#google-doc-container iframe');
-        if (googleDocIframe) {
-            const containerWidth = googleDocIframe.parentElement.clientWidth;
-            const aspectRatio = 1.0; // Adjust the aspect ratio as needed
-            const calculatedHeight = containerWidth / aspectRatio;
-            googleDocIframe.style.width = '100%';
-            googleDocIframe.style.height = `${calculatedHeight}px`;
+// Resize Google Doc iframe
+function resizeIframe() {
+    const googleDocIframe = document.querySelector('#google-doc-container iframe');
+    if (googleDocIframe) {
+        const containerWidth = googleDocIframe.clientWidth; // Use iframe width
+        const aspectRatio = 1.0; // Adjust the aspect ratio as needed
+        const calculatedHeight = containerWidth / aspectRatio;
+        googleDocIframe.style.height = `${calculatedHeight}px`;
         }
     }
 
