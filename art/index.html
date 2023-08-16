@@ -3,113 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Portfolio</title>
+    <title>GMAster ART</title>
     <style>
         /* Your existing CSS code */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0; auto; /* Center content horizontally */
-            padding: 0;
-            background-color: #222;
+
+        /* Additional styling for header */
+        header {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url(profile.jpg) no-repeat center center;
+            background-size: cover;
+            padding: 6rem 0;
+            text-align: center;
             color: #fff;
         }
+
+        /* Additional styling for header content */
+        header h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        header p {
+            font-size: 1.8rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Additional styling for navigation */
         nav {
             text-align: center;
-            margin: 1rem 0;
+            margin: 0;
+            padding: 1rem 0;
+            background-color: #222;
         }
+
+        /* Additional styling for navigation links */
         nav a {
             text-decoration: none;
             margin: 0 1rem;
-            color: #d32f2f;
-        }
-        .nav-link {
-            text-decoration: none;
-            margin: 0 1rem;
-            color: #d32f2f;
-            border: 2px solid #d32f2f;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 0.3rem 1.5rem;
+            border-radius: 20px;
             transition: background-color 0.3s, color 0.3s;
+            border: 2px solid #d32f2f;
         }
 
         .nav-link:hover {
             background-color: #d32f2f;
-            color: #fff;
-        }
-        /* Media query for screens with a maximum width of 768px (typical mobile devices) */
-        @media (max-width: 768px) {
-            .nav-link {
-                margin: 0.5rem 0;
-                display: block;
-                text-align: center;
-            }
-            section {
-                max-width: 900px;
-                margin: 0 auto;
-                padding: 2rem;
-                background-color: #333;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-            /* Add borders to the section content */
-            .section-content {
-                border: 2px solid #d32f2f; /* You can adjust the color and thickness */
-                border-radius: 5px;
-                padding: 1rem; /* Add some padding for spacing */
-                margin: 5rem 0; /* Add margin for spacing */
-                
-            }
-        }
-                /* Your existing CSS code */
-        /* ... */
-
-        /* Add styling for the slideshow container */
-        #google-photos-slideshow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Adjust this as needed */
+            color: #000;
         }
 
-        /* Adjust iframe width and height */
-        #google-photos-slideshow iframe {
+        /* Additional styling for section */
+        section {
+            background-color: #111;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 3rem auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Additional styling for Google Docs iframe container */
+        #google-doc-container {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #google-doc-container iframe {
             width: 100%;
-            height: 100%;
+            max-width: 1000px;
+            height: 80vh;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <nav>   
-    <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
-    <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
-    <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
-    <a href="https://dndiy.github.io/" class="nav-link">About</a>
+    <header>
+        <h1>Gregory M Aster</h1>
+        <p>Visual Artist</p>
+    </header>
+    
+    <nav>
+        <a href="https://dndiy.github.io/art/" class="nav-link">Art</a>
+        <a href="https://youtube.com/dndiy" class="nav-link">Video</a>
+        <a href="https://dndiy.github.io/builds/" class="nav-link">Builds</a>
+        <a href="https://dndiy.github.io/" class="nav-link">About</a>
     </nav>
-
-    <section id="art" class="section-content">
-        <h2 style="text-align: center;">Art Portfolio</h2>
-        <div id="google-photos-slideshow">
-            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/embed?start=true&loop=true&delayms=5000&amp;rm=minimal" 
-              frameborder="0" width="100%" height="100%" 
-              allowfullscreen="true" 
-              mozallowfullscreen="true" 
-              webkitallowfullscreen="true"></iframe>
+       
+    <section id="about">
+        <div id="google-doc-container">
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
         </div>
     </section>
-    
-    <script>
-    // Resize Google Photos slideshow iframe
-    function resizeIframe() {
-        const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-        if (googlePhotosIframe) {
-            const containerHeight = window.innerHeight;
-            googlePhotosIframe.style.height = `${containerHeight}px`;
-        }
-    }
-
-    // Call the function initially and on window resize
-    resizeIframe();
-    window.addEventListener('resize', resizeIframe);
-    </script>
-
 </body>
 </html>
