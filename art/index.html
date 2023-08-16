@@ -81,18 +81,17 @@
     
      <script>
     
-        function resizeIframes() {
-            // Resize Google Photos iframe
-            const googlePhotosIframe = document.querySelector('#google-photos-slideshow iframe');
-            if (googlePhotosIframe) {
-                googlePhotosIframe.style.width = '100%';
-                googlePhotosIframe.style.height = (googlePhotosIframe.offsetWidth * 9 / 16) + 'px'; // 16:9 aspect ratio
+        // Resize Google Doc iframe
+        function resizeIframe() {
+            const googleDocIframe = document.querySelector('#google-doc-container iframe');
+            if (googleDocIframe) {
+                const containerWidth = googleDocIframe.parentElement.clientWidth;
+                googleDocIframe.style.width = '100%';
+                // You might want to consider a different aspect ratio calculation for the height
+                googleDocIframe.style.height = `${containerWidth * 0.75}px`; // 4:3 aspect ratio
             }
-
-
-
-           
         }
+
 
         // Call the function initially and on window resize
         resizeIframes();
