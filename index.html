@@ -45,15 +45,15 @@
         nav a:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        
         /* Gallery */
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
             margin-top: 24px;
             width: 90%;
             max-width: 1200px;
+            transition: transform 0.3s ease;
         }
+
         .gallery img {
             max-width: 100%;
             border-radius: 8px;
@@ -97,6 +97,9 @@
     </style>
 
     <!-- JavaScript for dynamic photo loading and other features -->
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    
     <script>
       window.onload = function() {
     const gallery = document.querySelector(".gallery");
@@ -125,6 +128,26 @@
         
         //... add more filenames as you add them to your folder
     ];
+
+    images.forEach(url => {
+        const img = document.createElement("img");
+        img.src = "images/" + url;
+        img.onload = function() {  // This ensures Masonry activates after images are loaded
+            new Masonry(gallery, {
+                itemSelector: 'img',
+                columnWidth: 200,
+                fitWidth: true,
+                gutter: 10
+            });
+        }
+        img.addEventListener('click', function() {
+            bodyElement.style.backgroundImage = `url(images/${url})`;
+            bodyElement.style.backgroundSize = 'cover';
+            bodyElement.style.backgroundPosition = 'center center';
+        });
+        gallery.appendChild(img);
+    });
+
           
     // Select a random image for the initial background
     const randomImage = images[Math.floor(Math.random() * images.length)];
@@ -157,7 +180,7 @@
         <a href="https://dndiy.github.io/">About</a>
     </nav>
 
-    <div class="gallery"></div>
+    <div class="gallery grid"></div>
 
     <div id="google-doc-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
