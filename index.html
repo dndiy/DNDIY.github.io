@@ -125,8 +125,14 @@
         
         //... add more filenames as you add them to your folder
     ];
-
+          
+    // Select a random image for the initial background
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    bodyElement.style.backgroundImage = `url(images/${randomImage})`;
+    bodyElement.style.backgroundSize = 'cover';
+    bodyElement.style.backgroundPosition = 'center center';
     images.forEach(url => {
+        
         const img = document.createElement("img");
         img.src = "images/" + url; // Prepend the path to your images folder here
         img.addEventListener('click', function() {
