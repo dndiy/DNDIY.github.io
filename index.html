@@ -10,8 +10,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ... (the rest of the styles remain unchanged) ... */
-
+        /* General styles */
+        body, h1, h2, p, a {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #ddd;
+        }
+        body {
+            padding-top: 50px; /* Adjust as necessary */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            transition: background-image 0.3s ease-in-out;
+        }
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #ddd;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
         /* Gallery */
         .gallery {
             margin-top: 24px;
@@ -21,7 +55,7 @@
         }
 
         .gallery img {
-            width: 150px;  /* Adjusted the width */
+            width: 150px;  /* Adjust this value as per your preference */
             max-width: 100%;
             border-radius: 8px;
             opacity: 0.6;
@@ -32,59 +66,100 @@
             transform: scale(1.05);
             opacity: 1;
         }
+        
+        /* Google Docs container */
+        #google-doc-container {
+            margin-top: 50px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        #google-doc-container iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            opacity: 0.2;  /* Makes the iframe transparent */
+            transition: opacity 0.3s ease-in-out; /* Smooth transition */
+        }
+        #google-doc-container iframe:hover {
+            opacity: 1; /* Fully visible on hover */
+        }
 
-        /* ... (the rest of the styles remain unchanged) ... */
-
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 
     <!-- JavaScript for dynamic photo loading and other features -->
-
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     
     <script>
       window.onload = function() {
-    const gallery = document.querySelector(".gallery");
-    const bodyElement = document.querySelector('body');
+        const gallery = document.querySelector(".gallery");
+        const bodyElement = document.querySelector('body');
 
-    // Predefined list of images
-    const images = [
-        "image1.jpg",
-        // ... (rest of your images) ...
-    ];
+        // Predefined list of images
+        const images = [
+            "image1.jpg",
+            //... add more filenames as you add them to your folder
+        ];
 
-    images.forEach(url => {
-        const img = document.createElement("img");
-        img.src = "images/" + url;
-        img.onload = function() {  // This ensures Masonry activates after images are loaded
-            new Masonry(gallery, {
-                itemSelector: 'img',
-                columnWidth: 160,  /* Adjusted the columnWidth */
-                fitWidth: true,
-                gutter: 10
+        images.forEach(url => {
+            const img = document.createElement("img");
+            img.src = "images/" + url;
+            img.onload = function() {  // This ensures Masonry activates after images are loaded
+                new Masonry(gallery, {
+                    itemSelector: 'img',
+                    columnWidth: 160,  // Adjusted this value
+                    fitWidth: true,
+                    gutter: 10
+                });
+            }
+            img.addEventListener('click', function() {
+                bodyElement.style.backgroundImage = `url(images/${url})`;
+                bodyElement.style.backgroundSize = 'cover';
+                bodyElement.style.backgroundPosition = 'center center';
             });
-        }
-        img.addEventListener('click', function() {
-            bodyElement.style.backgroundImage = `url(images/${url})`;
-            bodyElement.style.backgroundSize = 'cover';
-            bodyElement.style.backgroundPosition = 'center center';
+            gallery.appendChild(img);
         });
-        gallery.appendChild(img);
-    });
 
-    // Select a random image for the initial background
-    const randomImage = images[Math.floor(Math.random() * images.length)];
-    bodyElement.style.backgroundImage = `url(images/${randomImage})`;
-    bodyElement.style.backgroundSize = 'cover';
-    bodyElement.style.backgroundPosition = 'center center';
-
-};  // Close the window.onload function
-
+        // Select a random image for the initial background
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        bodyElement.style.backgroundImage = `url(images/${randomImage})`;
+        bodyElement.style.backgroundSize = 'cover';
+        bodyElement.style.backgroundPosition = 'center center';
+      };
     </script>
 
 </head>
 
 <body>
-    <!-- ... (the rest of your body content remains unchanged) ... -->
+    <h1>Gregory M Aster</h1>
+
+    <nav>
+        <a href="https://dndiy.github.io/art/">Art</a>
+        <a href="https://youtube.com/dndiy">Video</a>
+        <a href="https://dndiy.github.io/builds/">Builds</a>
+        <a href="https://dndiy.github.io/">About</a>
+    </nav>
+
+    <div class="gallery"></div>
+
+    <div id="google-doc-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vSy-0tK6Rwz315j-zSzJpKvcZcfDRaoPb0buvDUVHZjl8nw04_5ybu_ddqxi1Siykpi_B2by1TXnVXQ/pub?embedded=true"></iframe>
+    </div>
+    
+    <script>   
+        document.querySelector('#google-doc-container iframe').addEventListener('click', function() {
+            this.style.opacity = "1";
+        });
+    </script>
+    
 </body>
 
 </html>
