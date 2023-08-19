@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,17 @@
             text-align: center;
             padding: 50px;
         }
+
         h1 {
             color: #ff33cc;
         }
+
         img {
             border-radius: 50%;
             width: 200px;
             margin: 20px;
         }
+
         button {
             padding: 10px 20px;
             border: none;
@@ -29,28 +33,72 @@
         }
     </style>
 </head>
+
 <body>
 
-<h1>April: The Party in a Can</h1>
-<img src="party/IMG_20220423_153640740_HDR.jpg" alt="April's Photo" id="aprilPhoto">
-<p>April shines, like glitter in the sky.<br>
-She dances wild, never letting life pass her by.<br>
-Every room she enters, becomes the stage,<br>
-With her, every moment, is the age of rave.</p>
-<button onclick="changePhoto()">Surprise Me!</button>
+    <h1>April: The Party in a Can</h1>
+    <img src="011000707.jpg" alt="April's Photo" id="aprilPhoto">
+    <p id="aprilPoem">April shines, like glitter in the sky.<br>
+        She dances wild, never letting life pass her by.<br>
+        Every room she enters, becomes the stage,<br>
+        With her, every moment, is the age of rave.</p>
+    <button onclick="surpriseMe()">Surprise Me!</button>
 
 <script>
-    function changePhoto() {
+    function surpriseMe() {
         const images = [
-            "party/IMG_20220427_214730141.jpg",
-            "party/PXL_20230716_222833747.jpg",
-            "party/PXL_20230520_215604665.MP.jpg"
+            "011000707.jpg", 
+            "011003343.jpg", 
+            "aDEkQEs9RmmREC930KrExg.jpeg", 
+            "april.png", 
+            "IMG_20190928_130626.jpg", 
+            "IMG_20191110_231633.jpg", 
+            "IMG_20210912_092012683.jpg", 
+            "IMG_20210912_112456774_HDR.jpg", 
+            "IMG_20210915_135743624.jpg", 
+            "IMG_20211003_114820525.jpg", 
+            "IMG_20211016_231852938_HDR.jpg", 
+            "IMG_20220115_095824211_HDR.jpg", 
+            "IMG_20220124_124101708_HDR.jpg", 
+            "IMG_20220125_125723836.jpg", 
+            "IMG_20220416_195753582_HDR.jpg", 
+            "IMG_20220423_153640740_HDR.jpg", 
+            "IMG_20220427_214730141.jpg", 
+            "IMG_20220611_120838489.jpg", 
+            "IMG_20220621_092414551_HDR.jpg", 
+            "IMG_20220623_090940891.jpg", 
+            "IMG_20220628_211438047.jpg", 
+            "MVIMG_20200925_213603.jpg", 
+            "original_9c908f18-fecc-4f5a-aa59-ef94fbfcc850_PXL_20230211_231706509.jpg", 
+            "original_52153e8b-6f61-4ad9-9c75-3c0e7ff8a033_IMG_20220102_123804492.jpg", 
+            "P1013775.JPG", 
+            "PXL_20210223_163838845.jpg", 
+            "PXL_20210428_040713391.jpg", 
+            "PXL_20220802_030308010.jpg", 
+            "PXL_20230109_063219435.jpg", 
+            "PXL_20230211_233843671.jpg", 
+            "PXL_20230520_215604665.MP.jpg", 
+            "PXL_20230611_221814374.MP.jpg", 
+            "PXL_20230612_220122948.jpg", 
+            "PXL_20230701_051825815.jpg", 
+            "PXL_20230701_193412650.jpg", 
+            "PXL_20230702_230902939.jpg", 
+            "PXL_20230716_222833747.jpg"
         ];
-        const randomIndex = Math.floor(Math.random() * images.length);
-        document.getElementById('aprilPhoto').src = images[randomIndex];
+        const poems = [
+            "April's laughter, a melody so fine,<br>With every chuckle, the stars align.<br>A toast to the girl, who lights up the night,<br>With her around, everything feels just right.",
+            "In the heart of the party, April stands tall,<br>With her infectious energy, she enchants all.<br>Her spirit's the music, her moves the song,<br>With April in the room, nothing can go wrong.",
+            "She's the spark, the fire, the burning flame,<br>April's presence, is never ever tame.<br>She’s the beat, the rhythm, the festive cheer,<br>With her, the party’s best, year after year.",
+            "Glowing bright, like a neon light,<br>April’s energy, takes flight.<br>In the realm of night, she’s the queen,<br>Her vibrant spirit, always keen.",
+            "Twinkling eyes, that lively stance,<br>April's always ready for a dance.<br>With every step, she tells a tale,<br>Of wild nights and fun, without fail."
+        ];
+        const randomImageIndex = Math.floor(Math.random() * images.length);
+        const randomPoemIndex = Math.floor(Math.random() * poems.length);
+        document.getElementById('aprilPhoto').src = images[randomImageIndex];
+        document.getElementById('aprilPoem').innerHTML = poems[randomPoemIndex];
     }
 </script>
 
 </body>
-</html>
 
+</html>
