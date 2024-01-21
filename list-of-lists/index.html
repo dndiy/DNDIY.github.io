@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untitled Anthology - Navigator</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body, h1, h2, p, a {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #ddd;
+        }
+        body {
+            padding-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            transition: background-image 0.3s ease-in-out;
+            background-size: cover;
+            background-position: center center;
+        }
+        nav {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #ddd;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .gallery {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 150px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 2px solid black; /* This line adds the black border */
+            opacity: 0.7;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+        
+        #google-doc-container {
+            margin-top: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+            display: flex; /* Use flexbox */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
+        }
+        #google-doc-container iframe {
+            display: block; /* Make the iframe a block-level element */
+            margin: 0 auto; /* Center the iframe horizontally with auto margins */
+            width: 100%;
+            height: 80vh;
+            border: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #google-doc-container iframe:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    
+    <script>
+      window.onload = function() {
+        const gallery = document.querySelector(".gallery");
+        const bodyElement = document.querySelector('body');
+        
+        const images = [
+          "image1.jpg", "image2.jpg", "image3.jpg", 
+          "image4.jpg", "image5.jpg", "image6.jpg", 
+          "image7.jpg", "image8.jpg", "P1003413.JPG", "1430.jpg",
+          "JYqtl0HgTCqf9hfH0tY-oQ.jpeg",
+          "13938071_1361151593898210_3080281611150569545_o.jpg",
+          "PXL_20210627_014812584~3.jpg",
+          "rockt.jpg",
+          "sub.jpg",
+          "artcar.jpg",
+
+         
+        ];
+        
+        images.forEach(url => {
+            const img = document.createElement("img");
+            img.src = "images/" + url;
+            img.onload = function() {
+                new Masonry(gallery, {
+                    itemSelector: 'img',
+                    columnWidth: 160,
+                    fitWidth: true,
+                    gutter: 10
+                });
+            }
+            img.addEventListener('click', function() {
+                bodyElement.style.backgroundImage = `url(images/${url})`;
+            });
+            gallery.appendChild(img);
+        });
+
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        bodyElement.style.backgroundImage = `url(images/${randomImage})`;
+      };
+    </script>
+</head>
+
+<body>
+//    <h1>Gregory M Aster</h1>
+
+//    <nav>
+//        <a href="https://docs.google.com/presentation/d/e/2PACX-1vQxPyDVQx577BwZYgouQIvmAdHp34rV4OPZF1Yh1TsEIz-DnKxNTSJrzsjEvFnqbwxsvpZRBTCwrnHU/pub?start=true&loop=true&delayms=5000">Art</a>
+//        <a href="https://youtube.com/dndiy">Video</a>
+//        <a href="https://docs.google.com/presentation/d/e/2PACX-1vRhwEAP3otnO8pDwGuTbC6tMdOSsW3SU-ZNcL3pb2z-hYLorj8PzCz-UYCnjc20701_rGvUIJQowV-7/pub?start=true&loop=true&delayms=10000&slide=id.g23bc3285e8c_0_18">Builds</a>
+//        <a href="https://dndiy.github.io/">About</a>
+//    </nav>
+
+    <div class="gallery"></div>
+
+    <div id="google-doc-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTHe45LYdVEVp81CRGOBVcMnQhLL6nhrhq2PpQSg2lFI6fkcL33xlLQRF0yF75d10o3MZl1Y8Q4RsGX/pub?embedded=true"></iframe>
+    </div>
+
+    <script>   
+        document.querySelector('#google-doc-container iframe').addEventListener('click', function() {
+            this.style.opacity = "1";
+        });
+    </script>
+    
+</body>
+
+</html>
