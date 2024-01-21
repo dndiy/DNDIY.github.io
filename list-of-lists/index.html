@@ -71,8 +71,7 @@
             height: 100vh; /* Full height */
             /* max-width: 2160px; */
             display: flex; /* Use flexbox */
-            align-items: center; /* Center items vertically */
-            justify-content: center; /* Center items horizontally */
+            text-align: center; /* Center the iframe horizontally */
         }
         #google-doc-container iframe {
             display: block; /* Make the iframe a block-level element */
@@ -82,6 +81,8 @@
             border: none;
             opacity: 0.8;
             transition: opacity 0.3s ease-in-out;
+            margin: 0 auto; /* Center the iframe horizontally using auto margins */
+
         }
         #google-doc-container iframe:hover {
             opacity: 1;
