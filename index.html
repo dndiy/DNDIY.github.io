@@ -66,10 +66,12 @@
         
         #google-doc-container {
             margin-top: 30px;
-            padding: 20px; /* added in a hacky attempt to make a border around iframe */
-          //  border: 1px solid #ccc; /* added in a hacky attempt to make a border around iframe */
+            padding: 20px;
             width: 90%;
             max-width: 1200px;
+            display: flex; /* Use flexbox */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
         }
         #google-doc-container iframe {
             display: block; /* Make the iframe a block-level element */
