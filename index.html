@@ -65,13 +65,15 @@
         }
         
         #google-doc-container {
-            margin-top: 50px;
+            margin-top: 30px;
             padding: 20px; /* added in a hacky attempt to make a border around iframe */
-            border: 1px solid #ccc; /* added in a hacky attempt to make a border around iframe */
+          //  border: 1px solid #ccc; /* added in a hacky attempt to make a border around iframe */
             width: 90%;
             max-width: 1200px;
         }
         #google-doc-container iframe {
+            display: block; /* Make the iframe a block-level element */
+            margin: 0 auto; /* Center the iframe horizontally with auto margins */
             width: 100%;
             height: 80vh;
             border: none;
