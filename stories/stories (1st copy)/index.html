@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"0": "In a magical land, Merkin, the god of laughter, created a world of wonders.",
+
+"1": "Merkin crafted a sky of vibrant colors, spreading joy to all in the enchanted forest.",
+
+"2": "Using his magic, Merkin conjured Flutterpixie, a whimsical creature, to share kindness.",
+,\
+"3": "Together, Merkin and Flutterpixie embarked on adventures, teaching friendship and nature's care.",
+
+"4": "In the heart of the magical forest, Merkin's laughter blossomed into enchanted flowers.",
+
+"5": "Mischievous Giggletwirl turned the garden into a field of bouncing bubble flowers.",
+
+"6": "Merkin, finding joy in surprises, turned it into a game for all forest creatures.",
+
+"7": "Seasons changed, revealing a hidden cave where dream crystals sparkled with magical power.",
+
+"8": "With dream crystals, Merkin and Flutterpixie inspired big dreams in the magical land.",
+
+"9": "The tale of Merkin, the god of laughter, and Flutterpixie's adventures echoed in the enchanted forest.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "/xl_1/ComfyUI_0001.png",
+            "/xl_1/ComfyUI_0002.png",
+            "/xl_1/ComfyUI_0003.png",
+            "/xl_1/ComfyUI_0004.png",
+            "/xl_1/ComfyUI_0005.png",
+            "/xl_1/ComfyUI_0006.png",
+            "/xl_1/ComfyUI_0007.png",
+            "/xl_1/ComfyUI_0008.png",
+            "/xl_1/ComfyUI_0009.png",
+            "/xl_1/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>
+
