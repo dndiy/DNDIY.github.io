@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"In the utterly thrilling town of Mehville, there lived Steve, a guy who considered watching paint dry an extreme sport.",
+
+"Steve's partner in mundane adventures, Karen, had a pet rock named Pebbles, renowned for its extraordinary lack of movement.",
+
+"One day, Steve discovered a treasure map promising 'The Most Unremarkable Adventure.' Spoiler alert: it led to a field of identical beige rocks.",
+
+"During this riveting quest, they encountered Phil, a sloth with a passion for extreme relaxation and a knack for giving slow-motion advice.",
+
+"Phil's profound words: 'Why dash when you can casually stroll through the tapestry of complete and utter indifference?'",
+
+"Returning to Mehville, Steve and Karen organized the 'Mehfest Carnival,' featuring contests like 'Spot the Most Average Cloud.'",
+
+"The highlight of the carnival was a riveting game of 'Watch Grass Grow,' where participants competed for the slowest-growing patch.",
+
+"Steve and Karen became local legends, hailed for transforming the ordinary into an art form and achieving unparalleled levels of mediocrity.",
+
+"Mehville, once overlooked, became a tourist destination for those seeking the epitome of underwhelming excitement.",
+
+"And so, the legend of Steve, Karen, and the town that made Meh a masterpiece spread far and wide, or at least as far as anyone bothered.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "stories/stories2/xl_1/ComfyUI_0001.png",
+            "stories/stories2/xl_1/ComfyUI_0002.png",
+            "stories/stories2/xl_1/ComfyUI_0003.png",
+            "stories/stories2/xl_1/ComfyUI_0004.png",
+            "stories/stories2/xl_1/ComfyUI_0005.png",
+            "stories/stories2/xl_1/ComfyUI_0006.png",
+            "stories/stories2/xl_1/ComfyUI_0007.png",
+            "stories/stories2/xl_1/ComfyUI_0008.png",
+            "stories/stories2/xl_1/ComfyUI_0009.png",
+            "stories/stories2/xl_1/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>
