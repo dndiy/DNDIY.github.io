@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"In the mystical realm of Grandoria, there lived a daring adventurer named Alex, known for seeking the extraordinary in the ordinary.",
+
+"Alex's trusty sidekick, Robin, had a pet dragon named Ember, whose fiery breath was only used for roasting marshmallows. Safety first!",
+
+"One day, Alex stumbled upon an ancient map promising 'The Ultimate Quest,' leading to the fabled Crystal Caverns.",
+
+"Within the caverns, they encountered a wise oracle, Sage the Tortoise, who bestowed upon them the knowledge of hidden realms and ancient mysteries.",
+
+"Guided by Sage, Alex and Robin traversed treacherous landscapes, crossing enchanted forests and soaring over misty mountains on Ember's back.",
+
+"Their journey led them to the Isle of Illusions, where mirrors played tricks, and the mischievous Sprite Twins, Sparkle and Glint, tested their wits.",
+
+"Facing challenges with humor and determination, Alex and Robin found the legendary Silver Scepter, unlocking the gateway to the Celestial Gateway.",
+
+"Through the gateway, they discovered the Starlight Citadel, where the cosmic forces revealed a destiny to restore balance to Grandoria.",
+
+"With newfound allies, including Luna the Lunar Wolf and Solaris the Sunbird, they braved the Cosmic Trials, proving their valor and unity.",
+
+"The culmination of their adventure saw Alex and Robin standing before the Fountain of Eternal Twilight, where wishes were granted, and legends were born.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "/stories/stories7/xl_1/ComfyUI_0001.png",
+            "/stories/stories7/xl_1/ComfyUI_0002.png",
+            "/stories/stories7/xl_1/ComfyUI_0003.png",
+            "/stories/stories7/xl_1/ComfyUI_0004.png",
+            "/stories/stories7/xl_1/ComfyUI_0005.png",
+            "/stories/stories7/xl_1/ComfyUI_0006.png",
+            "/stories/stories7/xl_1/ComfyUI_0007.png",
+            "/stories/stories7/xl_1/ComfyUI_0008.png",
+            "/stories/stories7/xl_1/ComfyUI_0009.png",
+            "/stories/stories7/xl_1/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>
