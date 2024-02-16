@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"In the vast cosmos of Animaria, lived a fearless space feline with an appetite for cosmic exploration.",
+
+"Our intrepid space feline's trusty sidekick, an interstellar avian, had a pet comet named Stardust, propelling their spacecraft, the Celestial Voyager.",
+
+"One cosmic day, they intercepted a signal from a wise space tortoise, revealing a star map to the legendary Stellar Sanctuary.",
+
+"Guided by the ancient space tortoise, our duo navigated asteroid fields, surfed solar winds, and encountered nebula creatures on their celestial journey.",
+
+"Their odyssey led them to the Starfall Archipelago, a constellation of floating orbs where Galaxy Navigators tested their astronomical prowess.",
+
+"Triumphing over challenges, they obtained the Starlight Cipher, unlocking the passage to the Cosmic Haven.",
+
+"Venturing through the Nebula Passage, they encountered AstroNomads, a diverse group of space animals drifting together in cosmic harmony.",
+
+"The AstroNomads joined their odyssey, forming a celestial caravan as they approached the radiant gates of the Cosmic Haven.",
+
+"Inside the haven, our fearless space feline, avian companion, and the AstroNomads unveiled the Essence Codex, revealing the interconnected brilliance of the cosmic tapestry.",
+
+"Armed with cosmic insight, our cosmic adventurers returned to Animaria as space pioneers, sparking curiosity for eons to come.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "/stories/stories8/xl_1/ComfyUI_0001.png",
+            "/stories/stories8/xl_1/ComfyUI_0002.png",
+            "/stories/stories8/xl_1/ComfyUI_0003.png",
+            "/stories/stories8/xl_1/ComfyUI_0004.png",
+            "/stories/stories8/xl_1/ComfyUI_0005.png",
+            "/stories/stories8/xl_1/ComfyUI_0006.png",
+            "/stories/stories8/xl_1/ComfyUI_0007.png",
+            "/stories/stories8/xl_1/ComfyUI_0008.png",
+            "/stories/stories8/xl_1/ComfyUI_0009.png",
+            "/stories/stories8/xl_1/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>
