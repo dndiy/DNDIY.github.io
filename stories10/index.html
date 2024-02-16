@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"In a mystical land of Enchanted Woods, a luminous star rabbit, with constellations adorning its fur, leapt gracefully through moonlit glades.",
+
+"A wise mountain-dwelling owl, its feathers shimmering like ethereal mist, observed the star rabbit's nightly ballet from its ancient pine perch.",
+
+"One twilight, a mischievous river sprite, with water droplets cascading from its aquatic wings, joined the nocturnal spectacle by conjuring luminescent ripples.",
+
+"Guided by the celestial fox, its fur a palette of aurora hues, the quartet embarked on a quest to unveil the secrets of the Whispering Willows.",
+
+"Their journey led them through the Enchanted Caverns, where crystal-dwelling fireflies illuminated the path with a symphony of bioluminescence.",
+
+"Upon reaching the Starlit Meadow, ethereal unicorns, with shimmering star manes, greeted the travelers, offering tales of ancient star lore.",
+
+"Dancing under the Everlasting Rainbow, a chorus of celestial songbirds, their feathers reflecting the hues of dawn, serenaded the star rabbit, owl, sprite, and fox.",
+
+"As they approached the Whispering Willows, ancient tree spirits with bark adorned in constellations whispered secrets of the cosmos through rustling leaves.",
+
+"Amidst the celestial energies, the travelers unlocked the Stellar Keystone, a radiant gem said to hold the essence of the enchanted realm.",
+
+"Their return to Enchanted Woods marked the beginning of an era where star rabbits, mountain owls, river sprites, and celestial foxes lived harmoniously, protecting the realm's magical equilibrium.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "/stories/stories9/xl_10/ComfyUI_0001.png",
+            "/stories/stories9/xl_10/ComfyUI_0002.png",
+            "/stories/stories9/xl_10/ComfyUI_0003.png",
+            "/stories/stories9/xl_10/ComfyUI_0004.png",
+            "/stories/stories9/xl_10/ComfyUI_0005.png",
+            "/stories/stories9/xl_10/ComfyUI_0006.png",
+            "/stories/stories9/xl_10/ComfyUI_0007.png",
+            "/stories/stories9/xl_10/ComfyUI_0008.png",
+            "/stories/stories9/xl_10/ComfyUI_0009.png",
+            "/stories/stories9/xl_10/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>

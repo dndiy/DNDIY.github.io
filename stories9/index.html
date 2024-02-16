@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkin's Stories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #story-container {
+            border: 5px solid red;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            background-color: black;
+            color: white; /* Add this line to set the text color */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Merkin's Magical Adventures</h1>
+
+    <div id="story-container">
+        <!-- Story content will be dynamically added here -->
+    </div>
+
+    <script>
+        // Array of text prompts
+        const storyPrompts = [
+"In a fantastical realm called Creaturescape, resided a curious space giraffe with polka-dotted fur, gazing at distant galaxies through its telescopic neck.",
+
+"The intergalactic avian, sporting iridescent plumage, befriended the space giraffe and shared tales of cosmic adventures over cups of stardust tea.",
+
+"One day, a mischievous moon-dwelling critter, known for its nocturnal whimsy, joined the duo on a quest to unravel the secrets of the Celestial Carnival.",
+
+"Guided by the mystical star-dwelling tortoise, renowned for its ancient wisdom, the trio navigated through the dazzling Stardust Glade.",
+
+"Their cosmic odyssey led them to the Nebula Nexus, a swirling hub of celestial wonders where time flowed like a river of shimmering stardust.",
+
+"The ethereal beings, with luminescent glowbugs as companions, welcomed our adventurers to the Galactic Gala, a grand celebration in the heart of the cosmos.",
+
+"Dancing nebula foxes, gravity-defying space kangaroos, and symphony-conducting star bears enchanted the space giraffe, avian, and moon-dwelling critter.",
+
+"As they reached the Cosmic Carousel, an ever-spinning galactic wonder, the star-dwelling tortoise whispered tales of the universe's oldest constellations.",
+
+"Upon their return to Creaturescape, the enchanted trio became cosmic storytellers, sharing their celestial experiences with a generation of whimsical creatures.",
+
+"And so, in the realm of Creaturescape, the tales of the space giraffe, intergalactic avian, and moon-dwelling critter echoed through the ages, inspiring wonder and imagination.",
+        ];
+
+        // Array of image URLs
+        const storyImages = [
+            "/stories/stories9/xl_1/ComfyUI_0001.png",
+            "/stories/stories9/xl_1/ComfyUI_0002.png",
+            "/stories/stories9/xl_1/ComfyUI_0003.png",
+            "/stories/stories9/xl_1/ComfyUI_0004.png",
+            "/stories/stories9/xl_1/ComfyUI_0005.png",
+            "/stories/stories9/xl_1/ComfyUI_0006.png",
+            "/stories/stories9/xl_1/ComfyUI_0007.png",
+            "/stories/stories9/xl_1/ComfyUI_0008.png",
+            "/stories/stories9/xl_1/ComfyUI_0009.png",
+            "/stories/stories9/xl_1/ComfyUI_0010.png",
+            // Add the URLs for your 10 images here
+        ];
+
+        // Function to create story elements dynamically
+        function createStoryElements() {
+            const storyContainer = document.getElementById('story-container');
+
+            for (let i = 0; i < storyPrompts.length; i++) {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = storyPrompts[i];
+                storyContainer.appendChild(paragraph);
+
+                if (i < storyImages.length) {
+                    const image = document.createElement('img');
+                    image.src = storyImages[i];
+                    storyContainer.appendChild(image);
+                }
+            }
+        }
+
+        // Call the function to generate the story elements
+        createStoryElements();
+    </script>
+
+</body>
+</html>
