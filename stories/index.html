@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=index1.html">
+    <meta http-equiv="refresh" content="0;url=/stories%(1th%copy)/index.html">
     <title>Random Story Redirect</title>
 </head>
 <body>
-    <p>If you are not redirected, <a href="index1.html">click here</a>.</p>
+    <p>If you are not redirected, <a href="/stories%(1th%copy)/index.html">click here</a>.</p>
 
     <script>
         // Function to generate a random number between 1 and 10
@@ -15,7 +15,7 @@
         }
 
         // Automatically redirect to a random sub-website (stories1, stories2, etc.)
-        const randomSubWebsite = `index${getRandomNumber()}.html`;
+        const randomSubWebsite = `/stories%(${getRandomNumber()}th%copy)/index.html`;
         window.location.href = randomSubWebsite;
     </script>
 </body>
