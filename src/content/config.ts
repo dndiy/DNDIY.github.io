@@ -62,9 +62,21 @@ const teamCollection = defineCollection({
   }),
 });
 
+// Define the friends collection
+const friendsCollection = defineCollection({
+  schema: z.object({
+    name: z.string(),
+    url: z.string(),
+    bio: z.string().optional(),
+    avatar: z.string().optional(),
+    lastSynced: z.string().optional(),
+  }),
+});
+
 // Export the collections
 export const collections = {
   posts: postsCollection,
   spec: specCollection,
   team: teamCollection,
+  friends: friendsCollection,
 };

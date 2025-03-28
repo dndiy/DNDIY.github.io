@@ -2,6 +2,18 @@
 import MainGridLayout from '../layouts/MainGridLayout.astro';
 import { Icon } from 'astro-icon/components';
 import FriendManager from '../components/svelte/friends/FriendManager.svelte';
+import { getCollection } from 'astro:content';
+
+// Get all saved friends from the content collection
+let savedFriends = [];
+try {
+  savedFriends = await getCollection('friends');
+  console.log(`Loaded ${savedFriends.length} saved friends from content collection`);
+} catch (error) {
+  console.error('Error loading friends from content collection:', error);
+  // This might happen if the collection doesn't exist yet
+  savedFriends = [];
+}
 ---
 
 <MainGridLayout title="Content Sharing" description="Share and manage blog content with friends">
@@ -14,19 +26,19 @@ import FriendManager from '../components/svelte/friends/FriendManager.svelte';
       </p>
       <div class="max-w-md mx-auto">
         <div class="mb-4">
-          <label for="auth-username" class="block text-sm font-medium text-75 mb-1">Username</label>
+          <label for="auth-username" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Username</label>
           <input 
             type="text" 
             id="auth-username" 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200 transition" 
           />
         </div>
         <div class="mb-4">
-          <label for="auth-password" class="block text-sm font-medium text-75 mb-1">Password</label>
+          <label for="auth-password" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Password</label>
           <input 
             type="password" 
             id="auth-password" 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200 transition" 
           />
         </div>
         <button 
@@ -182,8 +194,8 @@ import FriendManager from '../components/svelte/friends/FriendManager.svelte';
           Blogs you're connected with for automatic content sharing and updates.
         </p>
         
-        <!-- Friend Manager Component -->
-        <FriendManager client:load />
+        <!-- Friend Manager Component - Pass the saved friends -->
+        <FriendManager client:load savedFriends={savedFriends} />
       </div>
     </div>
   </div>
@@ -318,6 +330,29 @@ import FriendManager from '../components/svelte/friends/FriendManager.svelte';
       // Show success alert
       alert('Content successfully imported!');
     });
+    
+    // Debug helper for friend functionality
+    console.log('Friends page loaded');
+    
+    // Debug localStorage state
+    try {
+      const friendsData = localStorage.getItem('blogFriends');
+      if (friendsData) {
+        const friends = JSON.parse(friendsData);
+        console.log('Found', friends.length, 'friends in localStorage');
+      } else {
+        console.log('No friends found in localStorage');
+      }
+      
+      // Check auth status
+      console.log('Authentication status:', isAuthenticated);
+      
+      // Check friend content setting
+      const friendContentEnabled = localStorage.getItem('friendContentEnabled') !== 'false';
+      console.log('Friend content enabled:', friendContentEnabled);
+    } catch (error) {
+      console.error('Error checking friend data in localStorage:', error);
+    }
   });
   
   // Helper function to download a text file

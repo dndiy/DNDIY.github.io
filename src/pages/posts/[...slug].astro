@@ -24,24 +24,27 @@ export async function getStaticPaths() {
     props: { post, isFriendContent: false },
   }));
   
-  // Add special handling for friend content path
-  // This creates a virtual route for friend content using a prefix
-  // Friend content will be handled client-side based on the prefix
-  const friendContentPath = {
-    params: { slug: 'friend-content' },
-    props: { isFriendContent: true, friendContentPlaceholder: true },
+  // Add a catch-all path for everything, including friend content
+  // We'll determine if it's friend content in the component
+  const catchAllPath = {
+    params: { slug: undefined },
+    props: { isFriendContent: true },
   };
   
-  return [...regularPaths, friendContentPath];
+  return [...regularPaths, catchAllPath];
 }
 
-// Handle both regular posts and friend content
-const { post, isFriendContent, friendContentPlaceholder } = Astro.props;
+// Handle regular posts and friend content
+const { post, isFriendContent } = Astro.props;
+const slug = Astro.params.slug || '';
+
+// Determine if this is a friend content route based on the slug
+const isFriendContentRoute = typeof slug === 'string' && slug.startsWith('friend-');
 
 // Only process regular posts server-side
 let Content, headings, remarkPluginFrontmatter;
 
-if (!isFriendContent && post) {
+if (!isFriendContentRoute && post) {
   const rendered = await post.render();
   Content = rendered.Content;
   headings = rendered.headings;
@@ -49,7 +52,7 @@ if (!isFriendContent && post) {
 }
 
 // Generate JSON-LD metadata
-const jsonLd = !isFriendContent ? {
+const jsonLd = !isFriendContentRoute ? {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.data.title,
@@ -76,14 +79,15 @@ const jsonLd = !isFriendContent ? {
   inLanguage: siteConfig.lang.replace('_', '-'),
 };
 ---
+
 <MainGridLayout 
-  banner={isFriendContent ? undefined : post.data.image} 
-  title={isFriendContent ? "Friend Content" : post.data.title} 
-  description={isFriendContent ? "Shared content from a friend's blog" : post.data.description} 
-  lang={isFriendContent ? siteConfig.lang : post.data.lang} 
+  banner={isFriendContentRoute ? undefined : post?.data.image} 
+  title={isFriendContentRoute ? "Friend Content" : post?.data.title} 
+  description={isFriendContentRoute ? "Shared content from a friend's blog" : post?.data.description} 
+  lang={isFriendContentRoute ? siteConfig.lang : post?.data.lang} 
   setOGTypeArticle={true} 
-  headings={isFriendContent ? [] : headings}
-  post={isFriendContent ? undefined : post} 
+  headings={isFriendContentRoute ? [] : headings}
+  post={isFriendContentRoute ? undefined : post} 
 >
 
 <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
@@ -91,7 +95,7 @@ const jsonLd = !isFriendContent ? {
         <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
             {}
         ]}>
-            {!isFriendContent && (
+            {!isFriendContentRoute && (
               <>
                 <!-- word count and reading time -->
                 <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
@@ -112,7 +116,7 @@ const jsonLd = !isFriendContent ? {
             )}
 
             {/* Render different content based on whether this is friend content or regular content */}
-            {isFriendContent ? (
+            {isFriendContentRoute ? (
                 <div class="w-full onload-animation">
                     <FriendContentRenderer slug={Astro.params.slug} client:load />
                 </div>
@@ -162,7 +166,7 @@ const jsonLd = !isFriendContent ? {
     </div>
 
     {/* Only show navigation for regular posts */}
-    {!isFriendContent && (
+    {!isFriendContentRoute && post && (
       <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
           <a href={post.data.nextSlug ? getPostUrlBySlug(post.data.nextSlug) : "#"}
              class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !post.data.nextSlug}]}>
