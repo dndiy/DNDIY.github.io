@@ -282,12 +282,17 @@
       }, 2000);
     }
   }
-  
-  // Update content integration setting
+
   function updateContentIntegration(event) {
-    friendContentEnabled = event.target.checked;
-    localStorage.setItem('friendContentEnabled', friendContentEnabled);
-  }
+  friendContentEnabled = event.target.checked;
+  localStorage.setItem('friendContentEnabled', friendContentEnabled);
+  
+  // Dispatch an event
+  document.dispatchEvent(new CustomEvent('friend-content-toggled', {
+    detail: { enabled: friendContentEnabled },
+    bubbles: true
+  }));
+}
   
   // Format a date as "X time ago"
   function formatTimeAgo(dateString) {
