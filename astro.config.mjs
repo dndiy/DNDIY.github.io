@@ -126,6 +126,9 @@ export default defineConfig({
     ],
   },
   vite: {
+    optimizeDeps: {
+      include: ['mammoth']
+    },  
     build: {
       rollupOptions: {
         onwarn(warning, warn) {
