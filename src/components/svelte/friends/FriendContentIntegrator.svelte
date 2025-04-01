@@ -130,9 +130,15 @@
                   src="${entry.data.friendAvatar}" 
                   alt="${entry.data.friendName || 'Friend'}'s avatar"
                   class="w-full h-full object-cover"
-                  onerror="this.src='/placeholder.png'"
+                  onerror="this.src='/assets/avatar/avatar.png'"
                 />
-              ` : ''}
+              ` : `
+                <img 
+                  src="/assets/avatar/avatar.png" 
+                  alt="${entry.data.friendName || 'Friend'}'s avatar"
+                  class="w-full h-full object-cover"
+                />
+              `}
             </div>
             <span class="text-sm text-neutral-500 dark:text-neutral-400">
               Shared from <a href="${entry.data.friendUrl || '#'}" target="_blank" rel="noopener noreferrer" class="text-[var(--primary)] hover:underline">${entry.data.friendName || 'Friend'}</a>

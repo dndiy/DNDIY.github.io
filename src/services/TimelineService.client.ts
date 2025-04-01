@@ -10,14 +10,14 @@ import {
   groupEventsByEra,
   getTimelineStatistics,
   getEraConfigForYear
-} from './TimelineConfig';
+} from '../config/timelineconfig.ts';
 // Use 'import type' for types and interfaces
 import type { 
   TimelineEvent,
   EraConfig,
   EraConfigMap,
   TimelineViewConfig
-} from './TimelineConfig';
+} from '../config/timelineconfig.ts';
 
 // Function to safely handle date serialization issues (client-specific)
 export function safeJSONParse(jsonString: string): any {

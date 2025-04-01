@@ -5,11 +5,10 @@ import '@fontsource/roboto/700.css';
 import '@fontsource/sriracha/400.css';
 import '@fontsource-variable/jetbrains-mono';
 
-import { profileConfig, siteConfig } from '@/config'
+import { profileConfig, siteConfig } from '@/config/config'
 import ConfigCarrier from '@components/ConfigCarrier.astro'
 import {
   AUTO_MODE,
-  DEFAULT_THEME,
   DARK_MODE,
   LIGHT_MODE,
   PAGE_WIDTH,
@@ -113,9 +112,9 @@ const configHue = siteConfig.themeColor.hue
     ))}
 
     <!-- Set the theme before the page is rendered to avoid a flash -->
-    <script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, PAGE_WIDTH, configHue}}>
+        <script is:inline define:vars={{LIGHT_MODE, DARK_MODE, AUTO_MODE, PAGE_WIDTH, configHue, defaultTheme: siteConfig.defaultTheme}}>
         // Load the theme from local storage
-        const theme = localStorage.getItem('theme') || DEFAULT_THEME;
+        const theme = localStorage.getItem('theme') || defaultTheme;
         switch (theme) {
             case LIGHT_MODE:
                 document.documentElement.classList.remove('dark');

@@ -1,0 +1,16 @@
+---
+// This component ensures the friendStore functions are available to client-side scripts
+---
+
+<script>
+    // Import friendStore functions and make them available globally
+    import { isFriendContentEnabled, getFriendPostsAsEntries } from '../stores/friendStore';
+    
+    // Expose these functions to the window object for client-side scripts
+    if (typeof window !== 'undefined') {
+      window.isFriendContentEnabled = isFriendContentEnabled;
+      window.getFriendPostsAsEntries = getFriendPostsAsEntries;
+      
+      console.log('[FriendStoreExtension] Friend store functions exposed to window');
+    }
+  </script>

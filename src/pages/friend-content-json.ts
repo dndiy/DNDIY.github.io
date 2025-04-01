@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { siteConfig, profileConfig } from '../config';
+import { siteConfig, profileConfig } from '../config/config';
 
 export async function GET() {
   console.log('Friend content JSON endpoint called');

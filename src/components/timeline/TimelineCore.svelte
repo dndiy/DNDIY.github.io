@@ -10,7 +10,7 @@
     extractEraConfig,
     getEraConfigForYear,
     type EraConfigMap 
-  } from '../../services/TimelineConfig';
+  } from '../../config/timelineconfig';
 
   // Props
   export let events: TimelineEvent[] = [];
