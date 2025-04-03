@@ -7,8 +7,8 @@
   const dispatch = createEventDispatcher();
   
   // Form data
-  let username = '';
-  let password = '';
+  let username = 'password';
+  let password = 'password';
   let rememberMe = false;
   
   // UI state

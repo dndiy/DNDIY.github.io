@@ -471,7 +471,7 @@
                 id="social-name" 
                 bind:value={editingSocial.data.name}
                 class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
-                placeholder="e.g. GitHub, Twitter, etc."
+                placeholder="e.g. GitHub, Bluesky, etc."
               />
               <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                 How this link will be labeled (defaults to platform name if left blank)
@@ -487,7 +487,7 @@
                 id="social-url" 
                 bind:value={editingSocial.data.url}
                 class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
-                placeholder="e.g. https://twitter.com/username"
+                placeholder="e.g. https://bluesky.com/username"
               />
             </div>
             

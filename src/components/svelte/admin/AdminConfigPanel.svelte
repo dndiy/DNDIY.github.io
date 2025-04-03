@@ -12,6 +12,7 @@
   import ConfigExporter from './ConfigExporter.svelte';
   import CommunityConfigExporter from './CommunityConfigExporter.svelte';
   import AboutConfigExporter from './AboutConfigExporter.svelte';
+  import GitHubIntegration from './GitHubIntegration.svelte';
     
   // Props for configuration objects
   export let siteConfig;
@@ -42,6 +43,9 @@
   
   // Event dispatcher for notifying parent components
   const dispatch = createEventDispatcher();
+  
+  // GitHub integration component reference
+  let githubIntegration;
   
   // Tabs configuration
   const tabs = [
@@ -133,6 +137,70 @@
     }
   }
   
+  // Handle GitHub events
+  function handleGitHubConfigSaved(event) {
+    const { success, error } = event.detail;
+    
+    if (success) {
+      // Update original values to reflect saved state
+      originalConfigValues = {
+        siteConfig: JSON.stringify(siteConfig),
+        navBarConfig: JSON.stringify(navBarConfig),
+        profileConfig: JSON.stringify(profileConfig),
+        licenseConfig: JSON.stringify(licenseConfig),
+        timelineConfig: JSON.stringify(timelineConfig),
+        avatarConfig: JSON.stringify(avatarConfig),
+        communityConfig: JSON.stringify(communityConfig),
+        aboutConfig: JSON.stringify(aboutConfig)
+      };
+      
+      // Reset hasChanges flag
+      hasChanges = false;
+      
+      // Show success notification
+      saveStatus.success = true;
+      saveStatus.error = null;
+      
+      // Reset success message after a delay
+      setTimeout(() => {
+        saveStatus.success = false;
+      }, 3000);
+    } else if (error) {
+      console.error('GitHub save error:', error);
+      saveStatus.error = `GitHub save error: ${error}`;
+      saveStatus.success = false;
+      
+      // Reset error message after a delay
+      setTimeout(() => {
+        saveStatus.error = null;
+      }, 5000);
+    }
+  }
+  
+  // Handle GitHub deployment events
+  function handleGitHubDeploy(event) {
+    const { success, error } = event.detail;
+    
+    if (success) {
+      saveStatus.success = true;
+      saveStatus.error = null;
+      
+      // Reset success message after a delay
+      setTimeout(() => {
+        saveStatus.success = false;
+      }, 3000);
+    } else if (error) {
+      console.error('GitHub deploy error:', error);
+      saveStatus.error = `GitHub deploy error: ${error}`;
+      saveStatus.success = false;
+      
+      // Reset error message after a delay
+      setTimeout(() => {
+        saveStatus.error = null;
+      }, 5000);
+    }
+  }
+  
   // On component mount
   onMount(() => {
     // Check for saved config in localStorage (for demo/persistence)
@@ -188,13 +256,14 @@
             title: "Get In Touch",
             description: "Have questions, ideas, or want to collaborate? We'd love to hear from you!",
             contactInfo: {
-              email: "Greg@dndiy.org"
+              email: "contact@example.com"
             },
             displayOrder: ["description", "email"]
           }
         };
       }
       
+      // Load saved configs from localStorage if they exist
       const savedSiteConfig = localStorage.getItem('siteConfig');
       if (savedSiteConfig && savedSiteConfig !== 'undefined') {
         siteConfig = { ...siteConfig, ...JSON.parse(savedSiteConfig) };
@@ -246,6 +315,11 @@
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig)
       };
+      
+      // Initialize GitHub integration
+      if (githubIntegration) {
+        githubIntegration.initialize();
+      }
     } catch (error) {
       console.error('Error loading saved configuration:', error);
     }
@@ -255,8 +329,8 @@
   $: {
     if (originalConfigValues.siteConfig && originalConfigValues.navBarConfig &&
         originalConfigValues.profileConfig && originalConfigValues.licenseConfig &&
-        originalConfigValues.timelineConfig && originalConfigValues.communityConfig &&
-        originalConfigValues.aboutConfig) {
+        originalConfigValues.timelineConfig && originalConfigValues.avatarConfig &&
+        originalConfigValues.communityConfig && originalConfigValues.aboutConfig) {
           
       try {
         const currentValues = {
@@ -473,6 +547,25 @@
             {saveStatus.saving ? 'Saving...' : hasChanges ? 'Save Changes' : 'No Changes'}
           </button>
         </div>
+      </div>
+      
+      <!-- GitHub Integration Component -->
+      <div class="mt-4">
+        <GitHubIntegration
+          bind:this={githubIntegration}
+          {siteConfig}
+          {navBarConfig}
+          {profileConfig}
+          {licenseConfig}
+          {timelineConfig}
+          {avatarConfig}
+          {communityConfig}
+          {aboutConfig}
+          {originalConfigValues}
+          {hasChanges}
+          on:configsaved={handleGitHubConfigSaved}
+          on:deploy={handleGitHubDeploy}
+        />
       </div>
     </div>
   </div>

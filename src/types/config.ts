@@ -46,6 +46,14 @@ export enum LinkPreset {
   NewPost = 7,
 }
 
+//Password values
+export type PasswordConfig = {
+  username: string;
+  passwordHash: string;
+  needsSetup: boolean; // Flag to indicate if setup is needed
+  createdAt?: string;
+}
+
 //extend NavBarLink type to support dropdown menus
 export type NavBarLink = {
   name: string
