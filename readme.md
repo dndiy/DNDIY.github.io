@@ -1,25 +1,58 @@
-Features of site, sitemap, how to make it work:
+# TemporalFlow - Production Demo
 
-Notes - 
+This repository contains the production demo version of TemporalFlow, a personal website template developed by Gregory Aster. Unlike the original template repository which focuses on technical features and implementation, this demo showcases a fully realized implementation with actual creative content.
 
--email forwarding service is formspree
--in developer mode all drafts are set to false - this code is in the the url-utils.ts file
--Profile avatar image was orignally set in config.ts but is now set in Profile.astro.
--code for banner is set in MainGridLayout.astro (needs fixing still also)
--"dark Pages" are drafts with links
-- Swup hooks aka the interactive parts are currently only the toc,  the banner, theblog posts, and fullwidthbanner (inactive)
+![Website Preview](/posts/New/cover3.png)
 
-Development and known bugs -
+## About This Demo
 
-2-20-2025 about.astro has had a full revamp and some of the page info is still in development
-2-20-2025 New community tab
-*fixed* 2-25there is a bug with container length not loading if the page is resized afer page load 
-*fixed* 2-26more bugs found with container opening in mobile version - particularly when you open the container if your in the wrong place in the place it flys up and you find yourself on the bottom of the page
+This production version serves as a living demonstration of what TemporalFlow can achieve. It features Gregory Aster's actual creative work, storytelling, and multimedia projects—bringing the template to life with real content rather than placeholders.
 
-*fixed*2-27 thumbnail images dont look righ on mobile
-*fixed*2-27-backgroud doesnt look good on mobile either
-*fixed - mdx file solution*3-1 toc widget does not work with html elements
-*fixed*3-2 numerous flow bug with toc widget
-* managed but not fixed* Memory usage rampant horror show
+## The Creator
 
-*commented out css - strange bug at the end of timeline controller
+**Gregory Aster** is an experimental videographer and cosmic storyteller with a unique background:
+
+- 23 years as a mechanic (10 as a certified technician/manager, 13 as a business owner)
+- Now focused full-time on creative media
+- Expertise in Blender 3D, DaVinci Resolve, Python, and ComfyUI
+- Creator of multiple narrative universes including the MEGA MEAL saga
+- Blends cyberpunk, cosmic horror, and absurdist humor in his storytelling
+
+As Gregory describes himself: "A master of mechanical engineering, Blender wizardry, and Python sorcery. His realm is where machine precision meets artistic chaos."
+
+## Featured Content
+
+This demo showcases several of Gregory's actual projects:
+
+- **MEGA MEAL Universe**: An extensive cosmic horror narrative featuring interdimensional fast-food mascots, timeline anomalies, and dystopian storytelling
+- **The Melancholy Adventures of Steamboat Willie**: A reimagined version of the public domain character with added depth and artistic flourishes
+- **Essays and Thoughts**: Reflections on creativity, AI's impact on art, and the process of digital creation
+
+The production demo serves as both a portfolio and a narrative experience, demonstrating how the TemporalFlow template can be customized to create immersive storytelling environments.
+
+## Production vs Template
+
+While the original TemporalFlow repository provides the technical foundation, this production demo shows:
+
+- Real-world implementation with actual content
+- Content organization strategies
+- Multimedia integration in practice
+- Timeline functionality with established narrative events
+- How creative storytelling can be enhanced by thoughtful web design
+
+## Purpose of This Demo
+
+This production version exists to:
+
+1. Showcase a living example of the TemporalFlow template in action
+2. Provide inspiration for others implementing the template
+3. Serve as Gregory Aster's actual website and content hub
+4. Demonstrate how a creative professional can maintain control over their digital presence
+
+## Connect & Learn More
+
+For those interested in the template's technical aspects, please refer to the original TemporalFlow repository. This production demo is meant to inspire through example rather than provide technical documentation.
+
+---
+
+"This website is where all of that comes together - a home for projects, ideas, and whatever else comes next." - Gregory Aster
