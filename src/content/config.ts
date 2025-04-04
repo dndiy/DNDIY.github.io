@@ -19,13 +19,16 @@ const postsCollection = defineCollection({
     showImageOnPost: z.boolean().optional(),
     
     // Banner types
-    bannerType: z.enum(['image', 'video', 'timeline']).optional(),
     bannerData: z.object({
       videoId: z.string().optional(),
+      imageUrl: z.string().optional(), // Add this line for image banners
       category: z.string().optional(),
       startYear: z.number().optional(),
       endYear: z.number().optional(),
       background: z.string().optional(),
+      title: z.string().optional(), // Optional but useful
+      height: z.string().optional(), // Optional for custom heights
+      compact: z.boolean().optional(),
     }).optional(),
 
     // Timeline properties

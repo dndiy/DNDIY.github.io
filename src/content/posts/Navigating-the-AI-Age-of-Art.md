@@ -5,7 +5,7 @@ description: 'Exploring the Divide: Art, Isolation, and the Digital Future'
 image: '/posts/Navigating-the-AI-Age-of-Art/pic2.jpg'
 tags: []
 category: 'Blog'
-draft: false
+draft: true
 lang: ''
 
 ---

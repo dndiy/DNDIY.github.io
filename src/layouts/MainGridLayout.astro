@@ -54,8 +54,7 @@ const NAVBAR_HEIGHT_MOBILE = 3.5; // rem (56px ≈ 3.5rem)
 // Check banner types
 const hasTimelineBanner = post?.data?.bannerType === "timeline" && post?.data?.bannerData?.category;
 const hasVideoBanner = post?.data?.bannerType === "video" && post?.data?.bannerData?.videoId;
-const hasImageBanner = post?.data?.image && !hasVideoBanner && !hasTimelineBanner;
-const isPostWithBanner = hasVideoBanner || hasImageBanner || hasTimelineBanner;
+const hasImageBanner = (post?.data?.image || (post?.data?.bannerType === "image" && post?.data?.bannerData?.imageUrl)) && !hasVideoBanner && !hasTimelineBanner;const isPostWithBanner = hasVideoBanner || hasImageBanner || hasTimelineBanner;
 const isStandardPage = !isPostWithBanner;
 
 // Update the mainPanelTop calculation to be responsive
@@ -97,7 +96,7 @@ style={isStandardPage
     ? 'margin-top: calc(var(--navbar-height) - 3.5rem);' // Less space for video banner
     : hasTimelineBanner
       ? 'margin-top: 1rem;' // Add 2rem space for timeline banners
-      : 'margin-top: var(--navbar-height);' // Normal space for image banner
+      : 'margin-top: 1rem;' // Reduced space for image banner
 }>
 
 <!-- Video Banner Content -->
@@ -133,6 +132,19 @@ style={isStandardPage
           bannerHeight={post.data.bannerData.height || "70vh"}
         />
       </div>
+    </div>
+  </div>
+)}
+
+{/* Image Banner Content */}
+{hasImageBanner && (
+  <div class="image-banner-content max-w-screen-2xl mx-auto px-0">
+    <div class="relative w-full overflow-hidden shadow-lg rounded-lg">
+      <img 
+        src={post.data.bannerData?.imageUrl || post.data.image}
+        alt={post.data.title || "Post banner image"}
+        class="w-full object-cover"
+      />
     </div>
   </div>
 )}

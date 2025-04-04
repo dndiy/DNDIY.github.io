@@ -12,7 +12,7 @@ tags: [New, Website, Updates]
 
 category: 'News'
 
-draft: false
+draft: true
 
 lang: ''
 

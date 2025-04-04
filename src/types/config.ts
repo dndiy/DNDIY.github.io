@@ -115,9 +115,13 @@ export type LIGHT_DARK_MODE =
     bannerType?: 'image' | 'video' | 'timeline'
     bannerData?: {
       videoId?: string       // For video banners
+      imageUrl?: string      // For image banners (add this)
       category?: string      // For timeline banners
       startYear?: number     // For timeline banners
       endYear?: number       // For timeline banners
       background?: string    // For timeline banners
+      title?: string         // Optional title override
+      height?: string        // Optional height setting
+      compact?: boolean      // Optional compact mode
     }
   }
