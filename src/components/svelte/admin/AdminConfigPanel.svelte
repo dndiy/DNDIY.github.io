@@ -12,6 +12,7 @@
   import ConfigExporter from './ConfigExporter.svelte';
   import CommunityConfigExporter from './CommunityConfigExporter.svelte';
   import AboutConfigExporter from './AboutConfigExporter.svelte';
+  import PostCardConfigExporter from './PostCardConfigExporter.svelte';
   import GitHubIntegration from './GitHubIntegration.svelte';
     
   // Props for configuration objects
@@ -23,6 +24,7 @@
   export let avatarConfig;
   export let communityConfig;
   export let aboutConfig;
+  export let postCardConfig;
   
   // State management
   let activeTab = 'general';
@@ -38,7 +40,8 @@
     timelineConfig: null,
     avatarConfig: null,
     communityConfig: null,
-    aboutConfig: null
+    aboutConfig: null,
+    postCardConfig: null
   };
   
   // Event dispatcher for notifying parent components
@@ -69,6 +72,7 @@
   let showConfigExporter = false;
   let showCommunityConfigExporter = false;
   let showAboutConfigExporter = false;
+  let showPostCardConfigExporter = false;
   
   // Function to handle saving all configuration
   async function saveAllConfiguration() {
@@ -85,6 +89,7 @@
       localStorage.setItem('avatarConfig', JSON.stringify(avatarConfig));
       localStorage.setItem('communityConfig', JSON.stringify(communityConfig));
       localStorage.setItem('aboutConfig', JSON.stringify(aboutConfig));
+      localStorage.setItem('postCardConfig', JSON.stringify(postCardConfig));
       
       // Update original values to reflect saved state
       originalConfigValues = {
@@ -95,7 +100,8 @@
         timelineConfig: JSON.stringify(timelineConfig),
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
-        aboutConfig: JSON.stringify(aboutConfig)
+        aboutConfig: JSON.stringify(aboutConfig),
+        postCardConfig: JSON.stringify(postCardConfig)
       };
       
       // Reset hasChanges flag
@@ -109,6 +115,8 @@
         showCommunityConfigExporter = true;
       } else if (activeTab === 'about') {
         showAboutConfigExporter = true;
+      } else if (activeTab === 'appearance') {
+        showPostCardConfigExporter = true;
       } else {
         showConfigExporter = true;
       }
@@ -122,7 +130,8 @@
         timelineConfig,
         avatarConfig,
         communityConfig,
-        aboutConfig
+        aboutConfig,
+        postCardConfig
       });
       
       // Reset success message after a delay
@@ -151,7 +160,8 @@
         timelineConfig: JSON.stringify(timelineConfig),
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
-        aboutConfig: JSON.stringify(aboutConfig)
+        aboutConfig: JSON.stringify(aboutConfig),
+        postCardConfig: JSON.stringify(postCardConfig)
       };
       
       // Reset hasChanges flag
@@ -263,6 +273,68 @@
         };
       }
       
+      if (!postCardConfig) {
+        postCardConfig = {
+          localPosts: {
+            layout: {
+              imagePosition: 'right',
+              imageSizePercentage: 28,
+              cardBorderRadius: 'rounded-[var(--radius-large)]',
+              showEnterButton: true
+            },
+            styling: {
+              titleSize: 'text-3xl',
+              descriptionLines: 2,
+              animationEnabled: true
+            },
+            content: {
+              showCategory: true,
+              showTags: true,
+              showUpdateDate: true,
+              showWordCount: true,
+              showReadTime: true,
+              hideTagsOnMobile: true
+            }
+          },
+          friendPosts: {
+            layout: {
+              imagePosition: 'right',
+              imageSizePercentage: 28,
+              cardBorderRadius: 'rounded-[var(--radius-large)]',
+              showEnterButton: true
+            },
+            styling: {
+              titleSize: 'text-3xl',
+              descriptionLines: 2,
+              animationEnabled: true
+            },
+            content: {
+              showCategory: true,
+              showTags: true,
+              showUpdateDate: true,
+              showWordCount: true,
+              showReadTime: true,
+              hideTagsOnMobile: true
+            },
+            friendStyling: {
+              indicatorType: 'border',
+              indicatorColor: 'var(--primary)',
+              showFriendAvatar: true,
+              avatarSize: 'w-5 h-5'
+            },
+            attribution: {
+              showAttribution: true,
+              attributionText: 'Shared from [friendName]',
+              linkToFriendSite: true
+            },
+            behavior: {
+              sortingMethod: 'date',
+              mergeWithLocalPosts: true
+            }
+          }
+        };
+      }
+                  
       // Load saved configs from localStorage if they exist
       const savedSiteConfig = localStorage.getItem('siteConfig');
       if (savedSiteConfig && savedSiteConfig !== 'undefined') {
@@ -304,6 +376,11 @@
         aboutConfig = { ...aboutConfig, ...JSON.parse(savedAboutConfig) };
       }
       
+      const savedPostCardConfig = localStorage.getItem('postCardConfig');
+      if (savedPostCardConfig && savedPostCardConfig !== 'undefined') {
+        postCardConfig = { ...postCardConfig, ...JSON.parse(savedPostCardConfig) };
+      }
+      
       // Store original values for change detection
       originalConfigValues = {
         siteConfig: JSON.stringify(siteConfig),
@@ -313,7 +390,8 @@
         timelineConfig: JSON.stringify(timelineConfig),
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
-        aboutConfig: JSON.stringify(aboutConfig)
+        aboutConfig: JSON.stringify(aboutConfig),
+        postCardConfig: JSON.stringify(postCardConfig)
       };
       
       // Initialize GitHub integration
@@ -330,7 +408,8 @@
     if (originalConfigValues.siteConfig && originalConfigValues.navBarConfig &&
         originalConfigValues.profileConfig && originalConfigValues.licenseConfig &&
         originalConfigValues.timelineConfig && originalConfigValues.avatarConfig &&
-        originalConfigValues.communityConfig && originalConfigValues.aboutConfig) {
+        originalConfigValues.communityConfig && originalConfigValues.aboutConfig &&
+        originalConfigValues.postCardConfig) {
           
       try {
         const currentValues = {
@@ -341,7 +420,8 @@
           timelineConfig: JSON.stringify(timelineConfig),
           avatarConfig: JSON.stringify(avatarConfig),
           communityConfig: JSON.stringify(communityConfig),
-          aboutConfig: JSON.stringify(aboutConfig)
+          aboutConfig: JSON.stringify(aboutConfig),
+          postCardConfig: JSON.stringify(postCardConfig)
         };
         
         hasChanges = 
@@ -352,7 +432,8 @@
           currentValues.timelineConfig !== originalConfigValues.timelineConfig ||
           currentValues.avatarConfig !== originalConfigValues.avatarConfig ||
           currentValues.communityConfig !== originalConfigValues.communityConfig ||
-          currentValues.aboutConfig !== originalConfigValues.aboutConfig;
+          currentValues.aboutConfig !== originalConfigValues.aboutConfig ||
+          currentValues.postCardConfig !== originalConfigValues.postCardConfig;
       } catch (error) {
         console.error("Error checking for changes:", error);
         // If there's an error comparing, assume changes were made
@@ -402,7 +483,7 @@
                     <path d="M6 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
                     <path d="M22 12H2"></path>
                     <path d="M12 7V2"></path>
-                    <path d="m14 3-2 2-2-2"></path>
+                    <path d="M14 3l-2 2-2-2"></path>
                     <path d="M18 15v7"></path>
                     <path d="M18 22l-2-2"></path>
                     <path d="M18 22l2-2"></path>
@@ -455,6 +536,7 @@
         {:else if activeTab === 'appearance'}
           <AppearanceConfigTab 
             bind:siteConfig 
+            bind:postCardConfig
             on:change={() => hasChanges = true} 
           />
         {:else if activeTab === 'timeline'}
@@ -486,6 +568,7 @@
             {avatarConfig}
             {communityConfig}
             {aboutConfig}
+            {postCardConfig}
             on:update={(e) => {
               // Handle updates from the advanced editor
               const { configType, newValue } = e.detail;
@@ -497,6 +580,7 @@
               else if (configType === 'avatarConfig') avatarConfig = newValue;
               else if (configType === 'communityConfig') communityConfig = newValue;
               else if (configType === 'aboutConfig') aboutConfig = newValue;
+              else if (configType === 'postCardConfig') postCardConfig = newValue;
               
               // Mark that changes have been made
               hasChanges = true;
@@ -561,6 +645,7 @@
           {avatarConfig}
           {communityConfig}
           {aboutConfig}
+          {postCardConfig}
           {originalConfigValues}
           {hasChanges}
           on:configsaved={handleGitHubConfigSaved}
@@ -597,6 +682,13 @@
   bind:show={showAboutConfigExporter}
   {aboutConfig}
   on:close={() => showAboutConfigExporter = false}
+/>
+
+<!-- PostCard Config Exporter Dialog -->
+<PostCardConfigExporter
+  bind:show={showPostCardConfigExporter}
+  {postCardConfig}
+  on:close={() => showPostCardConfigExporter = false}
 />
   
 <style>

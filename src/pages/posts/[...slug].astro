@@ -8,46 +8,26 @@ import { i18n } from '@i18n/translation'
 import MainGridLayout from '@layouts/MainGridLayout.astro'
 import { getDir, getPostUrlBySlug } from '@utils/url-utils'
 import { Icon } from 'astro-icon/components'
-import { licenseConfig } from 'src/config/config'
+import { licenseConfig } from '../../config/config'
 import PostMetadata from '../../components/PostMeta.astro'
 import ImageWrapper from '../../components/misc/ImageWrapper.astro'
 import { profileConfig, siteConfig } from '../../config/config'
 import { formatDateToYYYYMMDD } from '../../utils/date-utils'
-import FriendContentRenderer from '../../components/svelte/friends/FriendContentRenderer.svelte'
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts'); // Include all posts, including drafts
-  
-  // Regular site posts
-  const regularPaths = posts.map(post => ({
+  return posts.map(post => ({
     params: { slug: post.slug },
-    props: { post, isFriendContent: false },
+    props: { post },
   }));
-  
-  // For a static site, we need to add a catch-all path that will be handled client-side
-  // This ensures the build doesn't try to render friend content statically
-  return regularPaths;
 }
 
-// Handle regular posts and friend content
-const { post, isFriendContent = false } = Astro.props;
-const slug = Astro.params.slug || '';
+const { post } = Astro.props; // Destructure `post` instead of `entry`
+const { Content, headings } = await post.render()
 
-// Determine if this is a friend content route based on the slug
-const isFriendContentRoute = typeof slug === 'string' && slug.startsWith('friend-');
+const { remarkPluginFrontmatter } = await post.render()
 
-// Only process regular posts server-side
-let Content, headings, remarkPluginFrontmatter;
-
-if (!isFriendContentRoute && post) {
-  const rendered = await post.render();
-  Content = rendered.Content;
-  headings = rendered.headings;
-  remarkPluginFrontmatter = rendered.remarkPluginFrontmatter;
-}
-
-// Generate JSON-LD metadata
-const jsonLd = !isFriendContentRoute ? {
+const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.data.title,
@@ -61,28 +41,16 @@ const jsonLd = !isFriendContentRoute ? {
   datePublished: formatDateToYYYYMMDD(post.data.published),
   inLanguage: (post.data.lang ? post.data.lang.replace('_', '-') : siteConfig.lang.replace('_', '-')),
   // TODO include cover image here
-} : {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: 'Friend Content',
-  description: 'Shared content from connected blogs',
-  author: {
-    '@type': 'Person',
-    name: profileConfig.name,
-    url: Astro.site,
-  },
-  inLanguage: siteConfig.lang.replace('_', '-'),
-};
+}
 ---
-
 <MainGridLayout 
-  banner={isFriendContentRoute ? undefined : post?.data.image} 
-  title={isFriendContentRoute ? "Friend Content" : post?.data.title} 
-  description={isFriendContentRoute ? "Shared content from a friend's blog" : post?.data.description} 
-  lang={isFriendContentRoute ? siteConfig.lang : post?.data.lang} 
+  banner={post.data.image} 
+  title={post.data.title} 
+  description={post.data.description} 
+  lang={post.data.lang} 
   setOGTypeArticle={true} 
-  headings={isFriendContentRoute ? [] : headings}
-  post={isFriendContentRoute ? undefined : post} 
+  headings={headings}
+  post={post} 
 >
 
 <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
@@ -90,100 +58,84 @@ const jsonLd = !isFriendContentRoute ? {
         <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
             {}
         ]}>
-            {!isFriendContentRoute && remarkPluginFrontmatter && (
-              <>
-                <!-- word count and reading time -->
-                <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
-                    <div class="flex flex-row items-center">
-                        <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
-                            <Icon name="material-symbols:notes-rounded"></Icon>
-                        </div>
-                        <div class="text-sm">{remarkPluginFrontmatter.words} {" " + i18n(I18nKey.wordsCount)}</div>
+            <!-- word count and reading time -->
+            <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
+                <div class="flex flex-row items-center">
+                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                        <Icon name="material-symbols:notes-rounded"></Icon>
                     </div>
-                    <div class="flex flex-row items-center">
-                        <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
-                            <Icon name="material-symbols:schedule-outline-rounded"></Icon>
-                        </div>
-                        <div class="text-sm">{remarkPluginFrontmatter.minutes} {" " + i18n(I18nKey.minutesCount)}</div>
-                    </div>
+                    <div class="text-sm">{remarkPluginFrontmatter.words} {" " + i18n(I18nKey.wordsCount)}</div>
                 </div>
-              </>
-            )}
-
-            {/* Render different content based on whether this is friend content or regular content */}
-            {isFriendContentRoute ? (
-                <div class="w-full onload-animation">
-                    <FriendContentRenderer slug={Astro.params.slug} client:load />
+                <div class="flex flex-row items-center">
+                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                        <Icon name="material-symbols:schedule-outline-rounded"></Icon>
+                    </div>
+                    <div class="text-sm">{remarkPluginFrontmatter.minutes} {" " + i18n(I18nKey.minutesCount)}</div>
                 </div>
-            ) : (
-                <>
-                    {/* Regular post title */}
-                    <div class="relative onload-animation">
-                        <div
-                            data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title"
-                            class="transition w-full block font-bold mb-3
-                            text-3xl md:text-[2.25rem]/[2.75rem]
-                            text-black/90 dark:text-white/90
-                            md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
-                            before:absolute before:top-[0.75rem] before:left-[-1.125rem]
-                        ">
-                            {post.data.title}
-                        </div>
-                    </div>
+            </div>
 
-                    {/* Regular post metadata */}
-                    <div class="onload-animation">
-                        <PostMetadata
-                                class="mb-5"
-                                published={post.data.published}
-                                updated={post.data.updated}
-                                tags={post.data.tags}
-                                category={post.data.category}
-                        ></PostMetadata>
-                        {!post.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
-                    </div>
+            <!-- title -->
+            <div class="relative onload-animation">
+                <div
+                    data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title"
+                    class="transition w-full block font-bold mb-3
+                    text-3xl md:text-[2.25rem]/[2.75rem]
+                    text-black/90 dark:text-white/90
+                    md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                    before:absolute before:top-[0.75rem] before:left-[-1.125rem]
+                ">
+                    {post.data.title}
+                </div>
+            </div>
 
-                    {/* Regular post cover image */}
-                    {post.data.image && post.data.showImageOnPost !== false &&
-                     <ImageWrapper id="post-cover" src={post.data.image} basePath={path.join("content/posts/", getDir(post.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
-                    }
+            <!-- metadata -->
+            <div class="onload-animation">
+                <PostMetadata
+                        class="mb-5"
+                        published={post.data.published}
+                        updated={post.data.updated}
+                        tags={post.data.tags}
+                        category={post.data.category}
+                ></PostMetadata>
+                {!post.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
+            </div>
 
-                    {/* Regular post content */}
-                    <Markdown class="mb-6 markdown-content onload-animation">
-                        <Content />
-                    </Markdown>
+            <!-- Only show cover if it exists and showImageOnPost isn't false -->
+            {post.data.image && post.data.showImageOnPost !== false &&
+             <ImageWrapper id="post-cover" src={post.data.image} basePath={path.join("content/posts/", getDir(post.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
+            }
 
-                    {/* License info for regular posts */}
-                    {licenseConfig.enable && <License title={post.data.title} slug={post.slug} pubDate={post.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
-                </>
-            )}
+
+            <Markdown class="mb-6 markdown-content onload-animation">
+                <Content />
+            </Markdown>
+
+            {licenseConfig.enable && <License title={post.data.title} slug={post.slug} pubDate={post.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
+
         </div>
     </div>
 
-    {/* Only show navigation for regular posts */}
-    {!isFriendContentRoute && post && (
-      <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
-          <a href={post.data.nextSlug ? getPostUrlBySlug(post.data.nextSlug) : "#"}
-             class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !post.data.nextSlug}]}>
-              {post.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
-                  <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
-                  <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                      {post.data.nextTitle}
-                  </div>
-              </div>}
-          </a>
+    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
+        <a href={post.data.nextSlug ? getPostUrlBySlug(post.data.nextSlug) : "#"}
+           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !post.data.nextSlug}]}>
+            {post.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
+                <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
+                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
+                    {post.data.nextTitle}
+                </div>
+            </div>}
+        </a>
 
-          <a href={post.data.prevSlug ? getPostUrlBySlug(post.data.prevSlug) : "#"}
-             class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !post.data.prevSlug}]}>
-              {post.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
-                  <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                      {post.data.prevTitle}
-                  </div>
-                  <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
-              </div>}
-          </a>
-      </div>
-    )}
+        <a href={post.data.prevSlug ? getPostUrlBySlug(post.data.prevSlug) : "#"}
+           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !post.data.prevSlug}]}>
+            {post.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
+                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
+                    {post.data.prevTitle}
+                </div>
+                <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
+            </div>}
+        </a>
+    </div>
 
 </MainGridLayout>
 
@@ -197,19 +149,4 @@ const jsonLd = !isFriendContentRoute ? {
     html {
       scroll-behavior: smooth;
     }
-</style>
-
-<script>
-  // Handle friend content navigation
-  document.addEventListener('DOMContentLoaded', () => {
-    // Check if this is a friend content route
-    const path = window.location.pathname;
-    if (path.includes('/friend-')) {
-      // Update document title based on friend content, if available
-      const friendTitle = document.querySelector('h1')?.textContent;
-      if (friendTitle) {
-        document.title = `${friendTitle} | Friend Content`;
-      }
-    }
-  });
-</script>
+  </style>
