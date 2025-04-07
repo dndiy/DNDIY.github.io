@@ -26,9 +26,15 @@ const corsMiddleware = (_, next) => {
   return async (context) => {
     const response = await next(context);
     
-    // Add CORS headers to friend-content.json and API routes
+    // Add CORS headers to RSS feeds and API endpoints
     if (context.request.url.includes('friend-content.json') || 
-        context.request.url.includes('/api/')) {
+        context.request.url.includes('/api/') ||
+        context.request.url.includes('rss.xml') ||
+        context.request.url.includes('feed.xml') ||
+        context.request.url.includes('/feed') ||
+        context.request.url.includes('/rss') ||
+        context.request.url.includes('atom.xml')) {
+      
       response.headers.set('Access-Control-Allow-Origin', '*');
       response.headers.set('Access-Control-Allow-Methods', 'GET');
       response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
