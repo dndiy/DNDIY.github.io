@@ -168,7 +168,7 @@
       <div class="general-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Timeline Settings</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80 text-black/80 dark:text-white/80">Timeline Settings</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -176,7 +176,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enable Timeline</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enable Timeline</span>
             </label>
           </div>
           
@@ -187,7 +187,7 @@
             <select 
               bind:value={timelineConfig.defaultEra} 
               on:change={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100"
             >
               {#each timelineConfig.eras as era}
                 <option value={era.name}>{era.name} ({era.startYear}-{era.endYear})</option>
@@ -215,7 +215,7 @@
         </div>
         
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
-          <h3 class="font-medium text-lg mb-4">Restore Defaults</h3>
+          <h3 class="font-medium text-lg text-black/80 dark:text-white/80 mb-4">Restore Defaults</h3>
           <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
             Reset the timeline configuration to its default settings.
           </p>
@@ -237,7 +237,7 @@
       <div class="eras-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Timeline Eras</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Timeline Eras</h3>
             <button 
               class="py-1.5 px-3 bg-[var(--primary)] hover:opacity-90 text-white font-medium rounded-md transition-opacity text-sm flex items-center"
               on:click={addEra}
@@ -331,7 +331,7 @@
     {:else if activeSection === 'display'}
       <div class="display-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
-          <h3 class="font-medium text-lg mb-4">Timeline Display Options</h3>
+          <h3 class="font-medium text-lg text-black/80 dark:text-white/80 mb-4">Timeline Display Options</h3>
           
           <div class="mb-4">
             <label class="flex items-center text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -379,7 +379,7 @@
               on:input={notifyChanges}
               min="1900" 
               max="2100" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
             <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
               Default is the current year, but you can override it for your content
@@ -396,7 +396,7 @@
               on:input={notifyChanges}
               min="1" 
               max="50" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
             <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
               Years between each label on the timeline (e.g., 10 = show every 10th year)
@@ -413,7 +413,7 @@
               on:input={notifyChanges}
               min="2" 
               max="20" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
         </div>
@@ -436,7 +436,7 @@
           <input 
             type="text" 
             bind:value={editingEra.data.name} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             placeholder="e.g., past, present, future"
           />
         </div>
@@ -451,7 +451,7 @@
               bind:value={editingEra.data.startYear} 
               min="1900" 
               max="2100" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -464,7 +464,7 @@
               bind:value={editingEra.data.endYear} 
               min="1900" 
               max="2100" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
         </div>
@@ -495,7 +495,7 @@
           <textarea 
             bind:value={editingEra.data.description} 
             rows="3" 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             placeholder="A short description of this era"
           ></textarea>
         </div>

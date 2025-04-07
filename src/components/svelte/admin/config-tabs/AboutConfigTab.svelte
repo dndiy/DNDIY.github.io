@@ -88,7 +88,7 @@
       <div class="team-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Team Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80 text-black/80 dark:text-white/80">Team Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -96,7 +96,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -108,7 +108,7 @@
               type="text" 
               bind:value={aboutConfig.team.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -120,7 +120,7 @@
               bind:value={aboutConfig.team.description} 
               on:input={notifyChanges}
               rows="2" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -132,7 +132,7 @@
               <select 
                 bind:value={aboutConfig.team.layout} 
                 on:change={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               >
                 <option value="grid">Grid Layout</option>
                 <option value="list">List Layout</option>
@@ -147,7 +147,7 @@
               <select 
                 bind:value={aboutConfig.team.avatarShape} 
                 on:change={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               >
                 <option value="square">Square</option>
                 <option value="rounded">Rounded</option>
@@ -171,7 +171,7 @@
                   max="2" 
                   bind:value={aboutConfig.team.columns.mobile} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -184,7 +184,7 @@
                   max="3" 
                   bind:value={aboutConfig.team.columns.tablet} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -197,7 +197,7 @@
                   max="4" 
                   bind:value={aboutConfig.team.columns.desktop} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
             </div>
@@ -232,7 +232,7 @@
       <div class="content-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Content Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Content Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -240,7 +240,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -252,7 +252,7 @@
               type="text" 
               bind:value={aboutConfig.content.defaultTitle} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
             <p class="text-xs text-neutral-500 mt-1">This title is shown when no team member is selected</p>
           </div>
@@ -289,7 +289,7 @@
       <div class="contact-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Contact Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Contact Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -297,7 +297,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -309,7 +309,7 @@
               type="text" 
               bind:value={aboutConfig.contact.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -321,11 +321,13 @@
               bind:value={aboutConfig.contact.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Contact Information</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Contact Information</h4>
           
           <!-- Email Input -->
           <div class="mb-4">
@@ -336,7 +338,7 @@
               type="email" 
               bind:value={aboutConfig.contact.contactInfo.email} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -349,7 +351,7 @@
               type="text" 
               bind:value={aboutConfig.contact.contactInfo.phone} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -362,7 +364,7 @@
               bind:value={aboutConfig.contact.contactInfo.address} 
               on:input={notifyChanges}
               rows="2" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -376,11 +378,13 @@
               bind:value={aboutConfig.contact.contactInfo.hours} 
               on:input={notifyChanges}
               placeholder="e.g., Mon-Fri: 9am-5pm" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Display Order</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Display Order</h4>
           <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
             Drag and drop to change the order of contact information displayed on the page.
           </p>

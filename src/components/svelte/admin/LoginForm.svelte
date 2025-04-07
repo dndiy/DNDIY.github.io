@@ -212,7 +212,7 @@ export default passwordConfig;
             type="text" 
             id="username" 
             bind:value={username} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             required 
           />
         </div>
@@ -223,7 +223,7 @@ export default passwordConfig;
             type="password" 
             id="password" 
             bind:value={password} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             required 
           />
         </div>
@@ -234,7 +234,7 @@ export default passwordConfig;
             type="password" 
             id="confirm-password" 
             bind:value={confirmPassword} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             required 
           />
         </div>
@@ -267,7 +267,7 @@ export default passwordConfig;
             type="text" 
             id="username" 
             bind:value={username} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             disabled={isLoading}
             required 
           />
@@ -279,7 +279,7 @@ export default passwordConfig;
             type="password" 
             id="password" 
             bind:value={password} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             disabled={isLoading}
             required 
           />

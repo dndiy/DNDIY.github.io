@@ -85,18 +85,18 @@
       </p>
     </div>
     
-    <!-- Password Management Section -->
-    <div class="card-base p-6 rounded-lg shadow-sm">
-      <h3 class="text-lg font-medium mb-4">Password Management</h3>
-      
-      <div class="border-t border-neutral-200 dark:border-neutral-700 pt-4 mt-4">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h4 class="text-md font-medium">Reset Admin Password</h4>
-            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              Reset your admin password by generating a new configuration file. This will trigger the password setup process on your next login.
-            </p>
-          </div>
+  <!-- Password Management Section -->
+  <div class="card-base p-6 rounded-lg shadow-sm">
+    <h3 class="text-lg font-medium text-black/80 dark:text-white/80 mb-4">Password Management</h3>
+    
+    <div class="border-t border-neutral-200 dark:border-neutral-700 pt-4 mt-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h4 class="text-md font-medium text-neutral-800 dark:text-neutral-200">Reset Admin Password</h4>
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+            Reset your admin password by generating a new configuration file. This will trigger the password setup process on your next login.
+          </p>
+        </div>
           
           <button 
             on:click={promptPasswordReset}

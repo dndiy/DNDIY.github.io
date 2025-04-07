@@ -13,6 +13,7 @@
   import CommunityConfigExporter from './CommunityConfigExporter.svelte';
   import AboutConfigExporter from './AboutConfigExporter.svelte';
   import PostCardConfigExporter from './PostCardConfigExporter.svelte';
+  import BannerConfigExporter from './BannerConfigExporter.svelte';
   import GitHubIntegration from './GitHubIntegration.svelte';
     
   // Props for configuration objects
@@ -25,6 +26,7 @@
   export let communityConfig;
   export let aboutConfig;
   export let postCardConfig;
+  export let bannerConfig;
   
   // State management
   let activeTab = 'general';
@@ -41,7 +43,8 @@
     avatarConfig: null,
     communityConfig: null,
     aboutConfig: null,
-    postCardConfig: null
+    postCardConfig: null,
+    bannerConfig: null
   };
   
   // Event dispatcher for notifying parent components
@@ -73,6 +76,7 @@
   let showCommunityConfigExporter = false;
   let showAboutConfigExporter = false;
   let showPostCardConfigExporter = false;
+  let showBannerConfigExporter = false;
   
   // Function to handle saving all configuration
   async function saveAllConfiguration() {
@@ -90,6 +94,7 @@
       localStorage.setItem('communityConfig', JSON.stringify(communityConfig));
       localStorage.setItem('aboutConfig', JSON.stringify(aboutConfig));
       localStorage.setItem('postCardConfig', JSON.stringify(postCardConfig));
+      localStorage.setItem('bannerConfig', JSON.stringify(bannerConfig));
       
       // Update original values to reflect saved state
       originalConfigValues = {
@@ -101,7 +106,8 @@
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig),
-        postCardConfig: JSON.stringify(postCardConfig)
+        postCardConfig: JSON.stringify(postCardConfig),
+        bannerConfig: JSON.stringify(bannerConfig)
       };
       
       // Reset hasChanges flag
@@ -116,7 +122,16 @@
       } else if (activeTab === 'about') {
         showAboutConfigExporter = true;
       } else if (activeTab === 'appearance') {
-        showPostCardConfigExporter = true;
+        // We want to offer the user the choice of which appearance config to export
+        // If banner settings were modified, show banner exporter, otherwise show post card exporter
+        const bannerChanged = JSON.stringify(bannerConfig) !== originalConfigValues.bannerConfig;
+        const postCardChanged = JSON.stringify(postCardConfig) !== originalConfigValues.postCardConfig;
+        
+        if (bannerChanged) {
+          showBannerConfigExporter = true;
+        } else {
+          showPostCardConfigExporter = true;
+        }
       } else {
         showConfigExporter = true;
       }
@@ -131,7 +146,8 @@
         avatarConfig,
         communityConfig,
         aboutConfig,
-        postCardConfig
+        postCardConfig,
+        bannerConfig
       });
       
       // Reset success message after a delay
@@ -161,7 +177,8 @@
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig),
-        postCardConfig: JSON.stringify(postCardConfig)
+        postCardConfig: JSON.stringify(postCardConfig),
+        bannerConfig: JSON.stringify(bannerConfig)
       };
       
       // Reset hasChanges flag
@@ -334,6 +351,52 @@
           }
         };
       }
+      
+      // Initialize banner config if it doesn't exist
+      if (!bannerConfig) {
+        bannerConfig = {
+          bannerList: [
+            "src/assets/banner/0001.png",
+            "src/assets/banner/0002.png",
+            "src/assets/banner/0003.png",
+            "src/assets/banner/0004.png",
+            "src/assets/banner/0005.png",
+            "src/assets/banner/0006.png",
+            "src/assets/banner/0007.png",
+            "src/assets/banner/0008.png"
+          ],
+          defaultBanner: "src/assets/banner/0001.png",
+          animation: {
+            enabled: true,
+            interval: 5000,
+            transitionDuration: 1000,
+            direction: "alternate"
+          },
+          layout: {
+            height: {
+              desktop: "50vh",
+              mobile: "30vh"
+            },
+            overlap: {
+              desktop: "3.5rem",
+              mobile: "2rem"
+            },
+            maxWidth: 1920
+          },
+          visual: {
+            objectFit: "cover",
+            objectPosition: "center",
+            applyGradientOverlay: false,
+            gradientOverlay: "linear-gradient(to bottom, rgba(0,0,0,0.2), transparent)",
+            borderRadius: "0"
+          },
+          fallback: {
+            enabled: true,
+            type: "gradient",
+            value: "linear-gradient(to bottom, var(--color-primary-light), var(--color-primary))"
+          }
+        };
+      }
                   
       // Load saved configs from localStorage if they exist
       const savedSiteConfig = localStorage.getItem('siteConfig');
@@ -381,6 +444,11 @@
         postCardConfig = { ...postCardConfig, ...JSON.parse(savedPostCardConfig) };
       }
       
+      const savedBannerConfig = localStorage.getItem('bannerConfig');
+      if (savedBannerConfig && savedBannerConfig !== 'undefined') {
+        bannerConfig = { ...bannerConfig, ...JSON.parse(savedBannerConfig) };
+      }
+      
       // Store original values for change detection
       originalConfigValues = {
         siteConfig: JSON.stringify(siteConfig),
@@ -391,7 +459,8 @@
         avatarConfig: JSON.stringify(avatarConfig),
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig),
-        postCardConfig: JSON.stringify(postCardConfig)
+        postCardConfig: JSON.stringify(postCardConfig),
+        bannerConfig: JSON.stringify(bannerConfig)
       };
       
       // Initialize GitHub integration
@@ -409,7 +478,7 @@
         originalConfigValues.profileConfig && originalConfigValues.licenseConfig &&
         originalConfigValues.timelineConfig && originalConfigValues.avatarConfig &&
         originalConfigValues.communityConfig && originalConfigValues.aboutConfig &&
-        originalConfigValues.postCardConfig) {
+        originalConfigValues.postCardConfig && originalConfigValues.bannerConfig) {
           
       try {
         const currentValues = {
@@ -421,7 +490,8 @@
           avatarConfig: JSON.stringify(avatarConfig),
           communityConfig: JSON.stringify(communityConfig),
           aboutConfig: JSON.stringify(aboutConfig),
-          postCardConfig: JSON.stringify(postCardConfig)
+          postCardConfig: JSON.stringify(postCardConfig),
+          bannerConfig: JSON.stringify(bannerConfig)
         };
         
         hasChanges = 
@@ -433,7 +503,8 @@
           currentValues.avatarConfig !== originalConfigValues.avatarConfig ||
           currentValues.communityConfig !== originalConfigValues.communityConfig ||
           currentValues.aboutConfig !== originalConfigValues.aboutConfig ||
-          currentValues.postCardConfig !== originalConfigValues.postCardConfig;
+          currentValues.postCardConfig !== originalConfigValues.postCardConfig ||
+          currentValues.bannerConfig !== originalConfigValues.bannerConfig;
       } catch (error) {
         console.error("Error checking for changes:", error);
         // If there's an error comparing, assume changes were made
@@ -537,6 +608,7 @@
           <AppearanceConfigTab 
             bind:siteConfig 
             bind:postCardConfig
+            bind:bannerConfig
             on:change={() => hasChanges = true} 
           />
         {:else if activeTab === 'timeline'}
@@ -569,6 +641,7 @@
             {communityConfig}
             {aboutConfig}
             {postCardConfig}
+            {bannerConfig}
             on:update={(e) => {
               // Handle updates from the advanced editor
               const { configType, newValue } = e.detail;
@@ -581,6 +654,7 @@
               else if (configType === 'communityConfig') communityConfig = newValue;
               else if (configType === 'aboutConfig') aboutConfig = newValue;
               else if (configType === 'postCardConfig') postCardConfig = newValue;
+              else if (configType === 'bannerConfig') bannerConfig = newValue;
               
               // Mark that changes have been made
               hasChanges = true;
@@ -646,6 +720,7 @@
           {communityConfig}
           {aboutConfig}
           {postCardConfig}
+          {bannerConfig}
           {originalConfigValues}
           {hasChanges}
           on:configsaved={handleGitHubConfigSaved}
@@ -689,6 +764,13 @@
   bind:show={showPostCardConfigExporter}
   {postCardConfig}
   on:close={() => showPostCardConfigExporter = false}
+/>
+
+<!-- Banner Config Exporter Dialog -->
+<BannerConfigExporter
+  bind:show={showBannerConfigExporter}
+  {bannerConfig}
+  on:close={() => showBannerConfigExporter = false}
 />
   
 <style>

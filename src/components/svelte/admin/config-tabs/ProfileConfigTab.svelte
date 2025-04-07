@@ -247,7 +247,7 @@
           <!-- Image Selection Controls -->
           <div class="mt-4 space-y-2">
             <select 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-900 dark:text-neutral-100"
               on:change={(e) => {
                 const path = e.target.value;
                 if (path) {
@@ -259,13 +259,13 @@
                 }
               }}
             >
-              <option value="">Select an avatar image</option>
-              <option value="/src/content/avatar/avatar.png">avatar.png</option>
-              <option value="/src/content/avatar/avatar2.png">avatar2.png</option>
-              <option value="/src/content/avatar/avatar3.png">avatar3.png</option>
-              <option value="/src/content/avatar/avatar4.png">avatar4.png</option>
-              <option value="/src/content/avatar/avatar5.png">avatar5.png</option>
-              <option value="/src/content/avatar/avatar6.png">avatar6.png</option>
+              <option value="" class="text-neutral-900 dark:text-neutral-100">Select an avatar image</option>
+              <option value="/src/content/avatar/avatar.png" class="text-neutral-900 dark:text-neutral-100">avatar.png</option>
+              <option value="/src/content/avatar/avatar2.png" class="text-neutral-900 dark:text-neutral-100">avatar2.png</option>
+              <option value="/src/content/avatar/avatar3.png" class="text-neutral-900 dark:text-neutral-100">avatar3.png</option>
+              <option value="/src/content/avatar/avatar4.png" class="text-neutral-900 dark:text-neutral-100">avatar4.png</option>
+              <option value="/src/content/avatar/avatar5.png" class="text-neutral-900 dark:text-neutral-100">avatar5.png</option>
+              <option value="/src/content/avatar/avatar6.png" class="text-neutral-900 dark:text-neutral-100">avatar6.png</option>
             </select>
 
             {#if isAvatarSequence}
@@ -284,7 +284,7 @@
                 </div>
                 
                 <select 
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                   on:change={(e) => {
                     const path = e.target.value;
                     if (path && !avatarConfig.avatarList.includes(path)) {
@@ -293,13 +293,13 @@
                     }
                   }}
                 >
-                  <option value="">Add to sequence...</option>
-                  <option value="/src/content/avatar/avatar.png">avatar.png</option>
-                  <option value="/src/content/avatar/avatar2.png">avatar2.png</option>
-                  <option value="/src/content/avatar/avatar3.png">avatar3.png</option>
-                  <option value="/src/content/avatar/avatar4.png">avatar4.png</option>
-                  <option value="/src/content/avatar/avatar5.png">avatar5.png</option>
-                  <option value="/src/content/avatar/avatar6.png">avatar6.png</option>
+                  <option value="" class="text-neutral-900 dark:text-neutral-100">Add to sequence...</option>
+                  <option value="/src/content/avatar/avatar.png" class="text-neutral-900 dark:text-neutral-100">avatar.png</option>
+                  <option value="/src/content/avatar/avatar2.png" class="text-neutral-900 dark:text-neutral-100">avatar2.png</option>
+                  <option value="/src/content/avatar/avatar3.png" class="text-neutral-900 dark:text-neutral-100">avatar3.png</option>
+                  <option value="/src/content/avatar/avatar4.png" class="text-neutral-900 dark:text-neutral-100">avatar4.png</option>
+                  <option value="/src/content/avatar/avatar5.png" class="text-neutral-900 dark:text-neutral-100">avatar5.png</option>
+                  <option value="/src/content/avatar/avatar6.png" class="text-neutral-900 dark:text-neutral-100">avatar6.png</option>
                 </select>
                 
                 <div class="mt-4">
@@ -314,7 +314,7 @@
                     min="500"
                     max="10000"
                     step="100"
-                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-900 dark:text-neutral-100"
                   />
                   <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                     Time between avatar changes (500ms - 10000ms)
@@ -348,7 +348,7 @@
             id="profile-name" 
             bind:value={profileConfig.name}
             on:input={() => dispatch('change', profileConfig)}
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
             placeholder="Your Name"
           />
         </div>
@@ -362,7 +362,7 @@
             bind:value={profileConfig.bio}
             on:input={() => dispatch('change', profileConfig)}
             rows="3"
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition resize-none"
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100 resize-none"
             placeholder="A short description about yourself"
           ></textarea>
           <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
@@ -453,11 +453,11 @@
                 id="social-platform" 
                 value={editingSocial.platformIndex}
                 on:change={updateSelectedPlatform}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100"
               >
-                <option value="" disabled selected={editingSocial.platformIndex === null}>Select a platform...</option>
+                <option value="" disabled selected={editingSocial.platformIndex === null} class="text-neutral-900 dark:text-neutral-100">Select a platform...</option>
                 {#each socialPlatforms as platform, index}
-                  <option value={index}>{platform.name}</option>
+                  <option value={index} class="text-neutral-900 dark:text-neutral-100">{platform.name}</option>
                 {/each}
               </select>
             </div>
@@ -470,7 +470,7 @@
                 type="text" 
                 id="social-name" 
                 bind:value={editingSocial.data.name}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
                 placeholder="e.g. GitHub, Bluesky, etc."
               />
               <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
@@ -486,7 +486,7 @@
                 type="text" 
                 id="social-url" 
                 bind:value={editingSocial.data.url}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
                 placeholder="e.g. https://bluesky.com/username"
               />
             </div>
@@ -500,7 +500,7 @@
                   type="text" 
                   id="social-icon" 
                   bind:value={editingSocial.data.icon}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition" 
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100" 
                   placeholder="e.g. fa6-brands:github"
                 />
                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">

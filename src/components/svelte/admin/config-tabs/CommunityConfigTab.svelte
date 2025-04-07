@@ -170,7 +170,7 @@
     {#if activeSection === 'general'}
       <div class="general-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
-          <h3 class="font-medium text-lg mb-4">Hero Section</h3>
+          <h3 class="font-medium text-lg text-black/80 dark:text-white/80 mb-4">Hero Section</h3>
           
           <div class="mb-4">
             <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
@@ -180,7 +180,7 @@
               type="text" 
               bind:value={communityConfig.hero.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -192,7 +192,7 @@
               bind:value={communityConfig.hero.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -208,7 +208,9 @@
             </label>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Quick Access Options</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Quick Access Options</h4>
           
           <div class="space-y-3">
             {#each communityConfig.hero.options as option, index}
@@ -221,7 +223,7 @@
                     class="mr-3 h-4 w-4"
                   />
                   <div>
-                    <div class="font-medium text-90">{option.title}</div>
+                    <div class="font-medium text-neutral-800 dark:text-neutral-200">{option.title}</div>
                     <div class="text-xs text-neutral-500 dark:text-neutral-400">{option.description}</div>
                   </div>
                 </div>
@@ -235,7 +237,7 @@
         
         <!-- Match Original Layout Helper for General Tab -->
         <div class="mt-8 card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
-          <h3 class="font-medium text-lg mb-4">Match Original Layout</h3>
+          <h3 class="font-medium text-lg text-black/80 dark:text-white/80 mb-4">Match Original Layout</h3>
           <p class="text-neutral-600 dark:text-neutral-400 mb-4">
             Use this option to restore the exact configuration from the original community.astro file.
           </p>
@@ -432,7 +434,7 @@
       <div class="discord-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Discord Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Discord Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -440,7 +442,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -452,7 +454,7 @@
               type="text" 
               bind:value={communityConfig.discord.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -464,7 +466,7 @@
               bind:value={communityConfig.discord.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -477,7 +479,7 @@
                 type="text" 
                 bind:value={communityConfig.discord.inviteUrl} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
             </div>
             
@@ -489,18 +491,20 @@
                 type="text" 
                 bind:value={communityConfig.discord.buttonText} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
             </div>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Discord Features</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Discord Features</h4>
           
           <div class="space-y-3 mb-6">
             {#each communityConfig.discord.features as feature, index}
               <div class="flex justify-between items-start p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div>
-                  <h5 class="font-medium">{feature.title}</h5>
+                  <h5 class="font-medium text-neutral-800 dark:text-neutral-200">{feature.title}</h5>
                   <p class="text-sm text-neutral-500 dark:text-neutral-400">{feature.description}</p>
                   <div class="text-xs text-neutral-400 mt-1">Icon: {feature.icon}</div>
                 </div>
@@ -516,7 +520,9 @@
             {/each}
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Discord Channels</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Discord Channels</h4>
           
           <div class="space-y-3 mb-4">
             {#each communityConfig.discord.channels as channel, index}
@@ -524,7 +530,7 @@
                 <div class="flex items-center">
                   <span class="w-3 h-3 bg-{channel.color} rounded-full mr-2"></span>
                   <div>
-                    <div class="font-medium">{channel.name}</div>
+                    <div class="font-medium text-neutral-800 dark:text-neutral-200">{channel.name}</div>
                     <div class="text-xs text-neutral-500 dark:text-neutral-400">{channel.description}</div>
                   </div>
                 </div>
@@ -567,7 +573,7 @@
       <div class="contact-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Contact Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Contact Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -575,7 +581,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -587,7 +593,7 @@
               type="text" 
               bind:value={communityConfig.contact.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -599,7 +605,7 @@
               bind:value={communityConfig.contact.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -612,7 +618,7 @@
                 type="text" 
                 bind:value={communityConfig.contact.formActionUrl} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
               <p class="text-xs text-neutral-500 mt-1">e.g., Formspree endpoint</p>
             </div>
@@ -625,18 +631,20 @@
                 type="text" 
                 bind:value={communityConfig.contact.buttonText} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
             </div>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Contact Features</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Contact Features</h4>
           
           <div class="space-y-3 mb-6">
             {#each communityConfig.contact.features as feature, index}
               <div class="flex justify-between items-start p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div>
-                  <h5 class="font-medium">{feature.title}</h5>
+                  <h5 class="font-medium text-neutral-800 dark:text-neutral-200">{feature.title}</h5>
                   <p class="text-sm text-neutral-500 dark:text-neutral-400">{feature.description}</p>
                   <div class="text-xs text-neutral-400 mt-1">Icon: {feature.icon}</div>
                 </div>
@@ -652,11 +660,13 @@
             {/each}
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Form Field Settings</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Form Field Settings</h4>
           
           <!-- Name Field -->
           <div class="mb-4 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
-            <h5 class="font-medium mb-2">Name Field</h5>
+            <h5 class="font-medium mb-2 text-neutral-800 dark:text-neutral-200">Name Field</h5>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Label</label>
@@ -664,7 +674,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.name.label} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -673,7 +683,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.name.placeholder} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
             </div>
@@ -692,7 +702,7 @@
           
           <!-- Email Field -->
           <div class="mb-4 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
-            <h5 class="font-medium mb-2">Email Field</h5>
+            <h5 class="font-medium mb-2 text-neutral-800 dark:text-neutral-200">Email Field</h5>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Label</label>
@@ -700,7 +710,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.email.label} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -709,7 +719,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.email.placeholder} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
             </div>
@@ -728,7 +738,7 @@
           
           <!-- Subject Field -->
           <div class="mb-4 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
-            <h5 class="font-medium mb-2">Subject Field</h5>
+            <h5 class="font-medium mb-2 text-neutral-800 dark:text-neutral-200">Subject Field</h5>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Label</label>
@@ -736,7 +746,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.subject.label} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -745,7 +755,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.subject.placeholder} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
             </div>
@@ -764,7 +774,7 @@
           
           <!-- Message Field -->
           <div class="mb-4 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
-            <h5 class="font-medium mb-2">Message Field</h5>
+            <h5 class="font-medium mb-2 text-neutral-800 dark:text-neutral-200">Message Field</h5>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Label</label>
@@ -772,7 +782,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.message.label} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div>
@@ -781,7 +791,7 @@
                   type="text" 
                   bind:value={communityConfig.contact.formFields.message.placeholder} 
                   on:input={notifyChanges}
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
             </div>
@@ -794,7 +804,7 @@
                   on:input={notifyChanges}
                   min="2" 
                   max="10" 
-                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                    class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
                 />
               </div>
               <div class="flex items-center">
@@ -818,7 +828,7 @@
       <div class="newsletter-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Newsletter Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Newsletter Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -826,7 +836,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -838,7 +848,7 @@
               type="text" 
               bind:value={communityConfig.newsletter.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -850,7 +860,7 @@
               bind:value={communityConfig.newsletter.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -862,7 +872,7 @@
               type="text" 
               bind:value={communityConfig.newsletter.buttonText} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -874,17 +884,19 @@
               bind:value={communityConfig.newsletter.consentText} 
               on:input={notifyChanges}
               rows="2" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Newsletter Features</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Newsletter Features</h4>
           
           <div class="space-y-3 mb-6">
             {#each communityConfig.newsletter.features as feature, index}
               <div class="flex justify-between items-start p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div>
-                  <h5 class="font-medium">{feature.title}</h5>
+                  <h5 class="font-medium text-neutral-800 dark:text-neutral-200">{feature.title}</h5>
                   <p class="text-sm text-neutral-500 dark:text-neutral-400">{feature.description}</p>
                   <div class="text-xs text-neutral-400 mt-1">Icon: {feature.icon}</div>
                 </div>
@@ -907,7 +919,7 @@
       <div class="events-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Events Section</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Events Section</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -915,7 +927,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -927,7 +939,7 @@
               type="text" 
               bind:value={communityConfig.events.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -939,7 +951,7 @@
               bind:value={communityConfig.events.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
@@ -952,7 +964,7 @@
                 type="text" 
                 bind:value={communityConfig.events.calendarUrl} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
             </div>
             
@@ -964,7 +976,7 @@
                 type="text" 
                 bind:value={communityConfig.events.calendarButtonText} 
                 on:input={notifyChanges}
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
               />
             </div>
           </div>
@@ -988,7 +1000,7 @@
       <div class="guidelines-section space-y-6">
         <div class="card bg-white dark:bg-neutral-800 p-5 rounded-lg border border-neutral-200 dark:border-neutral-700">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-medium text-lg">Community Guidelines</h3>
+            <h3 class="font-medium text-lg text-black/80 dark:text-white/80">Community Guidelines</h3>
             <label class="flex items-center">
               <input 
                 type="checkbox" 
@@ -996,7 +1008,7 @@
                 on:change={notifyChanges}
                 class="mr-2 h-4 w-4"
               />
-              <span class="text-sm font-medium">Enabled</span>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Enabled</span>
             </label>
           </div>
           
@@ -1008,7 +1020,7 @@
               type="text" 
               bind:value={communityConfig.guidelines.title} 
               on:input={notifyChanges}
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             />
           </div>
           
@@ -1020,18 +1032,20 @@
               bind:value={communityConfig.guidelines.description} 
               on:input={notifyChanges}
               rows="3" 
-              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+                class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
             ></textarea>
           </div>
           
-          <h4 class="font-medium text-base mb-3 mt-6">Community Guidelines List</h4>
+          <h4 class="font-medium text-base mb-3 mt-6 text-neutral-800 dark:text-neutral-200">
+
+Community Guidelines List</h4>
           
           <div class="space-y-3 mb-4">
             {#each communityConfig.guidelines.items as item, index}
               <div class="flex justify-between items-center p-3 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div class="flex items-center space-x-3">
                   <span class="text-neutral-500 dark:text-neutral-400">{index + 1}.</span>
-                  <p class="text-sm">{item}</p>
+                  <p class="text-sm text-neutral-800 dark:text-neutral-200">{item}</p>
                 </div>
                 <div class="flex space-x-2">
                   <button 
@@ -1082,7 +1096,7 @@
           <input 
             type="text" 
             bind:value={editFeature.title} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           />
         </div>
         
@@ -1093,7 +1107,7 @@
           <textarea 
             bind:value={editFeature.description} 
             rows="3" 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           ></textarea>
         </div>
         
@@ -1104,7 +1118,7 @@
           <input 
             type="text" 
             bind:value={editFeature.icon} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           />
           <p class="text-xs text-neutral-500 mt-1">e.g., mdi:chat-processing-outline</p>
         </div>
@@ -1143,7 +1157,7 @@
           <input 
             type="text" 
             bind:value={editChannel.name} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           />
         </div>
         
@@ -1154,7 +1168,7 @@
           <input 
             type="text" 
             bind:value={editChannel.description} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           />
         </div>
         
@@ -1164,7 +1178,7 @@
           </label>
           <select 
             bind:value={editChannel.color} 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           >
             <option value="green-500">Green</option>
             <option value="blue-500">Blue</option>
@@ -1210,7 +1224,7 @@
           <textarea 
             bind:value={editGuideline} 
             rows="3" 
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm"
+              class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm text-neutral-800 dark:text-neutral-200"
           ></textarea>
         </div>
         

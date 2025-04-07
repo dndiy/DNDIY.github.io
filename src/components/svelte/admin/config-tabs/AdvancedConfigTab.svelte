@@ -256,7 +256,7 @@ export const avatarConfig: AvatarConfig = ${JSON.stringify(avatarConfig, null, 2
           <select 
             id="export-format" 
             bind:value={exportFormat}
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition"
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100"
           >
             {#each exportFormats as format}
               <option value={format.value}>{format.label}</option>
@@ -272,7 +272,7 @@ export const avatarConfig: AvatarConfig = ${JSON.stringify(avatarConfig, null, 2
             type="text" 
             id="file-name" 
             bind:value={fileName}
-            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-md text-sm transition focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+            class="w-full px-3 py-2 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-l text-sm text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
             placeholder="site-config"
           />
           <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
