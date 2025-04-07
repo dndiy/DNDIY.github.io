@@ -35,52 +35,88 @@ export interface Friend {
   lastSynced?: string;
   postCount: number;
   posts: FriendPost[];
+  isPermanent?: boolean; // Flag to differentiate permanent vs temporary friends
 }
 
 // Constants for localStorage keys
 const FRIENDS_STORAGE_KEY = 'blogFriends';
 const FRIEND_CONTENT_ENABLED_KEY = 'friendContentEnabled';
 
-// Create stores
-export const temporaryFriends = writable<Friend[]>([]);
-export const permanentFriends = writable<any[]>([]);
+// Create a single unified store for all friends
+export const friends = writable<Friend[]>([]);
 
 // Initialize from localStorage if in browser
 if (typeof window !== 'undefined') {
   try {
     const storedFriends = localStorage.getItem(FRIENDS_STORAGE_KEY);
     if (storedFriends) {
-      temporaryFriends.set(JSON.parse(storedFriends));
+      // Mark these as temporary (not permanent) when loading from localStorage
+      const tempFriends = JSON.parse(storedFriends).map((friend: Friend) => ({
+        ...friend,
+        isPermanent: false
+      }));
+      friends.set(tempFriends);
     }
   } catch (error) {
     console.error('Error loading friends from localStorage:', error);
   }
 }
 
-// Save to localStorage when the store changes
-temporaryFriends.subscribe(friends => {
+// Save temporary friends to localStorage when the store changes
+friends.subscribe(allFriends => {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(FRIENDS_STORAGE_KEY, JSON.stringify(friends));
+    // Only save temporary friends to localStorage
+    const tempFriends = allFriends.filter(friend => !friend.isPermanent);
+    localStorage.setItem(FRIENDS_STORAGE_KEY, JSON.stringify(tempFriends));
   }
 });
 
 // Helper functions
-export function getFriends(): Friend[] {
-  return get(temporaryFriends);
+export function getFriends(includePermanent = true, includeTemporary = true): Friend[] {
+  const allFriends = get(friends);
+  return allFriends.filter(friend => 
+    (includePermanent && friend.isPermanent) || 
+    (includeTemporary && !friend.isPermanent)
+  );
 }
 
 export function addFriend(friend: Friend): void {
-  temporaryFriends.update(friends => [...friends, friend]);
+  friend.isPermanent = friend.isPermanent || false; // Default to temporary
+  friends.update(currentFriends => [...currentFriends, friend]);
 }
 
 export function removeFriend(id: string): void {
-  temporaryFriends.update(friends => friends.filter(f => f.id !== id));
+  friends.update(currentFriends => currentFriends.filter(f => f.id !== id));
 }
 
 export function updateFriend(updatedFriend: Friend): void {
-  temporaryFriends.update(friends => 
-    friends.map(f => f.id === updatedFriend.id ? updatedFriend : f)
+  friends.update(currentFriends => 
+    currentFriends.map(f => f.id === updatedFriend.id ? 
+      { ...updatedFriend, isPermanent: f.isPermanent } : f)
   );
+}
+
+export function addPermanentFriends(permanentFriends: any[]): void {
+  friends.update(currentFriends => {
+    // Convert permanent friends to the Friend interface format
+    const formattedPermanentFriends = permanentFriends.map(pf => ({
+      id: pf.id || `perm-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name: pf.data?.name || 'Unknown Friend',
+      url: pf.data?.url || '#',
+      bio: pf.data?.bio || '',
+      avatar: pf.data?.avatar || '',
+      lastSynced: pf.data?.lastSynced || new Date().toISOString(),
+      postCount: pf.posts?.length || 0,
+      posts: pf.posts || [],
+      isPermanent: true // Mark as permanent
+    }));
+    
+    // Filter out any existing permanent friends to avoid duplicates
+    const tempFriends = currentFriends.filter(f => !f.isPermanent);
+    
+    // Combine temporary and permanent friends
+    return [...tempFriends, ...formattedPermanentFriends];
+  });
 }
 
 export function isFriendContentEnabled(): boolean {
@@ -92,15 +128,14 @@ export function isFriendContentEnabled(): boolean {
 }
 
 export function getFriendContent(): FriendPost[] {
-  const friends = get(temporaryFriends);
-  const permFriends = get(permanentFriends);
+  const allFriends = get(friends);
   let allPosts: FriendPost[] = [];
   
-  console.log('getFriendContent called, found', friends.length, 'temporary friends and', permFriends.length, 'permanent friends');
+  console.log('getFriendContent called, found', allFriends.length, 'friends');
   
-  // First add temporary friends posts
-  friends.forEach(friend => {
-    console.log(`Temporary friend "${friend.name}" has ${friend.posts?.length || 0} posts`);
+  // Process all friends, both temporary and permanent
+  allFriends.forEach(friend => {
+    console.log(`Friend "${friend.name}" has ${friend.posts?.length || 0} posts (${friend.isPermanent ? 'permanent' : 'temporary'})`);
     if (friend.posts && friend.posts.length > 0) {
       const posts = friend.posts.map(post => {
         // Calculate word count and reading time if not already provided
@@ -121,31 +156,8 @@ export function getFriendContent(): FriendPost[] {
     }
   });
   
-  // Then add permanent friends posts if they exist
-  permFriends.forEach(friend => {
-    console.log(`Permanent friend "${friend.data?.name}" has ${friend.posts?.length || 0} posts`);
-    if (friend.posts && friend.posts.length > 0) {
-      const posts = friend.posts.map(post => {
-        // Calculate word count and reading time if not already provided
-        const wordCount = post.wordCount || (post.content ? Math.ceil(post.content.split(/\s+/).length) : 100);
-        const readingTime = post.readingTime || Math.max(1, Math.ceil(wordCount / 200));
-        
-        return {
-          ...post,
-          friendName: friend.data?.name || 'Friend',
-          friendUrl: friend.data?.url || '#',
-          friendAvatar: friend.data?.avatar || null,
-          isFriendContent: true,
-          wordCount,
-          readingTime
-        };
-      });
-      allPosts = [...allPosts, ...posts];
-    }
-  });
-  
   // Create sample friend post if needed for debugging
-  if (allPosts.length === 0 && (friends.length > 0 || permFriends.length > 0)) {
+  if (allPosts.length === 0 && allFriends.length > 0) {
     console.log('Creating sample friend post for debugging');
     allPosts = [{
       id: `sample-post-${Date.now()}`,
@@ -358,6 +370,8 @@ export async function validateSite(url: string): Promise<{
 
 // Fetch blog posts by checking common Astro endpoints and HTML scraping
 export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[]> {
+  // The implementation of this function remains unchanged
+  // as it doesn't directly interact with the friend store structure
   try {
     const formattedUrl = formatUrl(friendUrl);
     console.log(`Fetching content from ${formattedUrl}`);
@@ -978,3 +992,89 @@ export function downloadFriendAsMarkdown(friend: Friend) {
   
   return { filename };
 }
+
+// For backwards compatibility - these functions call the unified store functions
+export const temporaryFriends = {
+  set: (tempFriends: Friend[]) => {
+    const currentFriends = get(friends);
+    const permanentFriends = currentFriends.filter(f => f.isPermanent);
+    friends.set([...permanentFriends, ...tempFriends.map(f => ({ ...f, isPermanent: false }))]);
+  },
+  update: (updateFn: (tempFriends: Friend[]) => Friend[]) => {
+    friends.update(allFriends => {
+      const tempFriends = allFriends.filter(f => !f.isPermanent);
+      const permanentFriends = allFriends.filter(f => f.isPermanent);
+      const updatedTempFriends = updateFn(tempFriends).map(f => ({ ...f, isPermanent: false }));
+      return [...permanentFriends, ...updatedTempFriends];
+    });
+  },
+  subscribe: (callback: (value: Friend[]) => void) => {
+    return friends.subscribe(allFriends => {
+      callback(allFriends.filter(f => !f.isPermanent));
+    });
+  }
+};
+
+export const permanentFriends = {
+  set: (permFriends: any[]) => {
+    addPermanentFriends(permFriends);
+  },
+  update: (updateFn: (permFriends: any[]) => any[]) => {
+    // This is more complex with the new system, but maintaining for compatibility
+    friends.update(allFriends => {
+      const tempFriends = allFriends.filter(f => !f.isPermanent);
+      const permFriends = allFriends.filter(f => f.isPermanent);
+      
+      // Convert to old format for the update function
+      const oldFormat = permFriends.map(pf => ({
+        id: pf.id,
+        data: {
+          name: pf.name,
+          url: pf.url,
+          bio: pf.bio || '',
+          avatar: pf.avatar || '',
+          lastSynced: pf.lastSynced
+        },
+        posts: pf.posts || []
+      }));
+      
+      // Update using the provided function
+      const updatedPermFriendsOldFormat = updateFn(oldFormat);
+      
+      // Convert back to new format
+      const updatedPermFriends = updatedPermFriendsOldFormat.map(pf => ({
+        id: pf.id,
+        name: pf.data?.name || 'Unknown',
+        url: pf.data?.url || '#',
+        bio: pf.data?.bio || '',
+        avatar: pf.data?.avatar || '',
+        lastSynced: pf.data?.lastSynced || new Date().toISOString(),
+        postCount: pf.posts?.length || 0,
+        posts: pf.posts || [],
+        isPermanent: true
+      }));
+      
+      return [...tempFriends, ...updatedPermFriends];
+    });
+  },
+  subscribe: (callback: (value: any[]) => void) => {
+    return friends.subscribe(allFriends => {
+      // Convert to old format for the callback
+      const permFriends = allFriends
+        .filter(f => f.isPermanent)
+        .map(pf => ({
+          id: pf.id,
+          data: {
+            name: pf.name,
+            url: pf.url,
+            bio: pf.bio || '',
+            avatar: pf.avatar || '',
+            lastSynced: pf.lastSynced
+          },
+          posts: pf.posts || []
+        }));
+      
+      callback(permFriends);
+    });
+  }
+};

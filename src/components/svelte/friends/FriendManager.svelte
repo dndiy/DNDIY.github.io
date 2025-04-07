@@ -1,15 +1,16 @@
 <script>
   import { onMount } from 'svelte';
   import { 
-    temporaryFriends, 
-    permanentFriends, 
+    friends,
+    getFriends,
     formatUrl, 
     validateSite, 
     fetchFriendContent, 
     downloadFriendAsMarkdown,
     addFriend,
     removeFriend,
-    updateFriend
+    updateFriend,
+    addPermanentFriends
   } from '../../../stores/friendStore';
   import { siteConfig, profileConfig } from '../../../config/config';
   
@@ -29,36 +30,38 @@
   
   // Check if an image exists
   async function checkImageExists(url) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-        img.src = url;
-      });
-    }
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
+  }
     
-    // Image error handler with retry logic
-    function handleImageError(event) {
-      const originalSrc = event.target.src;
-      console.log(`Avatar image failed to load: ${originalSrc}`);
-      
-      // Try to load the default avatar
-      event.target.src = DEFAULT_AVATAR;
-      
-      // If even the default avatar fails, use a data URI for a simple avatar placeholder
-      event.target.onerror = () => {
-        console.error(`Even default avatar failed to load: ${DEFAULT_AVATAR}`);
-        // Simple colored circle as fallback
-        event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
-        // Remove any further error handlers to prevent loops
-        event.target.onerror = null;
-      };
-    }
+  // Image error handler with retry logic
+  function handleImageError(event) {
+    const originalSrc = event.target.src;
+    console.log(`Avatar image failed to load: ${originalSrc}`);
+    
+    // Try to load the default avatar
+    event.target.src = '/assets/avatar/avatar.png';
+    
+    // If even the default avatar fails, use a data URI for a simple avatar placeholder
+    event.target.onerror = () => {
+      console.error(`Even default avatar failed to load`);
+      // Simple colored circle as fallback
+      event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
+      // Remove any further error handlers to prevent loops
+      event.target.onerror = null;
+    };
+  }
   
-  // Initialize permanent friends from props
+  // Initialize friends from props
   onMount(() => {
-    // Load saved friends from Astro props
-    permanentFriends.set(savedFriends);
+    // Load saved permanent friends from Astro props and add them to the store
+    if (savedFriends && savedFriends.length > 0) {
+      addPermanentFriends(savedFriends);
+    }
     
     // Load local settings
     friendContentEnabled = localStorage.getItem('friendContentEnabled') !== 'false';
@@ -88,8 +91,8 @@
     const cleanUrl = formatUrl(friendUrl);
     
     // Check if this URL already exists
-    if ($temporaryFriends.some(f => f.url === cleanUrl) || 
-        $permanentFriends.some(f => f.data?.url === cleanUrl)) {
+    const allFriends = getFriends();
+    if (allFriends.some(f => f.url === cleanUrl)) {
       showStatus('This site is already in your friends list.', 'error');
       return;
     }
@@ -139,7 +142,8 @@
         avatar: siteAvatar,
         postCount: 0,
         lastSynced: null,
-        posts: []
+        posts: [],
+        isPermanent: false // This is a temporary friend
       };
       
       // Add to store
@@ -178,7 +182,7 @@
     }
   }
   
-  // Remove a temporary friend
+  // Remove a friend
   function handleRemoveFriend(id) {
     if (confirm('Are you sure you want to remove this friend?')) {
       removeFriend(id);
@@ -250,9 +254,10 @@
     }
   }
   
-  // Sync all temporary friends
+  // Sync all friends (both temporary and permanent)
   async function syncAllFriends() {
-    if ($temporaryFriends.length === 0) {
+    const allFriends = getFriends();
+    if (allFriends.length === 0) {
       alert('No friends to sync. Add some friends first.');
       return;
     }
@@ -265,7 +270,7 @@
     
     try {
       // Sync each friend
-      for (const friend of $temporaryFriends) {
+      for (const friend of allFriends) {
         try {
           const posts = await fetchFriendContent(friend.url);
           
@@ -307,15 +312,15 @@
   }
 
   function updateContentIntegration(event) {
-  friendContentEnabled = event.target.checked;
-  localStorage.setItem('friendContentEnabled', friendContentEnabled);
-  
-  // Dispatch an event
-  document.dispatchEvent(new CustomEvent('friend-content-toggled', {
-    detail: { enabled: friendContentEnabled },
-    bubbles: true
-  }));
-}
+    friendContentEnabled = event.target.checked;
+    localStorage.setItem('friendContentEnabled', friendContentEnabled);
+    
+    // Dispatch an event
+    document.dispatchEvent(new CustomEvent('friend-content-toggled', {
+      detail: { enabled: friendContentEnabled },
+      bubbles: true
+    }));
+  }
   
   // Format a date as "X time ago"
   function formatTimeAgo(dateString) {
@@ -422,117 +427,89 @@
   </div>
 </div>
 
-<!-- Friend Lists -->
+<!-- Unified Friends List -->
 <div class="space-y-6">
-  <!-- Permanent Friends -->
-  {#if $permanentFriends.length > 0}
-    <div>
-      <h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">Permanent Friends</h3>
-      <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">These friends are saved permanently in your site's content.</p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {#each $permanentFriends as friend}
-          <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 bg-green-50 dark:bg-green-900/10 rounded-lg">
-            <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
-              <img 
-                src={friend.data.avatar || '/assets/avatar/avatar.png'} 
-                alt={`${friend.data.name}'s avatar`}
-                class="w-full h-full object-cover"
-                on:error={handleImageError}
-              />
-            </div>
-            <div class="flex-1">
-              <h3 class="text-lg font-medium text-black/80 dark:text-white/80 mb-1">
-                {friend.data.name}
-              </h3>
-              <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                {friend.data.bio || 'No bio provided'}
-              </p>
-              <a href={friend.data.url} target="_blank" rel="noopener noreferrer" class="text-xs text-[var(--primary)] hover:underline flex items-center">
+  <h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">All Friends</h3>
+  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Manage all your friends in one place. Permanent friends (green background) are stored in your site content, while temporary friends are stored in your browser.</p>
+  
+  {#if $friends.length === 0}
+    <div class="p-8 text-center bg-neutral-50 dark:bg-neutral-800/20 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-neutral-400 dark:text-neutral-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <h3 class="text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-2">No Friends Yet</h3>
+      <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Add a site URL using the form above to start sharing content.</p>
+    </div>
+  {:else}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      {#each $friends as friend (friend.id)}
+        <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors {friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}" data-friend-id={friend.id}>
+          <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
+            <img 
+              src={friend.avatar || '/assets/avatar/avatar.png'} 
+              alt={`${friend.name}'s avatar`}
+              class="w-full h-full object-cover"
+              on:error={handleImageError}
+            />
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg font-medium text-black/80 dark:text-white/80 mb-1">
+              {friend.name}
+              {#if friend.isPermanent}
+                <span class="inline-block ml-2 px-2 py-0.5 text-xs bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 rounded-full">Permanent</span>
+              {/if}
+            </h3>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+              {friend.bio || 'No bio provided'}
+            </p>
+            <div class="flex items-center text-xs text-neutral-500 dark:text-neutral-400">
+              <a href={friend.url} target="_blank" rel="noopener noreferrer" class="text-xs text-[var(--primary)] hover:underline flex items-center mr-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                 </svg>
                 Visit Site
               </a>
+              <span class="flex items-center mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>{friend.postCount || 0} Posts</span>
+              </span>
+              <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>{formatTimeAgo(friend.lastSynced)}</span>
+              </span>
             </div>
           </div>
-        {/each}
-      </div>
-    </div>
-  {/if}
-  
-  <!-- Temporary Friends -->
-  <div>
-    <h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">Temporary Friends</h3>
-    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">These friends are stored in your browser. Click "Save" to make them permanent.</p>
-    
-    {#if $temporaryFriends.length === 0}
-      <div class="p-8 text-center bg-neutral-50 dark:bg-neutral-800/20 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-neutral-400 dark:text-neutral-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-        </svg>
-        <h3 class="text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-2">No Temporary Friends Yet</h3>
-        <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Add a site URL using the form above to start sharing content.</p>
-      </div>
-    {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {#each $temporaryFriends as friend (friend.id)}
-          <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors" data-friend-id={friend.id}>
-            <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
-              <img 
-                src={friend.avatar || '/assets/avatar/avatar.png'} 
-                alt={`${friend.name}'s avatar`}
-                class="w-full h-full object-cover"
-                on:error={handleImageError}
-              />
-            </div>
-            <div class="flex-1">
-              <h3 class="text-lg font-medium text-black/80 dark:text-white/80 mb-1">
-                {friend.name}
-              </h3>
-              <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                {friend.bio || 'No bio provided'}
-              </p>
-              <div class="flex items-center text-xs text-neutral-500 dark:text-neutral-400">
-                <span class="flex items-center mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                  <span>{friend.postCount || 0} Posts</span>
-                </span>
-                <span class="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span>{formatTimeAgo(friend.lastSynced)}</span>
-                </span>
-              </div>
-            </div>
-            <div class="flex flex-col flex-shrink-0 ml-2 gap-2">
-              <button 
-                on:click={() => syncFriend(friend)}
-                class="friend-sync p-2 text-[var(--primary)] hover:bg-[var(--primary)] hover:bg-opacity-10 rounded-full" 
-                title="Sync content"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
-                </svg>
-              </button>
-              
-              <!-- Save button -->
+          <div class="flex flex-col flex-shrink-0 ml-2 gap-2">
+            <!-- Sync button (available for both permanent and temporary friends) -->
+            <button 
+              on:click={() => syncFriend(friend)}
+              class="friend-sync p-2 text-[var(--primary)] hover:bg-[var(--primary)] hover:bg-opacity-10 rounded-full" 
+              title="Sync content"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
+              </svg>
+            </button>
+            
+            <!-- Save button (only for temporary friends) -->
+            {#if !friend.isPermanent}
               <button 
                 on:click={() => handleSaveAsPermanent(friend)}
                 class="p-2 text-green-500 hover:bg-green-500 hover:bg-opacity-10 rounded-full" 
-                title="Save as markdown file"
+                title="Save as permanent friend"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -540,7 +517,10 @@
                   <polyline points="7 3 7 8 15 8"></polyline>
                 </svg>
               </button>
-              
+            {/if}
+            
+            <!-- Remove button (only for temporary friends) -->
+            {#if !friend.isPermanent}
               <button 
                 on:click={() => handleRemoveFriend(friend.id)}
                 class="p-2 text-red-500 hover:bg-red-500 hover:bg-opacity-10 rounded-full" 
@@ -553,12 +533,12 @@
                   <line x1="14" y1="11" x2="14" y2="17"></line>
                 </svg>
               </button>
-            </div>
+            {/if}
           </div>
-        {/each}
-      </div>
-    {/if}
-  </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <!-- Content Integration Controls -->
@@ -581,7 +561,7 @@
     <button 
       id="sync-all-button"
       on:click={syncAllFriends}
-      disabled={$temporaryFriends.length === 0 || isLoading}
+      disabled={$friends.length === 0 || isLoading}
       class="px-4 py-2 bg-[var(--primary)] text-white font-medium rounded-md hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-60"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

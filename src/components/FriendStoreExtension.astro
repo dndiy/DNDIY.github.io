@@ -3,14 +3,25 @@
 ---
 
 <script>
-    // Import friendStore functions and make them available globally
-    import { isFriendContentEnabled, getFriendPostsAsEntries } from '../stores/friendStore';
+  // Import friendStore functions and make them available globally
+  import { 
+    isFriendContentEnabled, 
+    getFriendPostsAsEntries,
+    getFriends,
+    addFriend,
+    updateFriend,
+    removeFriend
+  } from '../stores/friendStore';
+  
+  // Expose these functions to the window object for client-side scripts
+  if (typeof window !== 'undefined') {
+    window.isFriendContentEnabled = isFriendContentEnabled;
+    window.getFriendPostsAsEntries = getFriendPostsAsEntries;
+    window.getFriends = getFriends;
+    window.addFriend = addFriend;
+    window.updateFriend = updateFriend;
+    window.removeFriend = removeFriend;
     
-    // Expose these functions to the window object for client-side scripts
-    if (typeof window !== 'undefined') {
-      window.isFriendContentEnabled = isFriendContentEnabled;
-      window.getFriendPostsAsEntries = getFriendPostsAsEntries;
-      
-      console.log('[FriendStoreExtension] Friend store functions exposed to window');
-    }
-  </script>
+    console.log('[FriendStoreExtension] Friend store functions exposed to window');
+  }
+</script>
