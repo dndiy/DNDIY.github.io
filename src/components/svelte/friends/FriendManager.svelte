@@ -27,7 +27,16 @@
   let statusMessage = '';
   let statusType = 'info';
   let isLoading = false;
+
+  // Sync states
+  let syncStates = {};
+  let syncAllStatus = 'idle';
   
+  // Initialize permanent friends before hydration
+  if (savedFriends && savedFriends.length > 0) {
+    addPermanentFriends(savedFriends);
+  }
+
   // Check if an image exists
   async function checkImageExists(url) {
     return new Promise((resolve) => {
@@ -46,24 +55,15 @@
     // Try to load the default avatar
     event.target.src = '/assets/avatar/avatar.png';
     
-    // If even the default avatar fails, use a data URI for a simple avatar placeholder
+    // If even the default avatar fails, use a data URI
     event.target.onerror = () => {
-      console.error(`Even default avatar failed to load`);
-      // Simple colored circle as fallback
       event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
-      // Remove any further error handlers to prevent loops
       event.target.onerror = null;
     };
   }
   
-  // Initialize friends from props
+  // Initialize client-side settings
   onMount(() => {
-    // Load saved permanent friends from Astro props and add them to the store
-    if (savedFriends && savedFriends.length > 0) {
-      addPermanentFriends(savedFriends);
-    }
-    
-    // Load local settings
     friendContentEnabled = localStorage.getItem('friendContentEnabled') !== 'false';
     lastSyncTime = localStorage.getItem('lastFriendSyncTime');
   });
@@ -81,28 +81,22 @@
   
   // Add a new friend
   async function addNewFriend() {
-    // Validate inputs
     if (!friendUrl) {
       showStatus('Please provide a URL for the friend site.', 'error');
       return;
     }
     
-    // Format URL
     const cleanUrl = formatUrl(friendUrl);
     
-    // Check if this URL already exists
-    const allFriends = getFriends();
-    if (allFriends.some(f => f.url === cleanUrl)) {
+    if (getFriends().some(f => f.url === cleanUrl)) {
       showStatus('This site is already in your friends list.', 'error');
       return;
     }
     
-    // Show loading state
     isLoading = true;
     showStatus('Validating site and fetching content...', 'info', false);
     
     try {
-      // Validate the site
       const validation = await validateSite(cleanUrl);
       
       if (!validation.valid) {
@@ -111,29 +105,19 @@
         return;
       }
       
-      // Get site info if available
-      let siteName = friendName;
-      let siteBio = '';
-      let siteAvatar = '';
+      let siteName = friendName || validation.siteInfo?.name;
+      let siteBio = validation.siteInfo?.description || '';
+      let siteAvatar = validation.siteInfo?.avatar || '';
       
-      if (validation.siteInfo) {
-        // Auto-fill from site info
-        siteName = siteName || validation.siteInfo.name;
-        siteBio = validation.siteInfo.description || '';
-        siteAvatar = validation.siteInfo.avatar || '';
-      }
-      
-      // If we still don't have a name, use domain
       if (!siteName) {
         try {
           const url = new URL(cleanUrl);
           siteName = url.hostname.replace('www.', '');
-        } catch (e) {
+        } catch {
           siteName = cleanUrl;
         }
       }
       
-      // Create new friend object
       const newFriend = {
         id: `friend-${Date.now()}`,
         name: siteName,
@@ -143,36 +127,25 @@
         postCount: 0,
         lastSynced: null,
         posts: [],
-        isPermanent: false // This is a temporary friend
+        isPermanent: false
       };
       
-      // Add to store
       addFriend(newFriend);
-      
-      // Reset form
       friendName = '';
       friendUrl = '';
       
-      // Fetch friend content
       try {
         const posts = await fetchFriendContent(cleanUrl);
-        
-        if (posts.length > 0) {
-          // Update friend with posts
-          updateFriend({
-            ...newFriend,
-            posts,
-            postCount: posts.length,
-            lastSynced: new Date().toISOString()
-          });
-          
-          showStatus(`Friend added successfully with ${posts.length} posts!`, 'success');
-        } else {
-          showStatus('Friend added, but no posts were found.', 'info');
-        }
+        updateFriend({
+          ...newFriend,
+          posts,
+          postCount: posts.length,
+          lastSynced: new Date().toISOString()
+        });
+        showStatus(`Friend added successfully with ${posts.length} posts!`, 'success');
       } catch (error) {
         console.error('Error fetching content:', error);
-        showStatus('Friend added, but there was an error fetching content.', 'error');
+        showStatus('Friend added, but error fetching content.', 'error');
       }
     } catch (error) {
       console.error('Error adding friend:', error);
@@ -182,79 +155,45 @@
     }
   }
   
-  // Remove a friend
   function handleRemoveFriend(id) {
     if (confirm('Are you sure you want to remove this friend?')) {
       removeFriend(id);
     }
   }
   
-  // Save a friend as markdown
   function handleSaveAsPermanent(friend) {
     try {
       const { filename } = downloadFriendAsMarkdown(friend);
-      showStatus(`File "${filename}" created! Move it to your content/friends/ folder.`, 'success');
+      showStatus(`File "${filename}" created! Move to content/friends/`, 'success');
     } catch (error) {
       console.error('Error saving friend:', error);
       showStatus(`Error creating file: ${error.message}`, 'error');
     }
   }
   
-  // Sync a specific friend's content
   async function syncFriend(friend) {
-    if (!friend) return;
-    
-    // Find the sync button
-    const friendElement = document.querySelector(`[data-friend-id="${friend.id}"]`);
-    const syncButton = friendElement?.querySelector('.friend-sync');
-    
-    // Store original button HTML
-    let originalButtonHTML = '';
-    if (syncButton) {
-      originalButtonHTML = syncButton.innerHTML;
-      syncButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>';
-      syncButton.disabled = true;
-    }
+    syncStates = { ...syncStates, [friend.id]: 'syncing' };
     
     try {
-      // Fetch posts
       const posts = await fetchFriendContent(friend.url);
-      
-      // Update friend
       updateFriend({
         ...friend,
         posts,
         postCount: posts.length,
         lastSynced: new Date().toISOString()
       });
-      
-      // Update button to success
-      if (syncButton) {
-        syncButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>';
-        
-        // Reset button after delay
-        setTimeout(() => {
-          syncButton.innerHTML = originalButtonHTML;
-          syncButton.disabled = false;
-        }, 2000);
-      }
+      syncStates = { ...syncStates, [friend.id]: 'success' };
     } catch (error) {
       console.error('Error syncing friend content:', error);
-      
-      // Show error on button
-      if (syncButton) {
-        syncButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
-        
-        // Reset button after delay
-        setTimeout(() => {
-          syncButton.innerHTML = originalButtonHTML;
-          syncButton.disabled = false;
-        }, 2000);
-      }
+      syncStates = { ...syncStates, [friend.id]: 'error' };
+    } finally {
+      setTimeout(() => {
+        const { [friend.id]: _, ...rest } = syncStates;
+        syncStates = rest;
+      }, 2000);
     }
   }
   
-  // Sync all friends (both temporary and permanent)
   async function syncAllFriends() {
     const allFriends = getFriends();
     if (allFriends.length === 0) {
@@ -262,19 +201,12 @@
       return;
     }
     
-    // Update sync button
-    const syncAllButton = document.getElementById('sync-all-button');
-    const originalButtonText = syncAllButton.innerHTML;
-    syncAllButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-spin mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> Syncing...';
-    syncAllButton.disabled = true;
+    syncAllStatus = 'syncing';
     
     try {
-      // Sync each friend
       for (const friend of allFriends) {
         try {
           const posts = await fetchFriendContent(friend.url);
-          
-          // Update friend
           updateFriend({
             ...friend,
             posts,
@@ -286,46 +218,29 @@
         }
       }
       
-      // Update last sync time
       const now = new Date().toISOString();
       localStorage.setItem('lastFriendSyncTime', now);
       lastSyncTime = now;
-      
-      // Show success
-      syncAllButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Sync Complete';
-      
-      setTimeout(() => {
-        syncAllButton.innerHTML = originalButtonText;
-        syncAllButton.disabled = false;
-      }, 2000);
+      syncAllStatus = 'success';
     } catch (error) {
       console.error('Error in global sync:', error);
-      
-      // Show error
-      syncAllButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg> Sync Failed';
-      
-      setTimeout(() => {
-        syncAllButton.innerHTML = originalButtonText;
-        syncAllButton.disabled = false;
-      }, 2000);
+      syncAllStatus = 'error';
+    } finally {
+      setTimeout(() => { syncAllStatus = 'idle' }, 2000);
     }
   }
 
   function updateContentIntegration(event) {
     friendContentEnabled = event.target.checked;
     localStorage.setItem('friendContentEnabled', friendContentEnabled);
-    
-    // Dispatch an event
     document.dispatchEvent(new CustomEvent('friend-content-toggled', {
       detail: { enabled: friendContentEnabled },
       bubbles: true
     }));
   }
   
-  // Format a date as "X time ago"
   function formatTimeAgo(dateString) {
     if (!dateString) return 'Never';
-    
     const date = new Date(dateString);
     const now = new Date();
     const diffMs = now - date;
@@ -334,34 +249,19 @@
     const diffHour = Math.floor(diffMin / 60);
     const diffDay = Math.floor(diffHour / 24);
     
-    if (diffDay > 0) {
-      return diffDay === 1 ? 'yesterday' : `${diffDay} days ago`;
-    }
-    if (diffHour > 0) {
-      return `${diffHour} hour${diffHour === 1 ? '' : 's'} ago`;
-    }
-    if (diffMin > 0) {
-      return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
-    }
+    if (diffDay > 0) return diffDay === 1 ? 'yesterday' : `${diffDay} days ago`;
+    if (diffHour > 0) return `${diffHour} hour${diffHour === 1 ? '' : 's'} ago`;
+    if (diffMin > 0) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
     return 'just now';
   }
 </script>
 
 <!-- Status message display -->
 {#if statusMessage}
-<div class="mb-4 p-3 rounded-md text-sm" 
-     class:bg-blue-50={statusType === 'info'}
-     class:text-blue-600={statusType === 'info'}
-     class:dark:bg-blue-900={statusType === 'info'}
-     class:dark:text-blue-400={statusType === 'info'}
-     class:bg-green-50={statusType === 'success'}
-     class:text-green-600={statusType === 'success'}
-     class:dark:bg-green-900={statusType === 'success'}
-     class:dark:text-green-400={statusType === 'success'}
-     class:bg-red-50={statusType === 'error'}
-     class:text-red-600={statusType === 'error'}
-     class:dark:bg-red-900={statusType === 'error'}
-     class:dark:text-red-400={statusType === 'error'}>
+<div class={`mb-4 p-3 rounded-md text-sm 
+    ${statusType === 'info' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-400' : ''}
+    ${statusType === 'success' ? 'bg-green-50 text-green-600 dark:bg-green-900 dark:text-green-400' : ''}
+    ${statusType === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-900 dark:text-red-400' : ''}`}>
     <div class="flex items-start">
       {#if statusType === 'info'}
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -378,14 +278,12 @@
       {/if}
       <div>{statusMessage}</div>
     </div>
-  </div>
+</div>
 {/if}
 
 <!-- Add New Friend Section -->
 <div class="mb-6 bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-lg">
   <h3 class="text-md font-medium text-black/70 dark:text-white/70 mb-3">Add New Friend</h3>
-  
-  <!-- Simplified form with just URL and auto-name -->
   <div class="grid grid-cols-1 gap-4">
     <div>
       <label for="friend-url" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Friend Site URL</label>
@@ -443,12 +341,14 @@
       <h3 class="text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-2">No Friends Yet</h3>
       <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Add a site URL using the form above to start sharing content.</p>
     </div>
-    {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {#each $friends as friend (friend.id)}
-          <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors {friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}" data-friend-id={friend.id}>
-            <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
+  {:else}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      {#each $friends as friend (friend.id)}
+        <div class={`friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors ${friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}`} 
+             data-friend-id={friend.id}>
+          <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
             <img 
+              key={friend.avatar}
               src={friend.avatar || '/assets/avatar/avatar.png'} 
               alt={`${friend.name}'s avatar`}
               class="w-full h-full object-cover"
@@ -493,18 +393,31 @@
             </div>
           </div>
           <div class="flex flex-col flex-shrink-0 ml-2 gap-2">
-            <!-- Sync button (available for both permanent and temporary friends) -->
             <button 
               on:click={() => syncFriend(friend)}
               class="friend-sync p-2 text-[var(--primary)] hover:bg-[var(--primary)] hover:bg-opacity-10 rounded-full" 
               title="Sync content"
+              disabled={syncStates[friend.id] === 'syncing'}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
-              </svg>
+              {#if syncStates[friend.id] === 'syncing'}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
+                </svg>
+              {:else if syncStates[friend.id] === 'success'}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+              {:else if syncStates[friend.id] === 'error'}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              {:else}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
+                </svg>
+              {/if}
             </button>
             
-            <!-- Save button (only for temporary friends) -->
             {#if !friend.isPermanent}
               <button 
                 on:click={() => handleSaveAsPermanent(friend)}
@@ -519,7 +432,6 @@
               </button>
             {/if}
             
-            <!-- Remove button (only for temporary friends) -->
             {#if !friend.isPermanent}
               <button 
                 on:click={() => handleRemoveFriend(friend.id)}
@@ -564,11 +476,29 @@
       disabled={$friends.length === 0 || isLoading}
       class="px-4 py-2 bg-[var(--primary)] text-white font-medium rounded-md hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-60"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 12c0-5.52-4.48-10-10-10s-10 4.48-10 10 4.48 10 10 10 10-4.48 10-10"></path>
-        <path d="M12 2v10l4 4"></path>
-      </svg>
-      Sync All Friends
+      {#if syncAllStatus === 'syncing'}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-spin mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        Syncing...
+      {:else if syncAllStatus === 'success'}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        Sync Complete
+      {:else if syncAllStatus === 'error'}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+        Sync Failed
+      {:else}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12c0-5.52-4.48-10-10-10s-10 4.48-10 10 4.48 10 10 10 10-4.48 10-10"></path>
+          <path d="M12 2v10l4 4"></path>
+        </svg>
+        Sync All Friends
+      {/if}
     </button>
     <div class="text-sm text-neutral-500 dark:text-neutral-400">
       Last global sync: {lastSyncTime ? formatTimeAgo(lastSyncTime) : 'Never'}
