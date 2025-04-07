@@ -443,11 +443,11 @@
       <h3 class="text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-2">No Friends Yet</h3>
       <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Add a site URL using the form above to start sharing content.</p>
     </div>
-  {:else}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      {#each $friends as friend (friend.id)}
-        <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors {friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}" data-friend-id={friend.id}>
-          <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
+    {:else}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {#each $friends as friend (friend.id)}
+          <div class="friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors {friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}" data-friend-id={friend.id}>
+            <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
             <img 
               src={friend.avatar || '/assets/avatar/avatar.png'} 
               alt={`${friend.name}'s avatar`}
