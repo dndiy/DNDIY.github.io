@@ -205,7 +205,7 @@ export function getFriendPostsAsEntries() {
         updated: post.updated ? new Date(post.updated) : undefined,
         tags: post.tags || [],
         category: post.category || 'Uncategorized',
-        image: post.image || '',
+        image: post.image || '', // Ensure image is passed through
         description: post.description || '',
         draft: false,
         // Add friend-specific data
@@ -257,6 +257,31 @@ export function getFriendPostsAsTimelineEvents() {
         friendUrl: post.friendUrl
       };
     });
+}
+
+// Helper to check if a date is valid and not a fallback
+export function hasValidDate(dateString: string): boolean {
+  // Check if this is a valid, non-fallback date
+  if (!dateString) return false;
+  
+  try {
+    const date = new Date(dateString);
+    
+    // 1. Check if it's a valid date
+    if (isNaN(date.getTime())) return false;
+    
+    // 2. Check if it's not today's date (which likely means it's a fallback)
+    const today = new Date();
+    const isToday = 
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+    
+    // Consider it valid if it's not today (not a fallback)
+    return !isToday;
+  } catch (e) {
+    return false;
+  }
 }
 
 // Format URL for consistency
@@ -419,7 +444,7 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
             if (items.length > 0) {
               console.log(`Found ${items.length} posts in RSS feed`);
               
-              return items.map((item, index) => {
+              const mappedPosts = items.map((item, index) => {
                 const title = item.querySelector('title')?.textContent || `Post ${index + 1}`;
                 
                 // Get link - handle both RSS and Atom formats
@@ -578,6 +603,12 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
                   isKeyEvent
                 };
               });
+              
+              // Filter out posts with invalid dates
+              const validPosts = mappedPosts.filter(post => hasValidDate(post.published));
+              console.log(`Filtered out ${mappedPosts.length - validPosts.length} RSS posts with invalid dates`);
+              
+              return validPosts;
             }
           }
         } catch (directError) {
@@ -654,88 +685,32 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
     // Method 3: HTML scraping for Astro/MDX sites
     try {
       console.log('Scraping HTML for blog posts with improved Astro/MDX selectors');
-      
+
       const response = await fetch(formattedUrl, { 
         method: 'GET',
         headers: { 'Accept': 'text/html' },
         mode: 'cors'
       });
-      
+
       if (response.ok) {
         const html = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
-        // Try to extract frontmatter from the HTML for date info
-        let frontmatterPublishDates: {[slug: string]: Date} = {};
-        let frontmatterTimelineData: {[slug: string]: {year?: number, era?: string, isKeyEvent?: boolean}} = {};
+        console.log("Extracting data from HTML", doc.title);
         
-        // Try to find frontmatter sections in the HTML
-        const frontmatterRegex = /---\s*([\s\S]*?)\s*---/g;
-        let match;
-        while ((match = frontmatterRegex.exec(html)) !== null) {
-          const frontmatter = match[1];
-          
-          // Extract title to match with slugs
-          const titleMatch = frontmatter.match(/title\s*:\s*"?([^"\n]+)"?/);
-          const title = titleMatch ? titleMatch[1].trim() : '';
-          
-          // Extract published date
-          const publishedMatch = frontmatter.match(/published\s*:\s*"?([^"\n]+)"?/);
-          if (publishedMatch) {
-            try {
-              const dateStr = publishedMatch[1].trim();
-              const slugMatch = frontmatter.match(/slug\s*:\s*"?([^"\n]+)"?/);
-              const slug = slugMatch ? slugMatch[1].trim() : title.toLowerCase().replace(/\s+/g, '-');
-              
-              const parsedDate = new Date(dateStr);
-              if (!isNaN(parsedDate.getTime())) {
-                frontmatterPublishDates[slug] = parsedDate;
-                console.log(`Found frontmatter date for "${title}": ${dateStr}`);
-              }
-            } catch (e) {
-              console.log('Failed to parse frontmatter date');
-            }
-          }
-          
-          // Extract timeline data
-          const timelineYearMatch = frontmatter.match(/timelineYear\s*:\s*(\d+)/);
-          const timelineEraMatch = frontmatter.match(/timelineEra\s*:\s*"?([^"\n]+)"?/);
-          const isKeyEventMatch = frontmatter.match(/isKeyEvent\s*:\s*(true|false)/i);
-          
-          // If any timeline data is found, associate it with the slug
-          if (timelineYearMatch || timelineEraMatch || isKeyEventMatch) {
-            const slugMatch = frontmatter.match(/slug\s*:\s*"?([^"\n]+)"?/);
-            const slug = slugMatch ? slugMatch[1].trim() : title.toLowerCase().replace(/\s+/g, '-');
-            
-            frontmatterTimelineData[slug] = {
-              year: timelineYearMatch ? parseInt(timelineYearMatch[1]) : undefined,
-              era: timelineEraMatch ? timelineEraMatch[1].trim() : undefined,
-              isKeyEvent: isKeyEventMatch ? isKeyEventMatch[1].toLowerCase() === 'true' : undefined
-            };
-            
-            console.log(`Found timeline data for "${title}":`, frontmatterTimelineData[slug]);
-          }
-        }
+        // DIRECT DATE EXTRACTION: First look for elements with data-post-date attribute (PostCard.astro)
+        console.log("Looking for data-post-date attributes in the HTML");
+        const elementsWithDates = Array.from(doc.querySelectorAll('[data-post-date]'));
+        console.log(`Found ${elementsWithDates.length} elements with data-post-date attributes`);
         
-        // Target the post container - specific to your Astro site structure
-        let postContainer = doc.getElementById('posts-container');
-        if (!postContainer) {
-          // Fallback to common selectors
-          postContainer = doc.querySelector('main, .content, [id*="content"], [class*="posts"]');
-        }
-        
-        if (!postContainer) {
-          console.log('Could not find post container, trying whole document');
-          postContainer = doc.body;
-        }
-        
-        // Find posts with specific Astro structure
-        let postElements = Array.from(postContainer.querySelectorAll('.card-base, .local-post, [class*="post-card"]'));
+        // Get all post cards with direct date attributes
+        let postElements = Array.from(doc.querySelectorAll('.card-base, .local-post, [class*="post-card"], [data-post-date]'));
         
         // Fallback to generic article selectors if needed
         if (postElements.length === 0) {
-          postElements = Array.from(postContainer.querySelectorAll('article, .post, a[href*="/posts/"]'));
+          console.log("No post cards found, trying generic article selectors");
+          postElements = Array.from(doc.querySelectorAll('article, .post, a[href*="/posts/"]'));
         }
         
         console.log(`Found ${postElements.length} potential post elements`);
@@ -746,15 +721,72 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
         
         for (const element of postElements) {
           try {
+            // DIRECT DATE EXTRACTION - this is the key part!
+            let directDateStr = element.getAttribute('data-post-date');
+            let directTimestamp = element.getAttribute('data-post-timestamp');
+            let published: Date | null = null;
+            let foundDate = false;
+            
+            // Method 1: Use data-post-date attribute if available
+            if (directDateStr) {
+              try {
+                published = new Date(directDateStr);
+                if (!isNaN(published.getTime())) {
+                  foundDate = true;
+                  console.log(`Found direct date attribute: ${directDateStr}`);
+                }
+              } catch (e) { /* Continue if this fails */ }
+            }
+            
+            // Method 2: Use data-post-timestamp attribute if available
+            if (!foundDate && directTimestamp) {
+              try {
+                published = new Date(parseInt(directTimestamp));
+                if (!isNaN(published.getTime())) {
+                  foundDate = true;
+                  console.log(`Found direct timestamp attribute: ${directTimestamp}`);
+                }
+              } catch (e) { /* Continue if this fails */ }
+            }
+            
+            // Method 3: Look for time elements inside this post element
+            if (!foundDate) {
+              const timeEl = element.querySelector('time[datetime]');
+              if (timeEl) {
+                const dateStr = timeEl.getAttribute('datetime');
+                if (dateStr) {
+                  try {
+                    published = new Date(dateStr);
+                    if (!isNaN(published.getTime())) {
+                      foundDate = true;
+                      console.log(`Found time element with datetime: ${dateStr}`);
+                    }
+                  } catch (e) { /* Continue if this fails */ }
+                }
+              }
+            }
+            
+            // Skip this post if we couldn't find a valid date
+            if (!foundDate) {
+              console.log("Skipping post - no valid date found");
+              continue;
+            }
+            
             // Extract post link
             const linkEl = element.tagName === 'A' ? 
               element : 
               element.querySelector('a[href*="/posts/"], a[href*="/blog/"], h1 a, h2 a, h3 a, .title a, [class*="title"] a');
               
-            if (!linkEl) continue;
+            if (!linkEl) {
+              console.log("Skipping post - no link element found");
+              continue;
+            }
             
             const href = linkEl.getAttribute('href');
-            if (!href) continue;
+            if (!href) {
+              console.log("Skipping post - no href attribute found");
+              continue;
+            }
             
             // Format URL and extract slug
             const fullUrl = href.startsWith('http') ? 
@@ -772,83 +804,49 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
             }
             
             // Skip if we've already processed this slug
-            if (!slug || processedSlugs.has(slug)) continue;
+            if (!slug || processedSlugs.has(slug)) {
+              console.log(`Skipping duplicate slug: ${slug}`);
+              continue;
+            }
             processedSlugs.add(slug);
             
             // Extract title - try multiple possible selectors
             let title = '';
-            const titleEl = element.querySelector('h1, h2, h3, .title, [class*="title"]');
-            if (titleEl) {
-              title = titleEl.textContent?.trim() || '';
+            
+            // First try data attribute if available
+            const directTitle = element.getAttribute('data-post-title');
+            if (directTitle) {
+              title = directTitle;
             } else {
-              title = linkEl.getAttribute('title') || linkEl.textContent?.trim() || '';
+              const titleEl = element.querySelector('h1, h2, h3, .title, [class*="title"]');
+              if (titleEl) {
+                title = titleEl.textContent?.trim() || '';
+              } else {
+                title = linkEl.getAttribute('title') || linkEl.textContent?.trim() || '';
+              }
             }
             
             // Skip posts with generic titles
-            if (title.startsWith('Post ') && /^\d+$/.test(title.substring(5))) continue;
-            if (!title) continue;
+            if (title.startsWith('Post ') && /^\d+$/.test(title.substring(5))) {
+              console.log(`Skipping generic title: ${title}`);
+              continue;
+            }
+            if (!title) {
+              console.log("Skipping post - no title found");
+              continue;
+            }
             
             // Extract description - try multiple selectors
             let description = '';
-            const descEl = element.querySelector('.text-75, p, .description, [class*="description"], [class*="excerpt"]');
-            if (descEl) {
-              description = descEl.textContent?.trim() || '';
-            }
             
-            // PUBLISH DATE with improved approach
-            let published: Date;
-            let foundDate = false;
-            
-            // Try using frontmatter date if available
-            console.log('Frontmatter data for slug:', frontmatterPublishDates[slug]);
-
-            if (frontmatterPublishDates[slug]) {
-              published = frontmatterPublishDates[slug];
-              foundDate = true;
-              console.log(`Using frontmatter date for "${title}": ${published.toISOString()}`);
+            // First look for a data attribute
+            const directDescription = element.getAttribute('data-post-description');
+            if (directDescription) {
+              description = directDescription;
             } else {
-              // Check meta tags
-              const metaDates = Array.from(doc.querySelectorAll('meta[property="article:published_time"], meta[name="date"], meta[name="publish-date"]'));
-              for (const meta of metaDates) {
-                const content = meta.getAttribute('content');
-                if (content) {
-                  try {
-                    const parsedDate = new Date(content);
-                    if (!isNaN(parsedDate.getTime())) {
-                      published = parsedDate;
-                      foundDate = true;
-                      console.log(`Using meta tag date for "${title}": ${content}`);
-                      break;
-                    }
-                  } catch (e) { /* Continue if this fails */ }
-                }
-              }
-              
-              // Look for visible date elements if meta tags didn't work
-              if (!foundDate) {
-                const dateEls = element.querySelectorAll('time, .date, [datetime], [data-post-date]');
-                for (const dateEl of dateEls) {
-                  const dateStr = dateEl.getAttribute('datetime') || 
-                                dateEl.getAttribute('data-post-date') || 
-                                dateEl.textContent?.trim();
-                  if (dateStr) {
-                    try {
-                      const parsedDate = new Date(dateStr);
-                      if (!isNaN(parsedDate.getTime())) {
-                        published = parsedDate;
-                        foundDate = true;
-                        console.log(`Using visible date for "${title}": ${dateStr}`);
-                        break;
-                      }
-                    } catch (e) { /* Continue if this fails */ }
-                  }
-                }
-              }
-              
-              // Fallback to current date if all attempts failed
-              if (!foundDate) {
-                published = new Date();
-                console.log(`Using current date for "${title}" as fallback`);
+              const descEl = element.querySelector('.text-75, p, .description, [class*="description"], [class*="excerpt"]');
+              if (descEl) {
+                description = descEl.textContent?.trim() || '';
               }
             }
             
@@ -856,47 +854,172 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
             let category = '';
             let tags: string[] = [];
             
-            // Look for category and tag links
-            const categoryEl = element.querySelector('a[href*="/category/"]');
-            if (categoryEl) {
-              category = categoryEl.textContent?.trim() || '';
+            // Try data attributes first
+            const directCategory = element.getAttribute('data-post-category');
+            if (directCategory) {
+              category = directCategory;
             } else {
-              // Try to extract from slug
-              const slugParts = slug.split('-');
-              if (slugParts.length > 1) {
-                category = slugParts[0].toUpperCase();
+              // Look for category and tag links
+              const categoryEl = element.querySelector('a[href*="/category/"]');
+              if (categoryEl) {
+                category = categoryEl.textContent?.trim() || '';
+              } else {
+                // Try to extract from slug
+                const slugParts = slug.split('-');
+                if (slugParts.length > 1) {
+                  category = slugParts[0].toUpperCase();
+                }
               }
             }
             
-            // Look for tags
-            const tagLinks = element.querySelectorAll('a[href*="/tag/"]');
-            if (tagLinks.length > 0) {
-              tags = Array.from(tagLinks).map(el => el.textContent?.trim() || '').filter(Boolean) as string[];
+            // Try data attribute for tags
+            const directTags = element.getAttribute('data-post-tags');
+            if (directTags) {
+              tags = directTags.split(',').map(t => t.trim()).filter(Boolean);
+            } else {
+              // Look for tags
+              const tagLinks = element.querySelectorAll('a[href*="/tag/"]');
+              if (tagLinks.length > 0) {
+                tags = Array.from(tagLinks).map(el => el.textContent?.trim() || '').filter(Boolean) as string[];
+              }
             }
             
-            // Extract image
+            // DIRECT IMAGE EXTRACTION - multiple methods similar to date extraction
             let image = '';
-            const imgEl = element.querySelector('img');
-            if (imgEl) {
-              const src = imgEl.getAttribute('src');
-              if (src) {
-                image = src.startsWith('http') ? src : (
-                  src.startsWith('/') ? `${formattedUrl}${src}` : `${formattedUrl}/${src}`
-                );
+                        
+            // Method 1: Try to extract image from post data attributes
+            const directImage = element.getAttribute('data-post-image');
+            if (directImage) {
+              // Ensure absolute URL
+              image = directImage.startsWith('http') ? directImage : (
+                directImage.startsWith('/') ? `${formattedUrl}${directImage}` : `${formattedUrl}/${directImage}`
+              );
+              console.log(`Found direct image attribute: ${image}`);
+            }
+
+            // Method 2: Try to extract image from HTML content (images specifically inside this post element)
+            if (!image) {
+              // First, look for specific post image containers
+              const postImageContainer = element.querySelector('.post-image, .featured-image, [class*="cover"], [class*="banner"], [id="post-cover"], [id*="cover"], [id*="banner"]');
+              if (postImageContainer) {
+                const imgEl = postImageContainer.querySelector('img');
+                if (imgEl) {
+                  const src = imgEl.getAttribute('src');
+                  if (src) {
+                    // Ensure absolute URL
+                    image = src.startsWith('http') ? src : (
+                      src.startsWith('/') ? `${formattedUrl}${src}` : `${formattedUrl}/${src}`
+                    );
+                    console.log(`Found post image container: ${image}`);
+                  }
+                }
               }
             }
+
+            // Method 3: Look for specific meta tags inside the post element
+            if (!image) {
+              const metaImage = element.querySelector('meta[property="og:image"], meta[name="image"], meta[name="twitter:image"]');
+              if (metaImage) {
+                const src = metaImage.getAttribute('content');
+                if (src) {
+                  // Ensure absolute URL
+                  image = src.startsWith('http') ? src : (
+                    src.startsWith('/') ? `${formattedUrl}${src}` : `${formattedUrl}/${src}`
+                  );
+                  console.log(`Found post meta image: ${image}`);
+                }
+              }
+            }
+
+            // Method 4: Try parsing frontmatter in the HTML source
+            if (!image) {
+              // If we have a title, try to find corresponding frontmatter in the HTML
+              const title = element.querySelector('h1, h2, h3, .title, [class*="title"]')?.textContent?.trim();
+              if (title) {
+                // Extract all frontmatter sections from the HTML
+                const frontmatterMatches = html.match(/---\s*([\s\S]*?)\s*---/g);
+                if (frontmatterMatches) {
+                  for (const match of frontmatterMatches) {
+                    const frontmatter = match.replace(/---/g, '').trim();
+                    // Check if this frontmatter section contains the title
+                    if (frontmatter.includes(`title: "${title}"`) || frontmatter.includes(`title: '${title}'`)) {
+                      // Extract image path
+                      const imageMatch = frontmatter.match(/image:\s*["']?([^"'\n]+)["']?/);
+                      if (imageMatch && imageMatch[1]) {
+                        const imagePath = imageMatch[1].trim();
+                        // Ensure absolute URL
+                        image = imagePath.startsWith('http') ? imagePath : (
+                          imagePath.startsWith('/') ? `${formattedUrl}${imagePath}` : `${formattedUrl}/${imagePath}`
+                        );
+                        console.log(`Found image in frontmatter: ${image}`);
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            // Method 5: Only now check for site-wide og:image
+            if (!image) {
+              const ogImageMeta = doc.querySelector('meta[property="og:image"]');
+              if (ogImageMeta) {
+                const metaImage = ogImageMeta.getAttribute('content');
+                if (metaImage) {
+                  // Extra check to skip known site banner images
+                  if (!metaImage.includes('/assets/banner/') && !metaImage.includes('/images/banner/')) {
+                    // Ensure absolute URL
+                    image = metaImage.startsWith('http') ? metaImage : (
+                      metaImage.startsWith('/') ? `${formattedUrl}${metaImage}` : `${formattedUrl}/${metaImage}`
+                    );
+                    console.log(`Found og:image meta tag: ${image}`);
+                  } else {
+                    console.log(`Skipping site banner image: ${metaImage}`);
+                  }
+                }
+              }
+            }
+
+            // Method 6: Fallback - look for any image
+            if (!image) {
+              const imgEl = element.querySelector('img');
+              if (imgEl) {
+                const src = imgEl.getAttribute('src');
+                if (src) {
+                  // Ensure absolute URL
+                  image = src.startsWith('http') ? src : (
+                    src.startsWith('/') ? `${formattedUrl}${src}` : `${formattedUrl}/${src}`
+                  );
+                  console.log(`Found generic image: ${image}`);
+                }
+              }
+            }
+
+            // Log image extraction result
+            if (image) {
+              console.log(`Successfully extracted image: ${image}`);
+            } else {
+              console.log('No image found for this post');
+            } 
+
+            // Extract word count and reading time from data attributes if available
+            let wordCount = 100; // Default
+            let readingTime = 1; // Default
             
-            // Calculate word count and reading time
-            const wordCount = element.querySelector('[data-post-words]')?.getAttribute('data-post-words') ? 
-                             parseInt(element.querySelector('[data-post-words]')?.getAttribute('data-post-words') || '100') : 
-                             (description ? Math.ceil(description.split(/\s+/).length) * 3 : 100); // Multiply by 3 to estimate full content length
-                             
-            const readingTime = element.querySelector('[data-post-minutes]')?.getAttribute('data-post-minutes') ? 
-                               parseInt(element.querySelector('[data-post-minutes]')?.getAttribute('data-post-minutes') || '1') : 
-                               Math.max(1, Math.ceil(wordCount / 200));
+            const directWordCount = element.getAttribute('data-post-words');
+            if (directWordCount && !isNaN(parseInt(directWordCount))) {
+              wordCount = parseInt(directWordCount);
+            } else {
+              // Estimate from description if available
+              wordCount = description ? Math.ceil(description.split(/\s+/).length) * 3 : 100;
+            }
             
-            // Check for timeline data
-            const timelineData = frontmatterTimelineData[slug] || {};
+            const directReadingTime = element.getAttribute('data-post-minutes');
+            if (directReadingTime && !isNaN(parseInt(directReadingTime))) {
+              readingTime = parseInt(directReadingTime);
+            } else {
+              readingTime = Math.max(1, Math.ceil(wordCount / 200));
+            }
             
             // Create post object with enhanced metadata
             posts.push({
@@ -911,11 +1034,10 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
               category,
               image,
               wordCount,
-              readingTime,
-              timelineYear: timelineData.year,
-              timelineEra: timelineData.era,
-              isKeyEvent: timelineData.isKeyEvent
+              readingTime
             });
+            
+            console.log(`Successfully extracted post: "${title}" with date ${published.toISOString()}`);
           } catch (err) {
             console.error('Error processing post element:', err);
           }
@@ -923,37 +1045,22 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
         
         console.log(`Successfully extracted ${posts.length} posts with metadata`);
         
+        // Only return posts that have valid dates
+        const validPosts = posts.filter(post => hasValidDate(post.published));
+        console.log(`Filtered to ${validPosts.length} posts with valid dates`);
+        
         // Return posts with metadata
-        return posts.length > 0 ? posts : [{
-          id: `sample-post-${Date.now()}`,
-          title: `Content from ${new URL(formattedUrl).hostname}`,
-          description: 'This site exists, but we could not extract detailed post information',
-          published: new Date().toISOString(),
-          sourceUrl: formattedUrl,
-          tags: ['sample'],
-          slug: 'sample',
-          wordCount: 100,
-          readingTime: 1
-        }];
+        return validPosts.length > 0 ? validPosts : [];
       }
     } catch (error) {
       console.log('Error with enhanced HTML scraping:', error);
     }
     
     // If we get here, we couldn't find any posts
-    console.log('Could not find any posts, creating a sample post');
+    console.log('Could not find any posts, creating a fallback placeholder post');
     
-    // Create a sample post
-    return [{
-      id: `sample-post-${Date.now()}`,
-      title: `Sample Post from ${new URL(formattedUrl).hostname}`,
-      description: 'This site appears to exist, but we could not find any posts',
-      published: new Date().toISOString(),
-      sourceUrl: formattedUrl,
-      tags: ['sample'],
-      wordCount: 100,
-      readingTime: 1
-    }];
+    // Return empty array since we don't want to create fallback posts anymore
+    return [];
   } catch (error) {
     console.error('Unexpected error in fetchFriendContent:', error);
     

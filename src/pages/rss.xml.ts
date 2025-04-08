@@ -1,3 +1,4 @@
+// src/pages/rss.xml.ts
 import { siteConfig } from '@/config/config'
 import rss from '@astrojs/rss'
 import { getSortedPosts } from '@utils/content-utils'
@@ -30,10 +31,23 @@ export async function GET(context: APIContext) {
         content: sanitizeHtml(parser.render(post.body), {
           allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
         }),
-      }
+        // Add explicit frontmatter data
+        customData: `
+        <frontmatter>
+          <published>${post.data.published.toISOString()}</published>
+          ${post.data.updated ? `<updated>${post.data.updated.toISOString()}</updated>` : ''}
+          ${post.data.tags && post.data.tags.length > 0 ? `<tags>${post.data.tags.join(',')}</tags>` : ''}
+          ${post.data.category ? `<category>${post.data.category}</category>` : ''}
+          ${post.data.timelineYear ? `<timelineYear>${post.data.timelineYear}</timelineYear>` : ''}
+          ${post.data.timelineEra ? `<timelineEra>${post.data.timelineEra}</timelineEra>` : ''}
+          ${post.data.isKeyEvent !== undefined ? `<isKeyEvent>${post.data.isKeyEvent}</isKeyEvent>` : ''}
+          ${post.data.image ? `<image>${post.data.image}</image>` : ''}
+        </frontmatter>
+      `
+      };
     }),
     customData: `<language>${siteConfig.lang}</language>`,
-  })
+  });
   
   // Add CORS headers to the response
   return createCORSResponse(response);

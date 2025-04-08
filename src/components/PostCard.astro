@@ -68,7 +68,9 @@ const dateStr = published.toISOString().split('T')[0];
   data-post-date={dateStr}
   data-post-timestamp={timestamp}
   data-post-category={category?.toLowerCase()}
-  data-post-tags={tags?.join(',')?.toLowerCase()}>
+  data-post-tags={tags?.join(',')?.toLowerCase()}
+  data-post-image={image}
+  data-post-description={description}>
   
   <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", {"w-full md:w-[calc(100%_-_52px_-_12px)]": !hasCover, "w-full md:w-[calc(100%_-_var(--coverWidth)_-_12px)]": hasCover}]}>
     <a href={url}
