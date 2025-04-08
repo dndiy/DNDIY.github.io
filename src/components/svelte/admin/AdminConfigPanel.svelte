@@ -1,5 +1,6 @@
 <script>
   import { onMount, createEventDispatcher } from 'svelte';
+  // config tabs
   import GeneralConfigTab from './config-tabs/GeneralConfigTab.svelte';
   import NavigationConfigTab from './config-tabs/NavigationConfigTab.svelte';
   import ProfileConfigTab from './config-tabs/ProfileConfigTab.svelte';
@@ -9,6 +10,9 @@
   import AboutConfigTab from './config-tabs/AboutConfigTab.svelte';
   import SecurityConfigTab from './config-tabs/SecurityConfigTab.svelte'; 
   import AdvancedConfigTab from './config-tabs/AdvancedConfigTab.svelte';
+  import AddonsConfigTab from './config-tabs/AddonsConfigTab.svelte';
+
+  // exporters
   import ConfigExporter from './ConfigExporter.svelte';
   import CommunityConfigExporter from './CommunityConfigExporter.svelte';
   import AboutConfigExporter from './AboutConfigExporter.svelte';
@@ -27,6 +31,7 @@
   export let aboutConfig;
   export let postCardConfig;
   export let bannerConfig;
+  export let addonsConfig;
   
   // State management
   let activeTab = 'general';
@@ -44,7 +49,8 @@
     communityConfig: null,
     aboutConfig: null,
     postCardConfig: null,
-    bannerConfig: null
+    bannerConfig: null,
+    addonsConfig: null
   };
   
   // Event dispatcher for notifying parent components
@@ -63,7 +69,8 @@
     { id: 'community', label: 'Community', icon: 'mdi:account-group' },
     { id: 'about', label: 'About', icon: 'mdi:information-outline' },
     { id: 'security', label: 'Security', icon: 'mdi:shield-outline' },
-    { id: 'advanced', label: 'Advanced', icon: 'mdi:code-json' }
+    { id: 'advanced', label: 'Advanced', icon: 'mdi:code-json' },
+    { id: 'addons', label: 'Add-ons', icon: 'mdi:puzzle-outline' }
   ];
   
   // Tab switching
@@ -95,6 +102,8 @@
       localStorage.setItem('aboutConfig', JSON.stringify(aboutConfig));
       localStorage.setItem('postCardConfig', JSON.stringify(postCardConfig));
       localStorage.setItem('bannerConfig', JSON.stringify(bannerConfig));
+      localStorage.setItem('addonsConfig', JSON.stringify(addonsConfig));
+
       
       // Update original values to reflect saved state
       originalConfigValues = {
@@ -107,7 +116,9 @@
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig),
         postCardConfig: JSON.stringify(postCardConfig),
-        bannerConfig: JSON.stringify(bannerConfig)
+        bannerConfig: JSON.stringify(bannerConfig),
+        addonsConfig: JSON.stringify(addonsConfig)
+
       };
       
       // Reset hasChanges flag
@@ -397,6 +408,15 @@
           }
         };
       }
+
+      // Initialize addons config if it doesn't exist
+      if (!addonsConfig) {
+        addonsConfig = {
+          enabled: false,
+          availableAddons: [],
+          installedAddons: []
+        };
+      }
                   
       // Load saved configs from localStorage if they exist
       const savedSiteConfig = localStorage.getItem('siteConfig');
@@ -448,6 +468,11 @@
       if (savedBannerConfig && savedBannerConfig !== 'undefined') {
         bannerConfig = { ...bannerConfig, ...JSON.parse(savedBannerConfig) };
       }
+
+      const savedAddonsConfig = localStorage.getItem('addonsConfig');
+      if (savedAddonsConfig && savedAddonsConfig !== 'undefined') {
+        addonsConfig = { ...addonsConfig, ...JSON.parse(savedAddonsConfig) };
+}
       
       // Store original values for change detection
       originalConfigValues = {
@@ -460,7 +485,8 @@
         communityConfig: JSON.stringify(communityConfig),
         aboutConfig: JSON.stringify(aboutConfig),
         postCardConfig: JSON.stringify(postCardConfig),
-        bannerConfig: JSON.stringify(bannerConfig)
+        bannerConfig: JSON.stringify(bannerConfig),
+        addonsConfig: JSON.stringify(addonsConfig)
       };
       
       // Initialize GitHub integration
@@ -491,7 +517,9 @@
           communityConfig: JSON.stringify(communityConfig),
           aboutConfig: JSON.stringify(aboutConfig),
           postCardConfig: JSON.stringify(postCardConfig),
-          bannerConfig: JSON.stringify(bannerConfig)
+          bannerConfig: JSON.stringify(bannerConfig),
+          addonsConfig: JSON.stringify(addonsConfig)
+
         };
         
         hasChanges = 
@@ -504,7 +532,9 @@
           currentValues.communityConfig !== originalConfigValues.communityConfig ||
           currentValues.aboutConfig !== originalConfigValues.aboutConfig ||
           currentValues.postCardConfig !== originalConfigValues.postCardConfig ||
-          currentValues.bannerConfig !== originalConfigValues.bannerConfig;
+          currentValues.bannerConfig !== originalConfigValues.bannerConfig ||
+          currentValues.addonsConfig !== originalConfigValues.addonsConfig;
+
       } catch (error) {
         console.error("Error checking for changes:", error);
         // If there's an error comparing, assume changes were made
@@ -575,6 +605,8 @@
                   {:else if tab.icon === 'mdi:code-json'}
                     <polyline points="16 18 22 12 16 6"></polyline>
                     <polyline points="8 6 2 12 8 18"></polyline>
+                    {:else if tab.icon === 'mdi:puzzle-outline'}
+                    <path d="M22 9h-4v6h4v6h-4v-6h-4v6h-4v-6H6v6H2v-6h4v-6H2V3h4v6h4V3h4v6h4V3h4v6z"></path>
                   {/if}
                 </svg>
               </span>
@@ -629,6 +661,11 @@
           {:else if activeTab === 'security'}
           <SecurityConfigTab
             on:change={() => hasChanges = true}
+          />
+          {:else if activeTab === 'addons'}
+          <AddonsConfigTab 
+            bind:addonsConfig
+            on:change={() => hasChanges = true} 
           />
         {:else if activeTab === 'advanced'}
           <AdvancedConfigTab 

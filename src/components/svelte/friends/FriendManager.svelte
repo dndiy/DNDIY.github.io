@@ -47,19 +47,42 @@
     });
   }
     
-  // Image error handler with retry logic
+  // Image error handler with improved retry logic for static sites
   function handleImageError(event) {
-    const originalSrc = event.target.src;
-    console.log(`Avatar image failed to load: ${originalSrc}`);
-    
-    // Try to load the default avatar
-    event.target.src = '/assets/avatar/avatar.png';
-    
-    // If even the default avatar fails, use a data URI
-    event.target.onerror = () => {
-      event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
-      event.target.onerror = null;
-    };
+    try {
+      const originalSrc = event.target.src;
+      console.log(`Avatar image failed to load: ${originalSrc}`);
+      
+      // Prevent infinite error loops
+      if (originalSrc.includes('/assets/avatar/avatar.png')) {
+        console.log('Default avatar failed to load, using fallback SVG');
+        event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
+        event.target.onerror = null;
+        return;
+      }
+      
+      // Try to load the default avatar with correct path for GitHub Pages
+      const basePath = document.querySelector('base')?.getAttribute('href') || '';
+      event.target.src = `${basePath}/assets/avatar/avatar.png`.replace('//', '/');
+      
+      // Set fallback for default avatar
+      event.target.onerror = () => {
+        event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
+        event.target.onerror = null;
+      };
+    } catch (error) {
+      console.error('Error in image error handler:', error);
+      // Final fallback
+      try {
+        event.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23d1d5db'/%3E%3C/svg%3E";
+        event.target.onerror = null;
+      } catch {
+        // Last resort - hide the image
+        if (event.target.style) {
+          event.target.style.display = 'none';
+        }
+      }
+    }
   }
   
   // Initialize client-side settings
@@ -346,15 +369,23 @@
       {#each $friends as friend (friend.id)}
         <div class={`friend-card flex items-start p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-[var(--primary)] transition-colors ${friend.isPermanent ? 'bg-green-50 dark:bg-green-900/10' : ''}`} 
              data-friend-id={friend.id}>
-          <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
-            <img 
-              key={friend.avatar}
-              src={friend.avatar || '/assets/avatar/avatar.png'} 
-              alt={`${friend.name}'s avatar`}
-              class="w-full h-full object-cover"
-              on:error={handleImageError}
-            />
-          </div>
+             <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mr-4 flex-shrink-0">
+              {#if typeof friend.avatar === 'string' && friend.avatar.trim() !== ''}
+                <img 
+                  src={friend.avatar} 
+                  alt={`${friend.name}'s avatar`}
+                  class="w-full h-full object-cover"
+                  on:error={handleImageError}
+                />
+              {:else}
+                <img 
+                  src="/assets/avatar/avatar.png" 
+                  alt={`${friend.name}'s avatar`}
+                  class="w-full h-full object-cover"
+                  on:error={handleImageError}
+                />
+              {/if}
+            </div>
           <div class="flex-1">
             <h3 class="text-lg font-medium text-black/80 dark:text-white/80 mb-1">
               {friend.name}
