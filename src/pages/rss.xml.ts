@@ -4,16 +4,23 @@ import { getSortedPosts } from '@utils/content-utils'
 import type { APIContext } from 'astro'
 import MarkdownIt from 'markdown-it'
 import sanitizeHtml from 'sanitize-html'
+import { createCORSResponse, handleCORS } from '../middleware/cors'
 
 const parser = new MarkdownIt()
 
 export async function GET(context: APIContext) {
+  // Handle preflight requests
+  const corsResponse = handleCORS(context);
+  if (corsResponse) return corsResponse;
+  
+  // Get posts
   const blog = await getSortedPosts()
-
-  return rss({
+  
+  // Generate RSS feed
+  const response = await rss({
     title: siteConfig.title,
     description: siteConfig.subtitle || 'No description',
-    site: context.site ?? 'https://dndiy.org',
+    site: context.site ?? (context.url ? context.url.origin : 'https://dndiy.org'),
     items: blog.map(post => {
       return {
         title: post.data.title,
@@ -27,4 +34,7 @@ export async function GET(context: APIContext) {
     }),
     customData: `<language>${siteConfig.lang}</language>`,
   })
+  
+  // Add CORS headers to the response
+  return createCORSResponse(response);
 }
