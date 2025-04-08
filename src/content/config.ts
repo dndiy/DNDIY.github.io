@@ -18,7 +18,10 @@ const postsCollection = defineCollection({
     lang: z.string().optional().default(''),
     showImageOnPost: z.boolean().optional(),
     
-    // Banner types
+    // Add bannerType field here
+    bannerType: z.enum(['image', 'video', 'timeline']).optional(),
+    
+    // Banner data
     bannerData: z.object({
       videoId: z.string().optional(),
       imageUrl: z.string().optional(), // Add this line for image banners

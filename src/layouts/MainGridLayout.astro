@@ -52,10 +52,47 @@ const NAVBAR_HEIGHT = 4.5; // rem (72px ≈ 4.5rem at 16px base font size)
 const NAVBAR_HEIGHT_MOBILE = 3.5; // rem (56px ≈ 3.5rem)
 
 // Check banner types
-const hasTimelineBanner = post?.data?.bannerType === "timeline" && post?.data?.bannerData?.category;
-const hasVideoBanner = post?.data?.bannerType === "video" && post?.data?.bannerData?.videoId;
-const hasImageBanner = (post?.data?.image || (post?.data?.bannerType === "image" && post?.data?.bannerData?.imageUrl)) && !hasVideoBanner && !hasTimelineBanner;const isPostWithBanner = hasVideoBanner || hasImageBanner || hasTimelineBanner;
+// STRICT BANNER DETECTION - Explicit priority system
+// First check if there's an explicit banner type declaration
+const explicitBannerType = post?.data?.bannerType || null;
+
+// Set banner flags based on explicit type FIRST
+let hasVideoBanner = false;
+let hasTimelineBanner = false;
+let hasImageBanner = false;
+
+// If explicit banner type exists, ONLY check for that specific type
+if (explicitBannerType === "video") {
+  hasVideoBanner = !!post?.data?.bannerData?.videoId;
+  hasTimelineBanner = false;
+  hasImageBanner = false;
+} else if (explicitBannerType === "timeline") {
+  hasVideoBanner = false;
+  hasTimelineBanner = !!post?.data?.bannerData?.category;
+  hasImageBanner = false;
+} else if (explicitBannerType === "image") {
+  hasVideoBanner = false;
+  hasTimelineBanner = false;
+  hasImageBanner = !!post?.data?.bannerData?.imageUrl;
+} else {
+  // Only if NO explicit banner type is set, check for default image
+  hasVideoBanner = false;
+  hasTimelineBanner = false;
+  hasImageBanner = !!post?.data?.image;
+}
+
+const isPostWithBanner = hasVideoBanner || hasTimelineBanner || hasImageBanner;
 const isStandardPage = !isPostWithBanner;
+
+// Debug banner detection
+console.log('[Banner Debug]', {
+  explicitType: explicitBannerType,
+  hasVideo: hasVideoBanner,
+  hasTimeline: hasTimelineBanner, 
+  hasImage: hasImageBanner,
+  videoId: post?.data?.bannerData?.videoId,
+  image: post?.data?.image
+});
 
 // Update the mainPanelTop calculation to be responsive
 const mainPanelTop = hasVideoBanner 
@@ -104,7 +141,7 @@ style={isStandardPage
   <div class="video-banner-content max-w-screen-2xl mx-auto px-4">
     <div class="relative w-full pb-[56.25%] bg-black overflow-hidden shadow-lg rounded-lg">
       <iframe
-        src={`https://www.youtube.com/embed/${post.data.bannerData.videoId}?autoplay=0&mute=0&controls=1`}
+        src={`https://www.youtube.com/embed/${post.data.bannerData.videoId.split('?')[0]}?autoplay=0&mute=0&controls=1`}
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
