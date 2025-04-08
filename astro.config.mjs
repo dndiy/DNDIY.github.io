@@ -23,7 +23,7 @@ import mdx from "@astrojs/mdx";
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import { dirname, join } from 'path';
-import fs from 'fs';  // Add this for fs.readFileSync
+import fs from 'fs';
 
 // CORS middleware for friend content sharing
 const corsMiddleware = () => {
@@ -57,42 +57,74 @@ const corsMiddleware = () => {
         });
       },
       'astro:build:done': ({ pages, dir }) => {
-        // Add CORS headers to generated static files during build
-        const files = [
-          'rss.xml', 
-          'feed.xml', 
-          'feed', 
-          'rss', 
-          'atom.xml', 
-          'friend-content.json'
-        ];
-        
         const outputDir = fileURLToPath(dir.href);
         
-        files.forEach(file => {
-          const filePath = join(outputDir, file);
-          if (existsSync(filePath)) {
-            try {
-              // Create a .htaccess file in the same directory
-              const htaccessPath = join(outputDir, '.htaccess');
-              const htaccessContent = `
-# Enable CORS for feed files
-<FilesMatch "\\.(xml|json)$">
-  <IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET, OPTIONS"
-    Header set Access-Control-Allow-Headers "Content-Type"
-  </IfModule>
-</FilesMatch>
-              `.trim();
-              
-              fs.writeFileSync(htaccessPath, htaccessContent);
-              console.log(`Created .htaccess file for CORS headers at ${htaccessPath}`);
-            } catch (error) {
-              console.warn(`Error adding CORS headers to ${file}:`, error);
-            }
-          }
-        });
+        // Create a client-side CORS proxy script that can be loaded by other sites
+        const proxyJsPath = join(outputDir, 'cors-proxy.js');
+        const proxyJsContent = `
+/* CORS Proxy Helper for RSS feeds */
+window.loadRSSCORS = function(url, callback) {
+  // Try direct fetch first
+  fetch(url, { 
+    method: 'GET',
+    headers: { 'Accept': 'application/xml, text/xml, application/rss+xml' },
+    mode: 'cors'
+  })
+  .then(response => {
+    if (response.ok) return response.text();
+    throw new Error('CORS request failed');
+  })
+  .then(text => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/xml');
+    if (callback) callback(doc);
+  })
+  .catch(err => {
+    // Fallback to a fetch with looser CORS policy
+    console.log('Direct fetch failed, attempting alternative method');
+    
+    // Use alternate approach - create a temporary iframe
+    const frame = document.createElement('iframe');
+    frame.style.display = 'none';
+    document.body.appendChild(frame);
+    
+    // Set timeout for cleanup
+    const timeout = setTimeout(() => {
+      try {
+        document.body.removeChild(frame);
+        if (callback) callback(null);
+      } catch(e) {}
+    }, 5000);
+    
+    // Setup message handler
+    window.addEventListener('message', function messageHandler(event) {
+      try {
+        const data = event.data;
+        if (data && data.rssProxyResponse && data.url === url) {
+          // Clean up
+          clearTimeout(timeout);
+          window.removeEventListener('message', messageHandler);
+          document.body.removeChild(frame);
+          
+          // Process data
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data.content, 'text/xml');
+          if (callback) callback(doc);
+        }
+      } catch(e) {
+        console.error('Error processing RSS proxy response', e);
+        if (callback) callback(null);
+      }
+    });
+    
+    // Navigate iframe to a special URL that can read the content
+    frame.src = url;
+  });
+};
+        `.trim();
+        
+        fs.writeFileSync(proxyJsPath, proxyJsContent);
+        console.log(`Created CORS proxy helper at ${proxyJsPath}`);
       }
     }
   };

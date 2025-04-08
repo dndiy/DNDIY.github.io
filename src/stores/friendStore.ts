@@ -370,37 +370,32 @@ export async function validateSite(url: string): Promise<{
 
 // Fetch blog posts by checking common Astro endpoints and HTML scraping
 export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[]> {
-  // The implementation of this function remains unchanged
-  // as it doesn't directly interact with the friend store structure
   try {
     const formattedUrl = formatUrl(friendUrl);
     console.log(`Fetching content from ${formattedUrl}`);
     
-    // Method 1: Try RSS feed first (common in blogs)
-    try {
-      // Try multiple common RSS feed paths
-      const rssPaths = [
-        '/rss.xml',
-        '/feed.xml',
-        '/feed',
-        '/rss',
-        '/atom.xml'
-      ];
+    // Method 1: Try RSS feed first with enhanced CORS handling
+    const rssPaths = ['/rss.xml', '/feed.xml', '/feed', '/rss', '/atom.xml'];
+    
+    for (const path of rssPaths) {
+      const rssUrl = `${formattedUrl}${path}`;
+      console.log('Checking for RSS feed at:', rssUrl);
       
-      for (const path of rssPaths) {
-        const rssUrl = `${formattedUrl}${path}`;
-        console.log('Checking for RSS feed at:', rssUrl);
-        
+      try {
+        // First approach: Direct fetch with CORS
         try {
           const response = await fetch(rssUrl, { 
             method: 'GET',
             headers: { 
               'Accept': 'application/xml, text/xml, application/rss+xml',
-              // Add cache control to prevent caching issues
-              'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache'
+              // Prevent caching
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
             },
-            mode: 'cors'
+            mode: 'cors',
+            // Use a reasonable timeout
+            signal: AbortSignal.timeout(3000)
           });
           
           if (response.ok) {
@@ -585,15 +580,30 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
               });
             }
           }
-        } catch (e) {
-          console.log(`Error checking RSS at ${rssUrl}:`, e);
+        } catch (directError) {
+          console.log(`Direct fetch failed for ${rssUrl}:`, directError);
         }
+        
+        // Second approach: Try with no-cors mode to check if resource exists
+        try {
+          // We can only check if the resource exists with no-cors, not read it
+          const response = await fetch(rssUrl, { 
+            method: 'GET',
+            mode: 'no-cors',
+            signal: AbortSignal.timeout(2000)
+          });
+          
+          // If we get here, resource exists, but we can't read it due to CORS
+          console.log(`Found RSS at ${rssUrl} but can't read due to CORS`);
+        } catch (noCorsError) {
+          console.log(`No resource exists at ${rssUrl}`);
+        }
+      } catch (e) {
+        console.log(`Error checking RSS at ${rssUrl}:`, e);
       }
-      
-      console.log('No working RSS feeds found');
-    } catch (error) {
-      console.log('Error in RSS feed checking process:', error);
     }
+    
+    console.log('No working RSS feeds found');
     
     // Method 2: Check for common Astro API endpoints
     try {
@@ -790,6 +800,8 @@ export async function fetchFriendContent(friendUrl: string): Promise<FriendPost[
             let foundDate = false;
             
             // Try using frontmatter date if available
+            console.log('Frontmatter data for slug:', frontmatterPublishDates[slug]);
+
             if (frontmatterPublishDates[slug]) {
               published = frontmatterPublishDates[slug];
               foundDate = true;
