@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { isFriendContentEnabled, getFriendPostsAsEntries } from '../../../stores/friendStore';
   import { postCardConfig } from '../../../config/postcard.config';
+  import { url } from '../../../utils/url-utils';
   
   // Using onMount to ensure browser APIs are only accessed client-side
   onMount(() => {
@@ -104,7 +105,8 @@
           // Update the title link
           const titleLink = friendPostElement.querySelector('a');
           if (titleLink) {
-            titleLink.href = entry.data.sourceUrl || `/friend/${entry.slug}`;
+            // Use the correct URL function to handle base path
+            titleLink.href = entry.data.sourceUrl || url(`/friend/${entry.slug}`);
             titleLink.textContent = entry.data.title;
           }
           
@@ -114,14 +116,16 @@
             dateElement.textContent = entry.data.published.toISOString().split('T')[0];
           }
           
-          // Update category
+          // Update category - MODIFIED: Link to friend site instead of local archive
           const categoryLink = friendPostElement.querySelector('a[href*="/category/"]');
           if (categoryLink) {
-            categoryLink.href = `/archive/category/${entry.data.category.toLowerCase()}/`;
+            // Just link to friend site instead of local archive
+            categoryLink.href = entry.data.friendUrl || '#';
+            categoryLink.target = "_blank"; // Open in new tab
             categoryLink.textContent = entry.data.category;
           }
           
-          // Update tags
+          // Update tags - MODIFIED: Use spans instead of links to avoid 404s
           const tagsContainer = friendPostElement.querySelector('.hidden.md\\:flex.items-center');
           if (tagsContainer && entry.data.tags && entry.data.tags.length > 0) {
             const tagsWrapper = tagsContainer.querySelector('div:last-child');
@@ -139,12 +143,11 @@
                   tagsWrapper.appendChild(separator);
                 }
                 
-                // Create tag link
-                const tagLink = document.createElement('a');
-                tagLink.href = `/archive/tag/${tag.toLowerCase()}/`;
-                tagLink.className = 'link-lg transition text-50 text-sm font-medium hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap';
-                tagLink.textContent = tag;
-                tagsWrapper.appendChild(tagLink);
+                // Create tag span (not link) to avoid 404s
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'link-lg transition text-50 text-sm font-medium whitespace-nowrap';
+                tagSpan.textContent = tag;
+                tagsWrapper.appendChild(tagSpan);
               });
             }
           }
@@ -201,11 +204,11 @@
                       src="${entry.data.friendAvatar}" 
                       alt="${entry.data.friendName || 'Friend'}'s avatar"
                       class="w-full h-full object-cover"
-                      onerror="this.src='/assets/avatar/avatar.png'"
+                      onerror="this.src='${url('/assets/avatar/avatar.png')}'"
                     />
                   ` : `
                     <img 
-                      src="/assets/avatar/avatar.png" 
+                      src="${url('/assets/avatar/avatar.png')}" 
                       alt="${entry.data.friendName || 'Friend'}'s avatar"
                       class="w-full h-full object-cover"
                     />
@@ -290,7 +293,8 @@
           } else {
             console.log(`No image wrapper or data for "${entry.data.title}"`, 
                        { wrapper: !!coverImageWrapper, image: entry.data.image });
-          }          
+          }
+                    
           // Add the friend post to the container
           postsContainer.appendChild(friendPostElement);
         });
@@ -427,9 +431,6 @@
         console.error('Error integrating friend posts:', error);
       }
     }, 300);
-    
-    // Set up for Swup page transitions
-    setupSwupIntegration();
     
     // Cleanup function for when component is destroyed
     return () => {
