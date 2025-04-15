@@ -126,27 +126,37 @@
       
       // Show success message
       saveStatus.success = true;
-      
+
+      // Check if we have a direct indication banner was modified
+      const bannerWasModified = localStorage.getItem('bannerWasModified') === 'true';
       // Show the appropriate exporter based on active tab
       if (activeTab === 'community') {
         showCommunityConfigExporter = true;
       } else if (activeTab === 'about') {
         showAboutConfigExporter = true;
       } else if (activeTab === 'appearance') {
-        // We want to offer the user the choice of which appearance config to export
-        // If banner settings were modified, show banner exporter, otherwise show post card exporter
-        const bannerChanged = JSON.stringify(bannerConfig) !== originalConfigValues.bannerConfig;
+        // First check if we have a direct flag indicating banner was modified
+        const bannerWasModified = localStorage.getItem('bannerWasModified') === 'true';
+        
+        // Check if banner or postcard config changed
+        const bannerChanged = bannerWasModified || JSON.stringify(bannerConfig) !== originalConfigValues.bannerConfig;
         const postCardChanged = JSON.stringify(postCardConfig) !== originalConfigValues.postCardConfig;
         
         if (bannerChanged) {
           showBannerConfigExporter = true;
-        } else {
+          // Clear the flag if it was set
+          if (bannerWasModified) {
+            localStorage.removeItem('bannerWasModified');
+          }
+        } else if (postCardChanged) {
           showPostCardConfigExporter = true;
+        } else {
+          // If no specific changes detected but we're in appearance tab, default to banner exporter
+          showBannerConfigExporter = true;
         }
       } else {
         showConfigExporter = true;
       }
-      
       // Notify parent component
       dispatch('saved', { 
         siteConfig, 
@@ -636,12 +646,24 @@
             on:change={() => hasChanges = true}
             on:avatarChange={() => hasChanges = true}
           />
-        {:else if activeTab === 'appearance'}
+          {:else if activeTab === 'appearance'}
           <AppearanceConfigTab 
             bind:siteConfig 
             bind:postCardConfig
             bind:bannerConfig
-            on:change={() => hasChanges = true} 
+            on:change={(e) => {
+              // Mark that changes have been made
+              hasChanges = true;
+              
+              // If we have specific change data, update the validation references
+              if (e.detail && e.detail.type === 'banner') {
+                // Force bannerConfig to be recognized as changed
+                bannerConfig = {...bannerConfig};
+              } else if (e.detail && e.detail.type === 'postCard') {
+                // Force postCardConfig to be recognized as changed
+                postCardConfig = {...postCardConfig};
+              }
+            }} 
           />
         {:else if activeTab === 'timeline'}
           <TimelineConfigTab 

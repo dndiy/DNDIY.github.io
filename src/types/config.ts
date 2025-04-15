@@ -10,6 +10,11 @@ export type SiteConfig = {
     hue: number
     fixed: boolean
   }
+
+    // Add transparency configuration
+    transparency?: number;
+
+    
   defaultTheme: LIGHT_DARK_MODE 
   banner: {
     enable: boolean
