@@ -608,24 +608,6 @@ style={isStandardPage
         : 'var(--banner-height)';
     }
   }
-  
-  // Swup transitions handler
-  function setupSwupTransitions() {
-    if (!window.swup?.hooks) return;
-    
-    window.swup.hooks.on('page:view', () => {
-      updateNavbarHeight();
-      initializeAnimations();
-      setupBannerAnimation();
-      setupEfficientParallax();
-    });
-  }
-  
-  // Initialize Swup if available
-  if (window.swup?.hooks) {
-    setupSwupTransitions();
-  } else {
-    document.addEventListener('swup:enable', setupSwupTransitions);
-  }
+
 </script>
 
