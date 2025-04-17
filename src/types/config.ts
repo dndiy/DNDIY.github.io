@@ -111,6 +111,8 @@ export type LIGHT_DARK_MODE =
     prevSlug?: string
     nextTitle?: string
     nextSlug?: string
+    bannerLink?: string
+
     // Timeline-specific fields
     timelineYear?: string
     timelineEra?: string
