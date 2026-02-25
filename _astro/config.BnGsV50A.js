@@ -1,0 +1,1 @@
+import{D as u}from"./index.bwX6JCdY.js";var t=(t=>(t[t.Home=0]="Home",t[t.Archive=1]="Archive",t[t.About=2]="About",t[t.Community=3]="Community",t[t.Projects=4]="Projects",t[t.Configs=5]="Configs",t[t.Friends=6]="Friends",t[t.NewPost=7]="NewPost",t))(t||{});const a={lang:"en",defaultTheme:u};t.Home,t.Community,t.Archive,t.About;export{a as s};

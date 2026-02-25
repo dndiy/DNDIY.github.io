@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://greg-aster.github.io/sitemap-index.xml
